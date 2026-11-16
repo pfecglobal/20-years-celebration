@@ -116,14 +116,14 @@ export default function Home() {
       <main>
         <Hero />
 
-        {/* Video fold + journey road share ONE #100694 → #F9F9F9 gradient (continues the hero's bottom) */}
-        <div className="bg-flow-down">
+        {/* Day One message + team videos: one starry #100694 → soft purple gradient (continues the hero) */}
+        <div className="bg-message-team">
           {/* Message from the people who were there on Day One */}
           <section
             id="message"
             className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 py-20 sm:px-6 sm:py-28"
           >
-            <div className="stars-carry" aria-hidden="true">
+            <div className="stars-carry stars-carry--full" aria-hidden="true">
               <SparkleField />
             </div>
             <div className="relative text-center">
@@ -152,6 +152,27 @@ export default function Home() {
             </div>
           </section>
 
+          {/* Team videos, filterable by country */}
+          <section id="team" className="relative isolate overflow-hidden px-4 pt-16 pb-16 sm:px-6 sm:pt-24 sm:pb-20">
+            <div className="stars-carry stars-carry--full" aria-hidden="true">
+              <SparkleField />
+            </div>
+            <div className="relative mx-auto max-w-7xl text-center">
+              <h2 data-reveal className="mx-auto max-w-2xl text-2xl leading-tight font-bold text-white sm:text-4xl">
+                {VOICES.team.title}
+              </h2>
+              <p data-reveal style={{ "--d": "100ms" }} className="mt-3 text-white/80">
+                {VOICES.team.sub}
+              </p>
+              <div className="mt-8 text-left">
+                <TeamVideoTabs countries={VOICES.team.countries} />
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Journey road: #100694 → #F9F9F9 gradient, continuing from the team section above */}
+        <div className="bg-flow-down">
           {/* Journey road — continues the light background from the video fold */}
           <section id="journey" className="px-4 pt-20 pb-10 sm:px-6 sm:pt-28 sm:pb-14">
             <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] lg:gap-10">
@@ -232,23 +253,9 @@ export default function Home() {
           <AwardsMarquee data={AWARDS} />
         </section>
 
-        {/* Student + team video walls: #100796 → #F9F9F9 (continues the awards background) */}
+        {/* Student stories: the awards' #100796 fades quickly to #F9F9F9 above the heading */}
         <div className="bg-voices">
-          <section id="team" className="px-4 pt-16 pb-16 sm:px-6 sm:pt-24 sm:pb-20">
-            <div className="mx-auto max-w-7xl text-center">
-              <h2 data-reveal className="mx-auto max-w-2xl text-2xl leading-tight font-bold text-white sm:text-4xl">
-                {VOICES.team.title}
-              </h2>
-              <p data-reveal style={{ "--d": "100ms" }} className="mt-3 text-white/80">
-                {VOICES.team.sub}
-              </p>
-              <div data-reveal style={{ "--d": "180ms" }} className="mt-8 text-left">
-                <TeamVideoTabs countries={VOICES.team.countries} />
-              </div>
-            </div>
-          </section>
-
-          <section id="students" className="px-4 pt-12 pb-6 sm:px-6 sm:pt-16 sm:pb-32">
+          <section id="students" className="px-4 pt-44 pb-6 sm:px-6 sm:pt-56 sm:pb-32">
             <div className="mx-auto max-w-7xl">
               <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
                 {VOICES.students.title}

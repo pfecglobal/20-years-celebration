@@ -18,13 +18,32 @@ function SplitWord({ text, start }) {
   );
 }
 
-/** Counts 0 → 20 as it appears, then pops and kicks off the fireworks + confetti. */
-function TwentyCounter({ end = 20, duration = 2000 }) {
+/** Shows 1 straight away and counts 1 → 20, then pops and kicks off the fireworks + confetti. */
+function TwentyCounter({ start = 1, end = 20, duration = 2000 }) {
   const ref = useRef(null);
 
   useEffect(() => {
     const el = ref.current;
     const wrap = el.parentElement;
+    // After landing on 20, it "jumps" again every 8–12s (random gap each time)
+    let popTimer = 0;
+    const schedulePop = () => {
+      popTimer = setTimeout(() => {
+        if (!document.hidden) {
+          const ease = "cubic-bezier(0.34, 1.56, 0.64, 1)"; // same bounce as the first jump (CSS twenty-pop)
+          el.animate(
+            [
+              { transform: "scale(1)", easing: ease },
+              { transform: "scale(1.14)", offset: 0.35, easing: ease },
+              { transform: "scale(1)" },
+            ],
+            { duration: 700 }
+          );
+        }
+        schedulePop();
+      }, 8000 + Math.random() * 4000);
+    };
+
     const done = () => {
       el.textContent = String(end);
       wrap.classList.add("is-done");
@@ -34,24 +53,23 @@ function TwentyCounter({ end = 20, duration = 2000 }) {
       return;
     }
 
-    // Lock the width to the final "20" so the layout doesn't jump while counting
-    el.style.minWidth = `${el.offsetWidth}px`;
-    el.textContent = "0";
+    // (the width is reserved for two digits in CSS, so nothing shifts while counting)
     wrap.classList.remove("is-done");
 
     let raf = 0;
-    // Start roughly when the CSS zoom-in (0.9s after load) is underway
-    const delay = Math.max(150, 1000 - performance.now());
+    // Start counting almost immediately — the number is never blank
+    const delay = 150;
     const timer = setTimeout(() => {
       const t0 = performance.now();
       const tick = (now) => {
         const p = Math.min((now - t0) / duration, 1);
         const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = String(Math.round(end * eased));
+        el.textContent = String(start + Math.round((end - start) * eased));
         if (p < 1) {
           raf = requestAnimationFrame(tick);
         } else {
           done();
+          schedulePop();
           window.dispatchEvent(
             new CustomEvent("pfec:celebrate", { detail: { count: 7, confetti: true, confettiAmount: 170 } })
           );
@@ -62,13 +80,14 @@ function TwentyCounter({ end = 20, duration = 2000 }) {
 
     return () => {
       clearTimeout(timer);
+      clearTimeout(popTimer);
       cancelAnimationFrame(raf);
     };
-  }, [end, duration]);
+  }, [start, end, duration]);
 
   return (
-    <span ref={ref} className="twenty text-gold-shimmer">
-      {end}
+    <span ref={ref} className="twenty text-gold-shimmer" suppressHydrationWarning>
+      {start}
     </span>
   );
 }

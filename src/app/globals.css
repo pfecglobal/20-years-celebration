@@ -157,7 +157,7 @@ body {
   position: relative;
   display: grid;
   place-items: center;
-  margin: -0.2rem 0 -0.6rem;
+  margin: -0.2rem 0 0.1rem; /* room below for the float, so the 20 never touches "YEARS" */
 }
 
 .twenty {
@@ -174,12 +174,25 @@ body {
     drop-shadow(0 5px 0 #9a5d08)
     drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55))
     drop-shadow(0 0 40px rgba(255, 180, 50, 0.35));
-  animation: twenty-in 0.8s var(--ease-out) 0.9s both;
+  min-width: 2ch; /* room for "20" (tabular digits) from the first paint, so counting from "1" never shifts */
+  animation: twenty-in 0.8s var(--ease-out) 0.05s both;
 }
 
 /* Once the counter reaches 20: pop + start shimmering */
+/* Once the count lands on 20 it "jumps" (with the double shockwave below, once).
+   After that it jumps again every 8–12s — those repeat jumps are triggered from Hero.js. */
 .twenty-wrap.is-done .twenty {
-  animation: twenty-pop 0.7s var(--ease-back) both, shimmer 5s ease-in-out 0.8s infinite;
+  animation:
+    twenty-pop 0.7s var(--ease-back) both,
+    shimmer 5s ease-in-out 0.8s infinite,
+    twenty-float 5s ease-in-out 0.7s infinite;
+}
+
+/* gentle floating — uses the separate `translate` property, so it layers with the jump (`transform`).
+   It dips *down* (there's ~25px of room above "YEARS", only ~10px below "TURNS") so it never touches the words. */
+@keyframes twenty-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 8px; }
 }
 
 @keyframes twenty-pop {
@@ -223,25 +236,46 @@ body {
   pointer-events: none;
 }
 
-.twenty-wrap::after {
+/* When the count lands on 20: a double shockwave — a bold gold ring, then a softer, wider one right behind it */
+.twenty-wrap::after,
+.twenty-wrap::before {
   content: "";
   position: absolute;
   width: 60%;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 2px solid rgba(255, 224, 138, 0.9);
-  box-shadow: 0 0 40px rgba(255, 197, 61, 0.8), inset 0 0 40px rgba(255, 197, 61, 0.6);
   opacity: 0;
   pointer-events: none;
 }
 
+.twenty-wrap::after {
+  border: 2.5px solid rgba(255, 224, 138, 0.95);
+  box-shadow: 0 0 40px rgba(255, 197, 61, 0.8), inset 0 0 40px rgba(255, 197, 61, 0.6);
+}
+
+.twenty-wrap::before {
+  border: 1.5px solid rgba(255, 243, 196, 0.85);
+  box-shadow: 0 0 28px rgba(255, 210, 110, 0.55), inset 0 0 24px rgba(255, 210, 110, 0.35);
+}
+
 .twenty-wrap.is-done::after {
-  animation: shock-ring 1.4s var(--ease-out) both;
+  animation: shock-ring 1.2s var(--ease-out) both;
+}
+
+.twenty-wrap.is-done::before {
+  animation: shock-ring-2 1.6s var(--ease-out) 0.24s both;
 }
 
 @keyframes shock-ring {
   0% { transform: scale(0.2); opacity: 1; }
-  100% { transform: scale(2.6); opacity: 0; }
+  55% { opacity: 0.85; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes shock-ring-2 {
+  0% { transform: scale(0.25); opacity: 0.95; }
+  55% { opacity: 0.7; }
+  100% { transform: scale(3.3); opacity: 0; }
 }
 
 @keyframes halo-pulse {
@@ -342,10 +376,17 @@ body {
     font-size: clamp(5.5rem, min(42vw, 25svh), 11rem);
   }
 
+  /* extra room under the 20 on phones so its float never touches "YEARS" */
+  .twenty-wrap {
+    margin-bottom: 1.6svh;
+  }
+
   .intro-pill {
     margin-top: 3svh;
-    padding: 0.55rem 1.1rem;
-    font-size: clamp(0.78rem, 1.9svh, 0.9rem);
+    padding: 0.55rem 0.95rem;
+    /* one line on every phone: the text scales with the screen width (and height) */
+    font-size: min(3.25vw, 1.9svh, 0.9rem);
+    white-space: nowrap;
   }
 
   .hero-cta {
@@ -615,9 +656,15 @@ body {
 }
 
 /* while a firework show runs, pause the costly text shimmer so the fireworks get the GPU/CPU */
-html.is-celebrating .text-gold-shimmer,
-html.is-celebrating .twenty-wrap.is-done .twenty {
+html.is-celebrating .text-gold-shimmer {
   animation: none;
+}
+
+/* keep the 20's jump during a show — only its shimmer pauses */
+html.is-celebrating .twenty-wrap.is-done .twenty {
+  animation:
+    twenty-pop 0.7s var(--ease-back) both,
+    twenty-float 5s ease-in-out 0.7s infinite;
 }
 
 .celebrate-btn::after {
@@ -1298,8 +1345,16 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 /* ---------- Below the hero: the #100694 ↔ #F9F9F9 palette ---------- */
 /* Video → journey: one blue (continuing the hero) → #F9F9F9 gradient, like the video design */
+/* Day One message + team: the hero's #100694 lightens to the original video-fold purple (#4840ac) by the
+   bottom of the message section (so the PFEC bars stay visible), then eases a touch lighter through the team */
+.bg-message-team {
+  background: linear-gradient(180deg, #100694 0, #4840ac 100vh, #5149b0 100%);
+  background: linear-gradient(180deg, #100694 0, #4840ac 100svh, #5149b0 100%);
+}
+
+/* Journey: continues from that purple and lightens to #F9F9F9 */
 .bg-flow-down {
-  background: linear-gradient(180deg, #100694 0%, #f9f9f9 88%, #f9f9f9 100%);
+  background: linear-gradient(180deg, #5149b0 0%, #f9f9f9 50%, #f9f9f9 100%);
 }
 
 /* the journey (its road + last card) paints above the TODAY section so nothing gets cut off */
@@ -1336,6 +1391,12 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 30%, transparent 70%);
   mask-image: linear-gradient(180deg, #000 0%, #000 30%, transparent 70%);
+}
+
+/* Stars across the whole section (Day One message + team), not fading out halfway */
+.stars-carry--full {
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 /* …and fading back in as the page returns to blue */
@@ -1727,7 +1788,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 /* ---------- Student & team video walls ---------- */
 .bg-voices {
-  background: linear-gradient(180deg, #100796 0, #f9f9f9 780px, #f9f9f9 100%);
+  background: linear-gradient(180deg, #100796 0, #f9f9f9 180px, #f9f9f9 100%);
 }
 
 /* Team video country tabs (sit on the dark top of .bg-voices) */
@@ -1884,7 +1945,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 /* Multi-row wall: 2 across on phones (instead of the swipe row), 5 across from 640px */
 @media (max-width: 639px) {
-  .video-wall--grid {
+  .video-wall.video-wall--grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     overflow: visible;
@@ -2194,7 +2255,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
    lilac — the slider area flows into this section without a seam. */
 @media (max-width: 639px) {
   .bg-voices {
-    background: linear-gradient(180deg, #100796 0, #f9f9f9 780px, #f9f9f9 calc(100% - 240px), #dcdaf2 100%);
+    background: linear-gradient(180deg, #100796 0, #f9f9f9 180px, #f9f9f9 calc(100% - 240px), #dcdaf2 100%);
   }
 
   .bg-story {
