@@ -7,6 +7,15 @@ const COLORS = ["#ffd36b", "#ffc53d", "#fff3c4", "#f5a524", "#ffffff", "#8f95ff"
 const PAGE_COLORS = ["#f5a524", "#e8a317", "#ffb04a", "#4234ff", "#6a5cff", "#d4af37"];
 const pick = (arr) => arr[(Math.random() * arr.length) | 0];
 
+// Performance: sparks are drawn in batches (one stroke per colour / opacity step / width step)
+// instead of one stroke per spark, and the canvas renders at ≤1.5× pixel density.
+const ALPHA_STEPS = 6;
+const MAX_DPR = 1.5;
+const remove = (arr, i) => {
+  arr[i] = arr[arr.length - 1];
+  arr.pop();
+};
+
 /**
  * Full-viewport overlay that renders fireworks and a gold cursor trail.
  * Clicking anywhere on the page (except buttons, links, videos, etc.) bursts a firework at the cursor.
@@ -28,14 +37,17 @@ export default function CelebrationCanvas() {
     let h = 0;
     let raf = 0;
     let last = 0;
+    let maxSparks = 1600;
+    const batches = new Map(); // "color|alpha|width" → flat [x1, y1, x2, y2, …]
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      maxSparks = w < 640 ? 800 : 1600; // phones get a smaller particle budget
     };
 
     const later = (fn, ms) => {
@@ -47,7 +59,9 @@ export default function CelebrationCanvas() {
     };
 
     const explode = (x, y, palette = COLORS) => {
-      const count = 70 + ((Math.random() * 50) | 0);
+      const room = maxSparks - sparks.length;
+      if (room < 20) return;
+      const count = Math.min(room, (w < 640 ? 45 : 70) + ((Math.random() * (w < 640 ? 30 : 50)) | 0));
       const base = pick(palette);
       const alt = pick(palette);
       const ring = Math.random() < 0.3;
@@ -79,8 +93,13 @@ export default function CelebrationCanvas() {
       start();
     };
 
+    // While a show runs, <html class="is-celebrating"> pauses costly CSS animations (see globals.css)
+    let celebrateTimer = 0;
     const show = (count = 6) => {
       for (let i = 0; i < count; i++) later(() => launch(), i * 260 + Math.random() * 220);
+      document.documentElement.classList.add("is-celebrating");
+      clearTimeout(celebrateTimer);
+      celebrateTimer = setTimeout(() => document.documentElement.classList.remove("is-celebrating"), count * 260 + 3200);
     };
 
     const step = (now) => {
@@ -104,9 +123,9 @@ export default function CelebrationCanvas() {
         ctx.lineTo(r.x, r.y);
         ctx.stroke();
         if (Math.abs(r.ty - r.y) < 6) {
-          rockets.splice(i, 1);
+          remove(rockets, i);
           explode(r.x, r.y, r.palette);
-        } else if (Math.random() < 0.5) {
+        } else if (Math.random() < 0.5 && sparks.length < maxSparks) {
           sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: (Math.random() - 0.5) * 0.6, vy: Math.random() * 1.2, life: 0.7, decay: 0.03, color: "#ffc53d", size: 1.2, gravity: 0.02, friction: 0.96 });
         }
       }
@@ -115,7 +134,7 @@ export default function CelebrationCanvas() {
         const s = sparks[i];
         s.life -= s.decay * k;
         if (s.life <= 0) {
-          sparks.splice(i, 1);
+          remove(sparks, i);
           continue;
         }
         if (s.ring) {
@@ -148,13 +167,30 @@ export default function CelebrationCanvas() {
         s.vy = s.vy * f + s.gravity * k;
         s.x += s.vx * k;
         s.y += s.vy * k;
-        ctx.globalAlpha = s.twinkle ? s.life * (0.4 + Math.random() * 0.6) : s.life;
-        ctx.strokeStyle = s.color;
-        ctx.lineWidth = s.size;
+        // queue the streak into its batch (drawn below in one stroke per batch)
+        const alpha = s.twinkle ? s.life * (0.4 + Math.random() * 0.6) : s.life;
+        const a = Math.ceil(alpha * ALPHA_STEPS);
+        if (a <= 0) continue;
+        const key = `${s.color}|${a}|${s.size < 1.6 ? 1 : s.size < 2.4 ? 2 : 3}`;
+        let list = batches.get(key);
+        if (!list) batches.set(key, (list = []));
+        list.push(s.px - s.vx * 1.5, s.py - s.vy * 1.5, s.x, s.y);
+      }
+
+      const WIDTHS = [0, 1.3, 2, 2.8];
+      for (const [key, list] of batches) {
+        if (!list.length) continue;
+        const [color, a, wi] = key.split("|");
+        ctx.globalAlpha = a / ALPHA_STEPS;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = WIDTHS[wi];
         ctx.beginPath();
-        ctx.moveTo(s.px - s.vx * 1.5, s.py - s.vy * 1.5);
-        ctx.lineTo(s.x, s.y);
+        for (let j = 0; j < list.length; j += 4) {
+          ctx.moveTo(list[j], list[j + 1]);
+          ctx.lineTo(list[j + 2], list[j + 3]);
+        }
         ctx.stroke();
+        list.length = 0;
       }
 
       ctx.globalAlpha = 1;
@@ -165,6 +201,7 @@ export default function CelebrationCanvas() {
       } else {
         raf = 0;
         last = 0;
+        batches.clear();
         ctx.clearRect(0, 0, w, h);
       }
     };
@@ -253,7 +290,7 @@ export default function CelebrationCanvas() {
     const onCelebrate = (e) => {
       const { count = 6, x, y } = e.detail || {};
       if (x != null && y != null) explode(x, y);
-      show(count);
+      show(w < 640 ? Math.ceil(count * 0.7) : count);
     };
 
     const inHero = () => window.scrollY <= window.innerHeight * 0.5;
@@ -298,6 +335,8 @@ export default function CelebrationCanvas() {
     return () => {
       cancelAnimationFrame(raf);
       clearInterval(ambient);
+      clearTimeout(celebrateTimer);
+      document.documentElement.classList.remove("is-celebrating");
       timers.forEach(clearTimeout);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onMove);

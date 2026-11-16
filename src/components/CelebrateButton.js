@@ -11,7 +11,10 @@ export default function CelebrateButton() {
   };
 
   return (
-    <button type="button" onClick={celebrate} className="celebrate-btn">
+    <span className="celebrate-wrap">
+      {/* pulsing ring behind the button: animates transform/opacity only (no per-frame repaint) */}
+      <span className="celebrate-ring" aria-hidden="true" />
+      <button type="button" onClick={celebrate} className="celebrate-btn">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M5.8 11.3 2 22l10.7-3.8" />
         <path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01" />
@@ -21,6 +24,7 @@ export default function CelebrateButton() {
         <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" />
       </svg>
       Celebrate with us
-    </button>
+      </button>
+    </span>
   );
 }

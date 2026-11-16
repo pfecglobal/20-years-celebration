@@ -58,9 +58,10 @@ export default function ConfettiRain() {
     let h = 0;
     let raf = 0;
     let last = 0;
+    let dpr = 1;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5); // ≤1.5× density: plenty for confetti, far cheaper
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;
@@ -90,7 +91,8 @@ export default function ConfettiRain() {
         p.flip += p.flipSpeed * k;
 
         if (p.y > h + 40) {
-          pieces.splice(i, 1);
+          pieces[i] = pieces[pieces.length - 1]; // O(1) removal (order doesn't matter)
+          pieces.pop();
           continue;
         }
         if (p.y < -40) continue;
@@ -100,15 +102,17 @@ export default function ConfettiRain() {
         ctx.globalAlpha = Math.min(1, (h + 40 - p.y) / (h * 0.15)) * (flip < 0 ? 0.75 : 1);
         ctx.fillStyle = p.color;
         ctx.strokeStyle = p.color;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.angle);
+
+        // one setTransform (translate · rotate · scale) instead of save/translate/rotate/scale/restore
+        const sx = p.type === "star" ? Math.abs(flip) * 0.5 + 0.5 : 1;
+        const sy = p.type === "paper" ? flip : p.type === "dot" ? 0.35 + Math.abs(flip) * 0.65 : 1;
+        const cos = Math.cos(p.angle) * dpr;
+        const sin = Math.sin(p.angle) * dpr;
+        ctx.setTransform(cos * sx, sin * sx, -sin * sy, cos * sy, p.x * dpr, p.y * dpr);
 
         if (p.type === "paper") {
-          ctx.scale(1, flip);
           ctx.fillRect(-p.size / 2, -p.size * 0.8, p.size, p.size * 1.6);
         } else if (p.type === "dot") {
-          ctx.scale(1, 0.35 + Math.abs(flip) * 0.65);
           ctx.beginPath();
           ctx.arc(0, 0, p.size * 0.45, 0, Math.PI * 2);
           ctx.fill();
@@ -126,13 +130,11 @@ export default function ConfettiRain() {
           }
           ctx.stroke();
         } else {
-          ctx.shadowColor = "#ffc53d";
-          ctx.shadowBlur = 8;
-          ctx.scale(Math.abs(flip) * 0.5 + 0.5, 1);
+          // (no shadowBlur — it's one of the slowest canvas operations)
           drawStar(ctx, p.size);
         }
-        ctx.restore();
       }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalAlpha = 1;
 
       if (pieces.length) {

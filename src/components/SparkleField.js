@@ -43,7 +43,7 @@ export default function SparkleField() {
     });
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // soft glow dots: 1.5× density is plenty
       const rect = canvas.getBoundingClientRect();
       w = rect.width;
       h = rect.height;
