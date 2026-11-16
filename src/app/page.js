@@ -365,6 +365,7 @@ export default function Home() {
           </section>
         </div>
       </main>
+      
 
       {/* Footer: no divider — the stars continue straight on from the thank-you section */}
       <footer className="footer-blue relative isolate overflow-hidden px-4 pt-6 pb-24 sm:px-6 sm:pb-12">
