@@ -11,7 +11,8 @@ import ConfettiRain from "@/components/ConfettiRain";
 import VideoMessage from "@/components/VideoMessage";
 import OfficesMap from "@/components/OfficesMap";
 import AwardsMarquee from "@/components/AwardsMarquee";
-import VideoWall from "@/components/VideoWall";
+import TeamVideoTabs from "@/components/TeamVideoTabs";
+import StudentCarousel from "@/components/StudentCarousel";
 import BackToTop from "@/components/BackToTop";
 import SmoothScroll from "@/components/SmoothScroll";
 import {
@@ -224,27 +225,27 @@ export default function Home() {
 
         {/* Student + team video walls: #100796 → #F9F9F9 (continues the awards background) */}
         <div className="bg-voices">
-          <section id="students" className="px-4 pt-16 pb-16 sm:px-6 sm:pt-24 sm:pb-20">
-            <div className="mx-auto max-w-7xl">
-              <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-white sm:text-4xl">
-                {VOICES.students.title}
+          <section id="team" className="px-4 pt-16 pb-16 sm:px-6 sm:pt-24 sm:pb-20">
+            <div className="mx-auto max-w-7xl text-center">
+              <h2 data-reveal className="mx-auto max-w-2xl text-2xl leading-tight font-bold text-white sm:text-4xl">
+                {VOICES.team.title}
               </h2>
-              <div className="mt-10">
-                <VideoWall videos={VOICES.students.videos} label="Watch story" />
+              <p data-reveal style={{ "--d": "100ms" }} className="mt-3 text-white/80">
+                {VOICES.team.sub}
+              </p>
+              <div data-reveal style={{ "--d": "180ms" }} className="mt-8 text-left">
+                <TeamVideoTabs countries={VOICES.team.countries} />
               </div>
             </div>
           </section>
 
-          <section id="team" className="px-4 pt-12 pb-24 sm:px-6 sm:pt-16 sm:pb-32">
-            <div className="mx-auto max-w-7xl text-center">
-              <h2 data-reveal className="mx-auto max-w-2xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
-                {VOICES.team.title}
+          <section id="students" className="px-4 pt-12 pb-24 sm:px-6 sm:pt-16 sm:pb-32">
+            <div className="mx-auto max-w-7xl">
+              <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
+                {VOICES.students.title}
               </h2>
-              <p data-reveal style={{ "--d": "100ms" }} className="mt-3 text-[#4b4b5e]">
-                {VOICES.team.sub}
-              </p>
-              <div className="mt-10 text-left">
-                <VideoWall videos={VOICES.team.videos} label="Watch message" />
+              <div data-reveal="zoom" style={{ "--d": "120ms" }} className="mt-10">
+                <StudentCarousel videos={VOICES.students.videos} />
               </div>
             </div>
           </section>

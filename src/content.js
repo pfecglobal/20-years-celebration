@@ -104,7 +104,13 @@ export const VOICES = {
   team: {
     title: "None of this Would Have Been Possible Without Your Efforts!",
     sub: "Hear it from our team!",
-    videos: videoSet("team", ["Team message 1", "Team message 2", "Team message 3", "Team message 4", "Team message 5"]),
+    // Country tabs (flag from /images/flags/{code}.svg) + an "All" tab. Videos go in public/videos/team/{code}/1.mp4, 2.mp4 …
+    // Change `length` to match how many videos each country has (5 per row on desktop).
+    countries: OFFICES.countries.map(({ code, name }) => ({
+      code,
+      name,
+      videos: videoSet(`team/${code}`, Array.from({ length: 10 }, (_, i) => `${name} team message ${i + 1}`)),
+    })),
   },
 };
 

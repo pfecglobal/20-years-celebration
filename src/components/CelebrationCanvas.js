@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 
 const COLORS = ["#ffd36b", "#ffc53d", "#fff3c4", "#f5a524", "#ffffff", "#8f95ff", "#ffb04a"];
+// Deeper tones for the occasional fireworks further down, so they still read on the light sections
+const PAGE_COLORS = ["#f5a524", "#e8a317", "#ffb04a", "#4234ff", "#6a5cff", "#d4af37"];
 const pick = (arr) => arr[(Math.random() * arr.length) | 0];
 
 /**
@@ -44,10 +46,10 @@ export default function CelebrationCanvas() {
       timers.add(id);
     };
 
-    const explode = (x, y) => {
+    const explode = (x, y, palette = COLORS) => {
       const count = 70 + ((Math.random() * 50) | 0);
-      const base = pick(COLORS);
-      const alt = pick(COLORS);
+      const base = pick(palette);
+      const alt = pick(palette);
       const ring = Math.random() < 0.3;
       for (let i = 0; i < count; i++) {
         const a = (i / count) * Math.PI * 2 + Math.random() * 0.15;
@@ -69,11 +71,11 @@ export default function CelebrationCanvas() {
       start();
     };
 
-    const launch = (tx, ty) => {
+    const launch = (tx, ty, palette) => {
       const x = tx ?? w * (0.12 + Math.random() * 0.76);
       const y = ty ?? h * (0.1 + Math.random() * 0.32);
       const sx = x + (Math.random() - 0.5) * w * 0.12;
-      rockets.push({ x: sx, y: h + 10, px: sx, py: h + 10, tx: x, ty: y });
+      rockets.push({ x: sx, y: h + 10, px: sx, py: h + 10, tx: x, ty: y, palette });
       start();
     };
 
@@ -103,7 +105,7 @@ export default function CelebrationCanvas() {
         ctx.stroke();
         if (Math.abs(r.ty - r.y) < 6) {
           rockets.splice(i, 1);
-          explode(r.x, r.y);
+          explode(r.x, r.y, r.palette);
         } else if (Math.random() < 0.5) {
           sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: (Math.random() - 0.5) * 0.6, vy: Math.random() * 1.2, life: 0.7, decay: 0.03, color: "#ffc53d", size: 1.2, gravity: 0.02, friction: 0.96 });
         }
@@ -196,12 +198,36 @@ export default function CelebrationCanvas() {
       show(count);
     };
 
+    const inHero = () => window.scrollY <= window.innerHeight * 0.5;
+
     // Gentle ambient fireworks while the hero is on screen
     const ambient = setInterval(() => {
-      if (document.hidden || window.scrollY > window.innerHeight * 0.5) return;
+      if (document.hidden || !inHero()) return;
       launch();
       if (Math.random() < 0.4) later(() => launch(), 350);
     }, 4200);
+
+    // Further down the page: a small show (2–3 rockets) every 5–6s — not while a video is playing.
+    // Rockets are spread across the screen: always one left + one right, and the 3rd in the middle.
+    const PAGE_MIN_MS = 5000;
+    const PAGE_MAX_MS = 6000;
+    const LANES = [
+      [0.06, 0.3], // left
+      [0.7, 0.94], // right
+      [0.38, 0.62], // centre
+    ];
+    const pageShow = () => {
+      if (!document.hidden && !inHero() && !document.querySelector("dialog[open]")) {
+        const lanes = LANES.slice(0, 2 + ((Math.random() * 2) | 0)).sort(() => Math.random() - 0.5); // random firing order
+        lanes.forEach(([from, to], i) => {
+          const x = w * (from + Math.random() * (to - from));
+          const y = h * (0.1 + Math.random() * 0.32);
+          later(() => launch(x, y, PAGE_COLORS), i * 380 + Math.random() * 200);
+        });
+      }
+      later(pageShow, PAGE_MIN_MS + Math.random() * (PAGE_MAX_MS - PAGE_MIN_MS));
+    };
+    later(pageShow, PAGE_MIN_MS);
 
     resize(); // the opening show is triggered by the "20" counter when it lands
     window.addEventListener("resize", resize);

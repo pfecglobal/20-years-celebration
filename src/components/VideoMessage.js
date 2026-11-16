@@ -27,8 +27,9 @@ function PlayIcon({ size = 28 }) {
 /** Portrait video card that expands into a popup player (and shrinks back on close). */
 /**
  * variant: "feature" (large card, e.g. the Day One message) | "tile" (portrait tile in a row of videos)
+ * caption: optional overlay inside the card (e.g. a name + label in the student carousel)
  */
-export default function VideoMessage({ src, poster, label = "Watch the message", title, variant = "feature" }) {
+export default function VideoMessage({ src, poster, label = "Watch the message", title, variant = "feature", caption = null }) {
   const cardRef = useRef(null);
   const dialogRef = useRef(null);
   const panelRef = useRef(null);
@@ -178,7 +179,8 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
             <PlayIcon />
           </span>
         </span>
-        <span className="video-card-label">{label}</span>
+        {label && <span className="video-card-label">{label}</span>}
+        {caption}
       </button>
 
       <dialog ref={dialogRef} className="video-dialog" aria-label={title}>

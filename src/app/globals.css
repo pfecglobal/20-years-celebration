@@ -1580,6 +1580,165 @@ body {
   background: linear-gradient(180deg, #100796 0, #f9f9f9 780px, #f9f9f9 100%);
 }
 
+/* Team video country tabs (sit on the dark top of .bg-voices) */
+.country-tabs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 6px;
+  scrollbar-width: none;
+}
+
+.country-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .country-tabs {
+    justify-content: flex-start;
+  }
+}
+
+.country-tab {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px 9px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.35s ease, color 0.45s ease, border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.country-tab:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+.country-tab:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.country-tab.is-active {
+  border-color: var(--color-gold);
+  background: #fff;
+  color: #0b0b2b;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 3px rgba(212, 175, 55, 0.25);
+}
+
+/* Once JS has measured, the white highlight is a separate pill that glides between tabs */
+.country-tab.has-pill.is-active {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.country-tab-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border: 1px solid var(--color-gold);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28), 0 0 0 3px rgba(212, 175, 55, 0.25), 0 0 26px rgba(212, 175, 55, 0.35);
+  pointer-events: none;
+  transition:
+    transform 0.6s cubic-bezier(0.34, 1.32, 0.5, 1),
+    width 0.6s cubic-bezier(0.34, 1.32, 0.5, 1),
+    height 0.6s cubic-bezier(0.34, 1.32, 0.5, 1);
+}
+
+.country-tab-flag {
+  width: 26px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.country-tab-globe {
+  width: 18px;
+  height: 18px;
+}
+
+/* Multi-row wall: 2 across on phones (instead of the swipe row), 5 across from 640px */
+@media (max-width: 639px) {
+  .video-wall--grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+}
+
+.video-wall--grid {
+  row-gap: clamp(14px, 2vw, 26px);
+}
+
+/* Filter swap: old tiles sink away, panel height eases, new tiles cascade in */
+.country-panel {
+  overflow: clip;
+  overflow-clip-margin: 32px;
+  transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.country-panel-inner .video-wall > li {
+  --stagger: min(var(--i, 0), 14);
+}
+
+.country-panel-inner.is-out .video-wall > li {
+  animation: tile-out 0.26s cubic-bezier(0.4, 0, 1, 1) both;
+  animation-delay: calc(min(var(--i, 0), 10) * 6ms);
+}
+
+.country-panel-inner.is-in .video-wall > li {
+  animation: tile-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--stagger) * 55ms);
+}
+
+@keyframes tile-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.96);
+    filter: blur(6px);
+  }
+}
+
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: perspective(900px) translate3d(0, 46px, 0) rotateX(10deg) scale(0.92);
+    filter: blur(12px);
+  }
+  60% {
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .country-panel { transition: none; }
+  .country-tab-pill { transition: none; }
+  .country-panel-inner .video-wall > li { animation: none !important; }
+}
+
 /* phones: swipeable row; ≥640px: 5 tiles across */
 .video-wall {
   display: flex;
@@ -1630,6 +1789,139 @@ body {
   bottom: 14px;
   font-size: 0.65rem;
   letter-spacing: 0.18em;
+}
+
+/* ---------- Student stories: coverflow carousel ---------- */
+.sc-stage {
+  --w: clamp(190px, 21vw, 290px); /* centre card width; height follows the 9:16 tile */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  outline: none;
+}
+
+@media (max-width: 639px) {
+  .sc-stage {
+    --w: 56vw;
+  }
+}
+
+/* Soft brand glow behind the centre card on the light background, breathing slowly */
+.sc-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 26% 44% at 50% 46%, rgba(66, 52, 255, 0.22), transparent 70%),
+    radial-gradient(ellipse 46% 60% at 50% 50%, rgba(212, 175, 55, 0.14), transparent 75%);
+  filter: blur(12px);
+  animation: sc-breathe 6s ease-in-out infinite;
+}
+
+@keyframes sc-breathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+.sc-track {
+  position: relative;
+  height: calc(var(--w) * 16 / 9 + 64px);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.sc-slide {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  width: var(--w);
+  margin-left: calc(var(--w) / -2);
+  opacity: var(--o);
+  transform: translate3d(calc(var(--x) * var(--w)), 0, 0) scale(var(--s));
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: saturate(0.7) brightness(0.92);
+  will-change: transform;
+}
+
+.sc-slide.is-active {
+  filter: none;
+}
+
+/* A card that loops round from one end to the other appears in place instead of flying across */
+.sc-slide.is-wrapping {
+  transition: none;
+  animation: sc-wrap-in 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes sc-wrap-in {
+  from { opacity: 0; }
+}
+
+.sc-slide .video-card {
+  box-shadow: 0 24px 50px -24px rgba(11, 11, 43, 0.45), 0 0 0 1px rgba(11, 11, 43, 0.06);
+}
+
+.sc-slide.is-active .video-card {
+  box-shadow: 0 40px 80px -28px rgba(16, 7, 150, 0.6), 0 0 0 2px rgba(212, 175, 55, 0.55);
+}
+
+/* Side cards don't lift on hover — only the centre one is "live" */
+.sc-slide:not(.is-active) .video-card:hover {
+  transform: none;
+}
+
+.sc-slide:not(.is-active) .video-play {
+  opacity: 0;
+}
+
+.sc-pick {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+/* Name overlay on each card (bottom-left, like the reference) */
+.sc-caption {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  pointer-events: none;
+}
+
+.sc-caption-tag {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.sc-caption-name {
+  font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-slide { transition: none; }
+  .sc-glow { animation: none; }
 }
 
 /* ---------- Story (hero-style background) ---------- */
