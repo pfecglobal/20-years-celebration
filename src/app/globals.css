@@ -313,6 +313,69 @@ body {
   padding-top: 6px;
 }
 
+/* Phones: the hero is exactly one screen tall, and its content scales with the screen *height*
+   too, so logo → 20 → tagline → button → scroll hint always fit, on short and tall phones alike */
+@media (max-width: 639px) {
+  .hero {
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+  }
+
+  .hero-content {
+    padding: 4svh 16px 9svh;
+  }
+
+  .hero-content .intro-logo {
+    width: clamp(104px, 19svh, 150px);
+  }
+
+  .hero-content > div[aria-hidden] {
+    margin-top: 2svh;
+  }
+
+  .split-word {
+    font-size: clamp(2rem, min(12vw, 7.2svh), 3.4rem);
+  }
+
+  .twenty {
+    font-size: clamp(5.5rem, min(42vw, 25svh), 11rem);
+  }
+
+  .intro-pill {
+    margin-top: 3svh;
+    padding: 0.55rem 1.1rem;
+    font-size: clamp(0.78rem, 1.9svh, 0.9rem);
+  }
+
+  .hero-cta {
+    margin-top: 2.6svh;
+  }
+
+  .hero-cta .celebrate-btn {
+    padding: clamp(0.6rem, 1.6svh, 0.8rem) 1.5rem;
+  }
+
+  /* there's room for the scroll hint again on phones */
+  .scroll-cue {
+    display: flex;
+    bottom: 2.4svh;
+    gap: 6px;
+    font-size: 10px;
+  }
+
+  .scroll-cue .mouse {
+    width: 20px;
+    height: 32px;
+  }
+}
+
+/* very short phones (landscape etc.): drop the scroll hint */
+@media (max-width: 639px) and (max-height: 560px) {
+  .scroll-cue { display: none; }
+}
+
+
 .scroll-cue .mouse::before {
   content: "";
   width: 4px;
@@ -487,6 +550,28 @@ body {
 
 @keyframes marquee {
   to { transform: translateX(-50%); }
+}
+
+/* Phones: slimmer ribbons, tilted more so they cross in a clear X and both stay readable */
+@media (max-width: 639px) {
+  .marquee {
+    transform: rotate(-6deg);
+    margin: 0 -3rem;
+    box-shadow: 0 12px 30px -14px rgba(255, 170, 40, 0.6);
+  }
+
+  .marquee--back {
+    transform: rotate(6deg);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  }
+
+  .marquee-track {
+    animation-duration: 26s;
+  }
+
+  .marquee--back .marquee-track {
+    animation-duration: 32s;
+  }
 }
 
 /* ---------- Celebrate button ---------- */
@@ -1153,6 +1238,55 @@ body {
   animation: node-ping 1.4s ease-out 2;
 }
 
+/* ---------- "Sheet over" transition (CoverReveal) ---------- */
+/* the pinned part locks when its bottom meets the bottom of the screen; the next section slides over it */
+.cover-pin {
+  position: sticky;
+  /* --pin-top is set from JS (visible viewport height − pin height) so it also matches on phones,
+     where the browser bar changes the viewport height; the calc is the no-JS fallback */
+  top: var(--pin-top, calc(100svh - var(--pin-h, 100svh)));
+  z-index: 0;
+  overflow: hidden;
+}
+
+@supports not (height: 100svh) {
+  .cover-pin { top: var(--pin-top, calc(100vh - var(--pin-h, 100vh))); }
+}
+
+.cover-pin-inner {
+  position: relative;
+  transform-origin: 50% 35%;
+  transform: scale(calc(1 - var(--cover, 0) * var(--cover-scale, 0.1))) translate3d(0, calc(var(--cover, 0) * -3%), 0);
+  border-radius: calc(var(--cover, 0) * var(--cover-radius, 32px));
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* darkens as the sheet covers it */
+.cover-pin-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 8, 44, 0.25), #08082c);
+  opacity: calc(var(--cover, 0) * var(--cover-shade, 0.8));
+  pointer-events: none;
+}
+
+.cover-sheet {
+  position: relative;
+  z-index: 1;
+  margin-top: -1px;
+  border-radius: 40px 40px 0 0;
+  overflow: hidden;
+  box-shadow: 0 -30px 60px -24px rgba(16, 7, 150, 0.45);
+}
+
+/* Phones get exactly the same sheet-over effect as desktop */
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-pin-inner { transform: none; border-radius: 0; }
+  .cover-pin-shade { opacity: 0; }
+}
+
 /* ---------- Below the hero: the #100694 ↔ #F9F9F9 palette ---------- */
 /* Video → journey: one blue (continuing the hero) → #F9F9F9 gradient, like the video design */
 .bg-flow-down {
@@ -1236,18 +1370,25 @@ body {
 }
 
 /* TODAY → offices: the light background turns into #121212 behind the crowd illustration,
-   through the brand colours (no grey band), so the offices section starts cleanly on #121212 */
-#today {
-  isolation: isolate;
+   through the brand colours (no grey band), so the offices section starts cleanly on #121212.
+   Lives on the pinned photo block (CoverReveal), so the TODAY card itself stays on plain #F9F9F9. */
+.cover-pin--today {
+  background: linear-gradient(180deg, #f9f9f9 0%, #f9f9f9 34%, #c9c6ec 52%, #100694 80%, #121212 100%);
 }
 
-#today::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, transparent 52%, #c9c6ec 64%, #100694 84%, #121212 100%);
+/* Phones: the photo fills most of the screen (like on desktop) so the sheet-over effect reads the same —
+   it's cropped to its centre (the two people + the crowd around them) */
+@media (max-width: 639px) {
+  .cover-pin--today .cover-pin-inner > [data-reveal] {
+    height: 55svh;
+  }
+
+  .cover-pin--today .cover-pin-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
 }
 
 .offices-maps {
@@ -1595,11 +1736,6 @@ body {
   display: none;
 }
 
-@media (max-width: 639px) {
-  .country-tabs {
-    justify-content: flex-start;
-  }
-}
 
 .country-tab {
   display: inline-flex;
@@ -1673,6 +1809,68 @@ body {
 .country-tab-globe {
   width: 18px;
   height: 18px;
+}
+
+/* Phones: one segmented bar — "All" + flags only, 6 equal slots that always fit the width
+   (the white highlight pill slides inside the bar) */
+@media (max-width: 639px) {
+  .country-tabs {
+    display: grid;
+    grid-template-columns: 1.35fr repeat(5, 1fr);
+    gap: 2px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 4px;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+  }
+
+  .country-tab {
+    justify-content: center;
+    min-width: 0;
+    gap: 0;
+    padding: 9px 0;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+    font-size: 0.85rem;
+  }
+
+  .country-tab:hover {
+    background: transparent;
+    transform: none;
+  }
+
+  .country-tab:not(.has-pill).is-active {
+    background: #fff;
+  }
+
+  .country-tab-globe {
+    display: none;
+  }
+
+  .country-tab-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .country-tab-flag {
+    width: 24px;
+    height: 17px;
+  }
+
+  .country-tab-pill {
+    border-width: 1px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(212, 175, 55, 0.25);
+  }
 }
 
 /* Multi-row wall: 2 across on phones (instead of the swipe row), 5 across from 640px */
@@ -1798,11 +1996,23 @@ body {
   isolation: isolate;
   overflow: hidden;
   outline: none;
+  /* side cards fade out at the edges, and the bottom fades too, so the stage never ends in a hard line */
+  --edge: 9%;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, #000 var(--edge), #000 calc(100% - var(--edge)), transparent 100%),
+    linear-gradient(180deg, #000 0, #000 calc(100% - 26px), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0, #000 var(--edge), #000 calc(100% - var(--edge)), transparent 100%),
+    linear-gradient(180deg, #000 0, #000 calc(100% - 26px), transparent 100%);
+  mask-composite: intersect;
 }
 
 @media (max-width: 639px) {
   .sc-stage {
     --w: 56vw;
+    margin: 0 -16px; /* edge to edge on phones (cancels the section's side padding) */
+    --edge: 14%;
   }
 }
 
@@ -1815,6 +2025,9 @@ body {
     radial-gradient(ellipse 26% 44% at 50% 46%, rgba(66, 52, 255, 0.22), transparent 70%),
     radial-gradient(ellipse 46% 60% at 50% 50%, rgba(212, 175, 55, 0.14), transparent 75%);
   filter: blur(12px);
+  /* fade the glow out before the stage edges, so it never ends in a hard line */
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 45%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 45%, transparent 100%);
   animation: sc-breathe 6s ease-in-out infinite;
 }
 
@@ -1864,8 +2077,33 @@ body {
   box-shadow: 0 24px 50px -24px rgba(11, 11, 43, 0.45), 0 0 0 1px rgba(11, 11, 43, 0.06);
 }
 
+/* the centre card is lifted towards the viewer: deeper layered shadow + gold rim */
 .sc-slide.is-active .video-card {
-  box-shadow: 0 40px 80px -28px rgba(16, 7, 150, 0.6), 0 0 0 2px rgba(212, 175, 55, 0.55);
+  box-shadow:
+    0 28px 50px -18px rgba(11, 11, 43, 0.55),
+    0 50px 90px -30px rgba(16, 7, 150, 0.65),
+    0 0 0 2px rgba(212, 175, 55, 0.55);
+}
+
+/* soft "floor" shadow under the centre card */
+.sc-slide::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -26px;
+  z-index: -1;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(16, 7, 150, 0.45), rgba(16, 7, 150, 0) 70%);
+  filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.sc-slide.is-active::after {
+  opacity: 1;
 }
 
 /* Side cards don't lift on hover — only the centre one is "live" */
@@ -1940,6 +2178,24 @@ body {
   z-index: -1;
   -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 120px, #000 260px);
   mask-image: linear-gradient(180deg, transparent 0, transparent 120px, #000 260px);
+}
+
+/* Phones: shorter light → blue blend so the story text can start higher (less empty gap).
+   The student section already tints towards lilac at its bottom, so the story continues from that same
+   lilac — the slider area flows into this section without a seam. */
+@media (max-width: 639px) {
+  .bg-voices {
+    background: linear-gradient(180deg, #100796 0, #f9f9f9 780px, #f9f9f9 calc(100% - 240px), #dcdaf2 100%);
+  }
+
+  .bg-story {
+    background: linear-gradient(180deg, #dcdaf2 0, #100694 90px, #121212 45%, #100694 100%);
+  }
+
+  .stars-carry--story {
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 60px, #000 160px);
+    mask-image: linear-gradient(180deg, transparent 0, transparent 60px, #000 160px);
+  }
 }
 
 /* ---------- Premium card (same look as the TODAY card) ----------

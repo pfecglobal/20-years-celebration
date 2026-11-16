@@ -118,9 +118,21 @@ export default function CelebrationCanvas() {
           sparks.splice(i, 1);
           continue;
         }
+        if (s.ring) {
+          // touch ripple: a thin gold ring that eases outward and fades
+          const t = 1 - s.life;
+          const eased = 1 - Math.pow(1 - t, 3);
+          ctx.globalAlpha = s.life * s.life * 0.45;
+          ctx.strokeStyle = s.color;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, 4 + eased * s.size, 0, Math.PI * 2);
+          ctx.stroke();
+          continue;
+        }
         if (s.flash) {
           const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size);
-          g.addColorStop(0, `rgba(255,240,200,${0.55 * s.life})`);
+          g.addColorStop(0, `rgba(255,236,180,${(s.peak ?? 0.55) * s.life})`);
           g.addColorStop(1, "rgba(255,200,80,0)");
           ctx.globalAlpha = 1;
           ctx.fillStyle = g;
@@ -184,10 +196,56 @@ export default function CelebrationCanvas() {
       start();
     };
 
+    // Touch screens have no cursor: press → soft glow + ripple ring, drag / scroll → sparkle trail under the finger
+    // soft, low-opacity halo that fades slowly
+    const glowAt = (x, y, size, peak) =>
+      sparks.push({ x, y, px: x, py: y, vx: 0, vy: 0, life: 1, decay: 0.022, color: "#fff", size, peak, gravity: 0, friction: 1, flash: true });
+    // a few tiny gold motes that drift gently upward and fade
+    const sparkle = (x, y, n, speed) => {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const sp = 0.2 + Math.random() * speed;
+        sparks.push({
+          x, y, px: x, py: y,
+          vx: Math.cos(a) * sp,
+          vy: Math.sin(a) * sp - 0.25,
+          life: 0.75, decay: 0.01 + Math.random() * 0.01,
+          color: pick(["#ffd36b", "#ffe08a", "#fff3c4"]),
+          size: 0.8 + Math.random() * 1, gravity: -0.004, friction: 0.97,
+        });
+      }
+    };
+
+    let tx = -1;
+    let ty = -1;
+    const onTouchStart = (e) => {
+      const t = e.touches[0];
+      if (!t) return;
+      tx = t.clientX;
+      ty = t.clientY;
+      glowAt(tx, ty, 38, 0.3);
+      sparks.push({ x: tx, y: ty, px: tx, py: ty, vx: 0, vy: 0, life: 1, decay: 0.018, color: "#ffd36b", size: 30, gravity: 0, friction: 1, ring: true });
+      sparkle(tx, ty, 5, 0.9);
+      start();
+    };
+    const onTouchMove = (e) => {
+      const t = e.touches[0];
+      if (!t) return;
+      const dx = t.clientX - tx;
+      const dy = t.clientY - ty;
+      if (dx * dx + dy * dy < 200) return; // ~14px between drops → a light, even trail
+      tx = t.clientX;
+      ty = t.clientY;
+      glowAt(tx, ty, 22, 0.18);
+      sparkle(tx, ty, 1 + (Math.random() < 0.5 ? 1 : 0), 0.6);
+      start();
+    };
+
     // Click anywhere → firework burst at that spot (interactive elements keep their normal behaviour)
     const INTERACTIVE = "a, button, input, textarea, select, label, video, dialog, [role='button'], .video-card, .award-row";
     const onClick = (e) => {
       if (e.button !== 0 || e.target.closest?.(INTERACTIVE)) return;
+      if (e.pointerType === "touch" || e.pointerType === "pen") return; // touch gets the soft glow instead
       if (window.getSelection?.().toString()) return; // don't fire while selecting text
       explode(e.clientX, e.clientY);
     };
@@ -234,6 +292,8 @@ export default function CelebrationCanvas() {
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pfec:celebrate", onCelebrate);
     window.addEventListener("click", onClick);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);
@@ -243,6 +303,8 @@ export default function CelebrationCanvas() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pfec:celebrate", onCelebrate);
       window.removeEventListener("click", onClick);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
     };
   }, []);
 

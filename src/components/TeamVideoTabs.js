@@ -125,6 +125,7 @@ export default function TeamVideoTabs({ countries }) {
               aria-selected={selected}
               aria-controls="team-tabpanel"
               tabIndex={selected ? 0 : -1}
+              title={t.name}
               onClick={() => select(t.code, i)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={`country-tab ${selected ? "is-active" : ""} ${pill ? "has-pill" : ""}`}
@@ -134,7 +135,8 @@ export default function TeamVideoTabs({ countries }) {
               ) : (
                 <img src={`/images/flags/${t.code}.svg`} alt="" width={26} height={18} className="country-tab-flag" />
               )}
-              <span>{t.name}</span>
+              {/* phones: country names are visually hidden (flags only) so every tab fits in one row */}
+              <span className={t.code === ALL ? undefined : "country-tab-name"}>{t.name}</span>
             </button>
           );
         })}

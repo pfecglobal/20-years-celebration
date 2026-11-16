@@ -15,6 +15,7 @@ import TeamVideoTabs from "@/components/TeamVideoTabs";
 import StudentCarousel from "@/components/StudentCarousel";
 import BackToTop from "@/components/BackToTop";
 import SmoothScroll from "@/components/SmoothScroll";
+import CoverReveal from "@/components/CoverReveal";
 import {
   ANNIVERSARY_YEAR,
   DAY_ONE,
@@ -55,14 +56,14 @@ const ICONS = {
 function Marquee({ back = false }) {
   const row = [...MARQUEE, ...MARQUEE];
   return (
-    <div className={`marquee py-3 sm:py-4 ${back ? "marquee--back" : ""}`} aria-hidden="true">
+    <div className={`marquee py-2 sm:py-4 ${back ? "marquee--back" : ""}`} aria-hidden="true">
       <div className="marquee-track">
         {[0, 1].map((g) => (
           <div key={g} className="flex shrink-0">
             {row.map((t, i) => (
               <span
                 key={i}
-                className={`flex items-center gap-6 px-6 text-lg font-extrabold tracking-wider whitespace-nowrap uppercase sm:text-2xl ${
+                className={`flex items-center gap-4 px-4 text-sm font-extrabold tracking-wider whitespace-nowrap uppercase sm:gap-6 sm:px-6 sm:text-2xl ${
                   back ? "text-white/80" : "text-[#08082c]"
                 }`}
               >
@@ -176,7 +177,7 @@ export default function Home() {
         </div>
 
         {/* TODAY — the road ends here, on top of a premium card */}
-        <section id="today" className="relative overflow-hidden pt-12 text-center">
+        <section id="today" className="relative z-[1] overflow-x-clip pt-12 pb-6 text-center sm:pb-8">
           <div className="px-4 sm:px-6">
             {/* opacity-only reveal so the node (road end point) never moves */}
             <div data-reveal="fade" className="today-card">
@@ -198,28 +199,36 @@ export default function Home() {
               <p className="today-text">{TODAY.text}</p>
             </div>
           </div>
-          <div data-reveal="rise" style={{ "--d": "250ms" }} className="mx-auto mt-8 max-w-[1760px] sm:mt-10">
-            <Image
-              src={TODAY.image}
-              alt={TODAY.imageAlt}
-              width={1760}
-              height={893}
-              sizes="(min-width: 1760px) 1760px, 100vw"
-              className="h-auto w-full"
-            />
-          </div>
         </section>
 
-        {/* Offices: hero gradient (#121212 → #100796) with stars, flowing into the awards section */}
-        <section id="offices" className="bg-offices relative isolate overflow-hidden px-4 pt-20 pb-20 sm:px-6 sm:pt-28 sm:pb-28">
-          <div className="stars-carry stars-carry--in" aria-hidden="true">
-            <SparkleField />
-          </div>
-          <OfficesMap data={OFFICES} />
-        </section>
+        {/* The celebration photo stays pinned while the offices section slides up over it like a sheet */}
+        <CoverReveal
+          className="bg-[#f9f9f9]"
+          pinClassName="cover-pin--today pt-8 sm:pt-10"
+          pin={
+            <div data-reveal="rise" style={{ "--d": "250ms" }} className="mx-auto max-w-[1760px]">
+              <Image
+                src={TODAY.image}
+                alt={TODAY.imageAlt}
+                width={1760}
+                height={893}
+                sizes="(min-width: 1760px) 1760px, (min-width: 640px) 100vw, 1000px"
+                className="h-auto w-full"
+              />
+            </div>
+          }
+        >
+          {/* Offices: hero gradient (#121212 → #100796) with stars, flowing into the awards section */}
+          <section id="offices" className="bg-offices relative isolate overflow-hidden px-4 pt-20 pb-8 sm:px-6 sm:pt-28 sm:pb-28">
+            <div className="stars-carry stars-carry--in" aria-hidden="true">
+              <SparkleField />
+            </div>
+            <OfficesMap data={OFFICES} />
+          </section>
+        </CoverReveal>
 
         {/* 50+ Awards & Recognitions: solid #100796, two marquee rows in opposite directions */}
-        <section id="awards" className="bg-awards relative overflow-hidden py-20 sm:py-28">
+        <section id="awards" className="bg-awards relative overflow-hidden pt-8 pb-20 sm:py-28">
           <AwardsMarquee data={AWARDS} />
         </section>
 
@@ -239,7 +248,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="students" className="px-4 pt-12 pb-24 sm:px-6 sm:pt-16 sm:pb-32">
+          <section id="students" className="px-4 pt-12 pb-6 sm:px-6 sm:pt-16 sm:pb-32">
             <div className="mx-auto max-w-7xl">
               <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
                 {VOICES.students.title}
@@ -252,7 +261,7 @@ export default function Home() {
         </div>
 
         {/* Story: hero-style background (#121212 → #100694) with stars, blended in/out of the light sections */}
-        <section id="story" className="bg-story relative isolate overflow-hidden px-4 pt-44 pb-40 sm:px-6 sm:pt-56 sm:pb-52">
+        <section id="story" className="bg-story relative isolate overflow-hidden px-4 pt-28 pb-6 sm:px-6 sm:pt-56 sm:pb-52">
           <div className="stars-carry stars-carry--story" aria-hidden="true">
             <SparkleField />
           </div>
@@ -272,7 +281,7 @@ export default function Home() {
           <div className="on-light">
 
             {/* Stats */}
-            <section id="numbers" className="px-4 pt-16 pb-24 sm:px-6 sm:pt-20 sm:pb-36">
+            <section id="numbers" className="px-4 pt-2 pb-8 sm:px-6 sm:pt-20 sm:pb-36">
               <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
                 {STATS.map((s, i) => (
                   <div key={s.label} data-reveal="zoom" style={{ "--d": `${i * 120}ms` }}>
@@ -282,7 +291,7 @@ export default function Home() {
                     >
                       <span className="today-spark today-spark--tl" aria-hidden="true">✦</span>
                       <span className="today-spark today-spark--br" aria-hidden="true">✦</span>
-                      <p className="text-gold relative text-4xl font-extrabold tracking-tight sm:text-6xl">
+                      <p className="text-gold relative text-3xl font-extrabold tracking-tight sm:text-6xl">
                         <CountUp end={s.value} suffix={s.suffix} />
                       </p>
                       <p className="relative mt-3 text-xs font-semibold tracking-[0.2em] text-[#8c6d35] uppercase sm:text-sm">
@@ -295,9 +304,9 @@ export default function Home() {
             </section>
 
             {/* Marquee ribbons */}
-            <div className="relative overflow-x-clip py-10">
+            <div className="relative overflow-x-clip pt-10 pb-8 sm:py-10">
               <Marquee back />
-              <div className="-mt-12 sm:-mt-14">
+              <div className="-mt-9 sm:-mt-14">
                 <Marquee />
               </div>
           </div>
@@ -334,7 +343,7 @@ export default function Home() {
         </div>
 
           {/* Celebrate */}
-          <section id="celebrate" className="relative isolate overflow-hidden px-4 py-28 text-center sm:px-6 sm:py-40">
+          <section id="celebrate" className="relative isolate overflow-hidden px-4 pt-8 pb-28 text-center sm:px-6 sm:py-40">
             <div className="stars-carry stars-carry--up" aria-hidden="true">
               <SparkleField />
             </div>

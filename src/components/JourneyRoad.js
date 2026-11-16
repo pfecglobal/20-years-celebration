@@ -39,10 +39,13 @@ export default function JourneyRoad({ items, endId }) {
       // Vertical tangents at each node → smooth S-curves like a winding road
       const end = endId && document.getElementById(endId);
       let tail = { x: pts[pts.length - 1].x, y: h };
+      let hole = null;
       if (end) {
         const r = end.getBoundingClientRect();
-        // end exactly at the top edge of the end node, so the line meets the circle cleanly
-        tail = { x: r.left + r.width / 2 - box.left, y: r.top - box.top + 1 };
+        // run into the centre of the end node; a mask hides the road inside the circle,
+        // so the line looks like it slides in *behind* it (no round cap sitting on top)
+        tail = { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+        hole = { x: tail.x, y: tail.y, r: r.width / 2 + 2 }; // +2 → edge tucked under the node's ring
       }
       const all = [{ x: pts[0].x, y: 0 }, ...pts, tail];
       let d = `M ${all[0].x} ${all[0].y}`;
@@ -58,7 +61,7 @@ export default function JourneyRoad({ items, endId }) {
           d += ` C ${a.x} ${a.y + k}, ${b.x} ${b.y - k}, ${b.x} ${b.y}`;
         }
       }
-      setGeom({ w, h, d, nodeYs: pts.map((p) => p.y) });
+      setGeom({ w, h, d, hole, nodeYs: pts.map((p) => p.y) });
     };
     const ro = new ResizeObserver(build);
     ro.observe(wrap);
@@ -155,15 +158,23 @@ export default function JourneyRoad({ items, endId }) {
               <stop offset="0.62" stopColor="#3a3fe6" />
               <stop offset="1" stopColor="#100694" />
             </linearGradient>
+            {geom.hole && (
+              <mask id={`${gradId}-mask`} maskUnits="userSpaceOnUse" x={-geom.w} y={-geom.h} width={geom.w * 3} height={geom.h * 3}>
+                <rect x={-geom.w} y={-geom.h} width={geom.w * 3} height={geom.h * 3} fill="#fff" />
+                <circle cx={geom.hole.x} cy={geom.hole.y} r={geom.hole.r} fill="#000" />
+              </mask>
+            )}
           </defs>
-          {/* grey road */}
-          <path ref={(el) => { pathRefs.current[0] = el; }} d={geom.d} fill="none" stroke="#c4c2e4" strokeWidth="5" strokeLinecap="round" />
-          {/* glowing progress (layered strokes = cheap glow) */}
-          <path ref={(el) => { pathRefs.current[1] = el; }} d={geom.d} fill="none" stroke={`url(#${gradId})`} strokeWidth="22" strokeOpacity="0.12" strokeLinecap="round" />
-          <path ref={(el) => { pathRefs.current[2] = el; }} d={geom.d} fill="none" stroke={`url(#${gradId})`} strokeWidth="13" strokeOpacity="0.28" strokeLinecap="round" />
-          <path ref={(el) => { pathRefs.current[3] = el; }} d={geom.d} fill="none" stroke={`url(#${gradId})`} strokeWidth="6" strokeLinecap="round" />
-          {/* light at the tip */}
-          <circle ref={tipRef} r="7" className="jr-tip" style={{ opacity: 0 }} />
+          <g mask={geom.hole ? `url(#${gradId}-mask)` : undefined}>
+            {/* grey road */}
+            <path ref={(el) => { pathRefs.current[0] = el; }} d={geom.d} fill="none" stroke="#c4c2e4" strokeWidth="5" strokeLinecap="round" />
+            {/* glowing progress (layered strokes = cheap glow) */}
+            <path ref={(el) => { pathRefs.current[1] = el; }} d={geom.d} fill="none" stroke={`url(#${gradId})`} strokeWidth="22" strokeOpacity="0.12" strokeLinecap="round" />
+            <path ref={(el) => { pathRefs.current[2] = el; }} d={geom.d} fill="none" stroke={`url(#${gradId})`} strokeWidth="13" strokeOpacity="0.28" strokeLinecap="round" />
+            <path ref={(el) => { pathRefs.current[3] = el; }} d={geom.d} fill="none" stroke={`url(#${gradId})`} strokeWidth="6" strokeLinecap="round" />
+            {/* light at the tip */}
+            <circle ref={tipRef} r="7" className="jr-tip" style={{ opacity: 0 }} />
+          </g>
         </svg>
       )}
 
