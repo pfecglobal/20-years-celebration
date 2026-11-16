@@ -1276,22 +1276,10 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   .cover-pin { top: var(--pin-top, calc(100vh - var(--pin-h, 100vh))); }
 }
 
+/* the photo stays exactly as it is — the next section simply slides up over it */
 .cover-pin-inner {
   position: relative;
-  transform-origin: 50% 35%;
-  transform: scale(calc(1 - var(--cover, 0) * var(--cover-scale, 0.1))) translate3d(0, calc(var(--cover, 0) * -3%), 0);
-  border-radius: calc(var(--cover, 0) * var(--cover-radius, 32px));
   overflow: hidden;
-  will-change: transform;
-}
-
-/* darkens as the sheet covers it */
-.cover-pin-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(8, 8, 44, 0.25), #08082c);
-  opacity: calc(var(--cover, 0) * var(--cover-shade, 0.8));
-  pointer-events: none;
 }
 
 .cover-sheet {
@@ -1306,8 +1294,6 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 /* Phones get exactly the same sheet-over effect as desktop */
 
 @media (prefers-reduced-motion: reduce) {
-  .cover-pin-inner { transform: none; border-radius: 0; }
-  .cover-pin-shade { opacity: 0; }
 }
 
 /* ---------- Below the hero: the #100694 ↔ #F9F9F9 palette ---------- */
