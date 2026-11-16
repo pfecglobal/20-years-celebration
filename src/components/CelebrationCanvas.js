@@ -300,12 +300,12 @@ export default function CelebrationCanvas() {
       if (document.hidden || !inHero()) return;
       launch();
       if (Math.random() < 0.4) later(() => launch(), 350);
-    }, 4200);
+    }, 7000);
 
-    // Further down the page: a small show (2–3 rockets) every 5–6s — not while a video is playing.
+    // Further down the page: a small show (2–3 rockets) every 8–10s — not while a video is playing.
     // Rockets are spread across the screen: always one left + one right, and the 3rd in the middle.
-    const PAGE_MIN_MS = 5000;
-    const PAGE_MAX_MS = 6000;
+    const PAGE_MIN_MS = 8000;
+    const PAGE_MAX_MS = 10000;
     const LANES = [
       [0.06, 0.3], // left
       [0.7, 0.94], // right
