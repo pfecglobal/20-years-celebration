@@ -148,6 +148,13 @@ body {
   animation-delay: calc(var(--start, 0s) + var(--i) * 70ms);
 }
 
+/* Glossy sweep on the words too — staggered so it runs down the stack: CELEBRATING → 20 → YEARS, 0.6s apart,
+   every 5s. All three sweeps (re)start together when a firework show ends (html.is-celebrating pauses them),
+   so the delays are relative to that moment: CELEBRATING 0.2s, the 20 0.8s (its own rule), YEARS 1.4s. */
+.split-word.text-gold-shimmer {
+  animation-delay: var(--shine-delay, 2.4s);
+}
+
 @keyframes letter-up {
   from { transform: translateY(110%) rotate(8deg); opacity: 0; }
   to { transform: none; opacity: 1; }
@@ -1059,6 +1066,47 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   transition: color 0.6s;
 }
 
+/* country pill beside the city: small flag + name in soft gold */
+.jr-country {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+  padding: 2px 8px 2px 4px;
+  border: 1px solid rgba(200, 169, 106, 0.4);
+  border-radius: 999px;
+  background: rgba(200, 169, 106, 0.1);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  color: #8c6d35;
+  vertical-align: 2px;
+  white-space: nowrap;
+}
+
+.jr-country--flag {
+  padding: 3px 5px;
+}
+
+.jr-country img {
+  width: 16px;
+  height: 11px;
+  border-radius: 2px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* not reached yet: pill greyed like the rest of the card */
+.jr-item:not(.is-active) .jr-country {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.jr-country {
+  transition: filter 0.9s, opacity 0.9s;
+}
+
 .jr-text {
   margin-top: 0.3rem;
   font-size: 0.82rem;
@@ -1095,10 +1143,10 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 @media (min-width: 640px) {
   .journey-road {
-    --seg: 340px;
+    --seg: 230px; /* text-only milestone cards: closer together */
     --pad: 70px;
     /* + room for the last milestone card, which hangs below its node */
-    height: calc(var(--pad) + (var(--n) - 1) * var(--seg) + 330px);
+    height: calc(var(--pad) + (var(--n) - 1) * var(--seg) + 230px);
   }
 
   .jr-item {
@@ -1214,6 +1262,69 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: #8c6d35;
+}
+
+/* Journey intro: round country flags under "Our Journey · 2006 — 2026" */
+.journey-flags {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+  list-style: none;
+}
+
+.journey-flags li {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 0 0 1.5px #fff,
+    0 0 0 2.75px rgba(200, 169, 106, 0.75),
+    0 6px 12px -6px rgba(16, 6, 148, 0.5);
+  scale: 0;
+  transition: transform 0.35s var(--ease-back), box-shadow 0.35s ease;
+}
+
+.journey-flags img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* one after another: each flag pops in, then they bob gently in a little wave */
+.journey-flags.is-in li {
+  animation:
+    flag-pop 0.6s var(--ease-back) both,
+    flag-bob 4s ease-in-out infinite;
+  animation-delay:
+    calc(0.35s + var(--k) * 0.15s),
+    calc(1.4s + var(--k) * 0.35s);
+}
+
+@keyframes flag-pop {
+  from { scale: 0; rotate: -25deg; }
+  to { scale: 1; rotate: 0deg; }
+}
+
+@keyframes flag-bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -4px; }
+}
+
+.journey-flags li:hover {
+  transform: translateY(-3px) scale(1.12);
+  box-shadow:
+    0 0 0 1.5px #fff,
+    0 0 0 2.75px #e9b949,
+    0 10px 18px -6px rgba(190, 130, 0, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-flags li { scale: 1; }
+  .journey-flags.is-in li { animation: none; }
 }
 
 .today-title {
@@ -1943,6 +2054,24 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   }
 }
 
+/* Row-by-row scroll reveal (VideoWall rowReveal): each row rises in, tiles staggered left → right */
+.video-wall--rows > li {
+  opacity: 0;
+  transform: translate3d(0, 56px, 0) scale(0.94);
+  filter: blur(8px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--row-delay, 0ms);
+}
+
+.video-wall--rows > li.row-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
 /* Multi-row wall: 2 across on phones (instead of the swipe row), 5 across from 640px */
 @media (max-width: 639px) {
   .video-wall.video-wall--grid {
@@ -2322,6 +2451,134 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 .jr-item.is-active .jr-card.premium-card {
   animation: premium-sweep 6s ease-in-out infinite;
   animation-delay: 0.4s; /* first shine right after the road arrives */
+}
+
+/* ---------- Journey cards: arrival animation + 3D hover ----------
+   Not reached yet: the card waits slightly turned away, off to its side of the road.
+   When the road arrives: it swings into place, then year → title → text → photo rise in one after another,
+   a gold underline grows under the year, and the photo settles from a slight zoom with a single shine. */
+.jr-item .jr-card.premium-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  transform-origin: 50% 0%;
+  transform: perspective(1000px) translate3d(var(--from-x, 28px), 14px, 0) rotateY(var(--from-ry, -12deg));
+  transition:
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.8s ease;
+}
+
+@media (min-width: 640px) {
+  .jr-item--a .jr-card.premium-card { --from-x: -28px; --from-ry: 12deg; } /* left of the road → comes from the left */
+  .jr-item--b .jr-card.premium-card { --from-x: 28px; --from-ry: -12deg; }
+}
+
+.jr-item.is-active .jr-card.premium-card {
+  transform: perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+}
+
+/* 3D tilt toward the cursor (vars set in JourneyRoad.js); quick follow while hovering */
+.jr-item.is-active .jr-card.premium-card:hover {
+  transform: perspective(1000px) translate3d(0, -6px, 0) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: transform 0.18s ease-out, box-shadow 0.6s ease, opacity 0.8s ease;
+}
+
+/* soft light glare that follows the cursor */
+.jr-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.55), transparent 50%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.jr-item.is-active .jr-card:hover::after {
+  opacity: 1;
+}
+
+/* content rises in, one after another, when the card activates */
+.jr-year,
+.jr-title,
+.jr-text,
+.jr-img {
+  translate: 0 12px;
+  transition-property: color, translate, filter, opacity, box-shadow, transform;
+  transition-duration: 0.6s, 0.8s, 0.9s, 0.9s, 0.9s, 0.9s;
+  transition-timing-function: ease, cubic-bezier(0.22, 1, 0.36, 1), ease, ease, ease, cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.jr-item.is-active :is(.jr-year, .jr-title, .jr-text, .jr-img) { translate: none; }
+.jr-item.is-active .jr-year { transition-delay: 0.12s; }
+.jr-item.is-active .jr-title { transition-delay: 0.2s; }
+.jr-item.is-active .jr-text { transition-delay: 0.28s; }
+.jr-item.is-active .jr-img { transition-delay: 0.36s; }
+
+/* gold underline grows under the year */
+.jr-year {
+  position: relative;
+  display: inline-block;
+}
+
+.jr-year::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #f5b000, #ffd23f 60%, rgba(255, 210, 63, 0));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.45s;
+}
+
+.jr-item.is-active .jr-year::after {
+  transform: scaleX(1);
+}
+
+/* photo: settles from a slight zoom (slow Ken Burns) as it gains colour… */
+.jr-img img {
+  transform: scale(1.14);
+  transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.jr-item.is-active .jr-img img {
+  transform: scale(1);
+}
+
+.jr-item.is-active .jr-card:hover .jr-img img {
+  transform: scale(1.05);
+  transition-duration: 0.8s;
+  transition-delay: 0s;
+}
+
+/* …with one shine sweeping across it on arrival */
+.jr-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.jr-item.is-active .jr-img::after {
+  transform: translateX(120%);
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.75s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jr-item .jr-card.premium-card,
+  .jr-item.is-active .jr-card.premium-card,
+  .jr-item.is-active .jr-card.premium-card:hover { transform: none; }
+  .jr-year, .jr-title, .jr-text, .jr-img { translate: none; }
+  .jr-img img { transform: none; }
+  .jr-img::after { display: none; }
 }
 
 /* ---------- Floating back-to-top button ---------- */

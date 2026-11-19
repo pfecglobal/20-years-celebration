@@ -34,6 +34,12 @@ import {
   TAGLINE,
 } from "@/content";
 
+// Countries with a PFEC office, in the order they joined the journey (from the milestones)
+const JOURNEY_COUNTRIES = [...new Set(MILESTONES.map((m) => m.country).filter(Boolean))].map((code) => ({
+  code,
+  name: OFFICES.countries.find((c) => c.code === code)?.name ?? code,
+}));
+
 const ICONS = {
   globe: (
     <>
@@ -182,6 +188,15 @@ export default function Home() {
                 <p data-reveal className="today-eyebrow relative">
                   Our Journey · {FOUNDED_YEAR} — {ANNIVERSARY_YEAR}
                 </p>
+                {/* round flags of every country we're in — they pop in one after another */}
+                <ul data-reveal="fade" className="journey-flags" aria-label="Countries with a PFEC office">
+                  {JOURNEY_COUNTRIES.map((c, i) => (
+                    <li key={c.code} style={{ "--k": i }} title={c.name}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`/images/flags/${c.code}.svg`} alt={c.name} width={28} height={28} />
+                    </li>
+                  ))}
+                </ul>
                 <h2 data-reveal style={{ "--d": "80ms" }} className="relative mt-3 text-3xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
                   {JOURNEY.title}
                 </h2>

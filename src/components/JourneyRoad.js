@@ -5,6 +5,9 @@ import { useEffect, useId, useRef, useState } from "react";
 
 const SAMPLES = 800;
 
+// milestone `country` code → name (flags live in /images/flags/{code}.svg)
+const COUNTRIES = { au: "Australia", bd: "Bangladesh", in: "India", lk: "Sri Lanka", id: "Indonesia" };
+
 /**
  * Winding grey road with milestone nodes. As you scroll, a glowing blue line
  * drives along the road; every node it reaches turns gold and its card goes
@@ -69,6 +72,49 @@ export default function JourneyRoad({ items, endId }) {
     if (end) ro.observe(end.parentElement);
     return () => ro.disconnect();
   }, [items.length, endId]);
+
+  // 3D hover: an active card tilts toward the cursor and a soft glare follows it (mouse / trackpad only)
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const cards = [...wrap.querySelectorAll(".jr-card")];
+    const offs = cards.map((card) => {
+      let raf = 0;
+      let px = 0.5;
+      let py = 0.5;
+      const apply = () => {
+        raf = 0;
+        card.style.setProperty("--tilt-x", `${((0.5 - py) * 8).toFixed(2)}deg`);
+        card.style.setProperty("--tilt-y", `${((px - 0.5) * 10).toFixed(2)}deg`);
+        card.style.setProperty("--gx", `${(px * 100).toFixed(1)}%`);
+        card.style.setProperty("--gy", `${(py * 100).toFixed(1)}%`);
+      };
+      const onMove = (e) => {
+        if (!card.closest(".jr-item")?.classList.contains("is-active")) return;
+        const r = card.getBoundingClientRect();
+        px = (e.clientX - r.left) / r.width;
+        py = (e.clientY - r.top) / r.height;
+        if (!raf) raf = requestAnimationFrame(apply);
+      };
+      const onLeave = () => {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        card.style.setProperty("--tilt-x", "0deg");
+        card.style.setProperty("--tilt-y", "0deg");
+      };
+      card.addEventListener("pointermove", onMove);
+      card.addEventListener("pointerleave", onLeave);
+      return () => {
+        cancelAnimationFrame(raf);
+        card.removeEventListener("pointermove", onMove);
+        card.removeEventListener("pointerleave", onLeave);
+      };
+    });
+    return () => offs.forEach((off) => off());
+  }, [items.length]);
 
   // 2) Scroll-linked progress along the road
   useEffect(() => {
@@ -180,11 +226,21 @@ export default function JourneyRoad({ items, endId }) {
 
       <ol>
         {items.map((m, i) => (
-          <li key={m.year} className={`jr-item ${i % 2 ? "jr-item--b" : "jr-item--a"}`} style={{ "--i": i }}>
+          <li key={`${m.year}-${m.title}`} className={`jr-item ${i % 2 ? "jr-item--b" : "jr-item--a"}`} style={{ "--i": i }}>
             <span className="jr-node" aria-hidden="true" />
             <div className="jr-card premium-card" style={{ "--sweep-delay": `${(i % 4) * 0.9}s` }}>
               <p className="jr-year">{m.year}</p>
-              <h3 className="jr-title">{m.title}</h3>
+              <h3 className="jr-title">
+                {m.title}
+                {m.country && (
+                  // the city is the country itself (e.g. "Indonesia") → flag only
+                  <span className={`jr-country ${COUNTRIES[m.country] === m.title ? "jr-country--flag" : ""}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`/images/flags/${m.country}.svg`} alt="" width={16} height={11} />
+                    {COUNTRIES[m.country] !== m.title && COUNTRIES[m.country]}
+                  </span>
+                )}
+              </h3>
               <p className="jr-text">{m.text}</p>
               {m.img && (
                 <div className="jr-img">

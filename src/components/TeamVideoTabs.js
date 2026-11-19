@@ -151,7 +151,8 @@ export default function TeamVideoTabs({ countries }) {
         style={height != null ? { height } : undefined}
       >
         <div ref={innerRef} key={current.code} className={`country-panel-inner is-${phase}`}>
-          <VideoWall videos={current.videos} label="Watch message" reveal={false} grid />
+          {/* first view: rows reveal one by one on scroll; after a country switch the cascade animation takes over */}
+          <VideoWall videos={current.videos} label="Watch message" reveal={false} grid rowReveal={phase === "idle"} />
         </div>
       </div>
     </div>

@@ -34,15 +34,22 @@ export const JOURNEY = {
   sub: "Here's a look at how our story unfolded, one milestone at a time.",
 };
 
+// Office openings along the road. `country` = flag code (bd / au / in / lk / id → /images/flags/{code}.svg),
+// shown with the country name beside the city. Text only — add `img: "/images/journey/…"` to show a photo.
 export const MILESTONES = [
-  { year: 2006, title: "Where it all began", text: "A single office in Melbourne and a promise to guide every student like family.", img: "/images/journey/2006-melbourne.jpg" },
-  { year: 2009, title: "Growing across Australia", text: "Sydney opens, soon followed by Adelaide, Perth and Brisbane." },
-  { year: 2012, title: "Hello, Bangladesh", text: "Our Dhaka office opens its doors, later joined by Chattogram.", img: "/images/journey/2012-bangladesh.jpg" },
-  { year: 2015, title: "100 partner institutions", text: "Universities, TAFEs and colleges worldwide join our network." },
-  { year: 2017, title: "India & Sri Lanka", text: "Kolkata, Ahmedabad and Colombo bring PFEC closer to more families.", img: "/images/journey/2017-india-sri-lanka.jpg" },
-  { year: 2019, title: "10,000 students placed", text: "A milestone measured in dreams, visas and first days on campus." },
-  { year: 2022, title: "Migration services", text: "Registered migration agents join, guiding students from classroom to career." },
-  { year: 2024, title: "550+ partners, 11 countries", text: "A study-abroad network that spans the globe.", img: "/images/journey/2024-global.jpg" },
+  { year: "Nov 2006", title: "Melbourne", country: "au", text: "Where it all began — one small office and one big promise: to guide every student like family." },
+  { year: "Dec 2012", title: "Dhanmondi", country: "bd", text: "Our first step into Bangladesh, bringing world-class guidance closer to home." },
+  { year: "Sep 2013", title: "Chattogram", country: "bd", text: "The port city joins the journey — more dreams, now just around the corner." },
+  { year: "Nov 2016", title: "Sydney", country: "au", text: "Harbour lights and a growing family — PFEC arrives in Australia's biggest city." },
+  { year: "Jul & Dec 2019", title: "Adelaide & Perth", country: "au", text: "Two cities in one year — PFEC now stretches across Australia, from coast to coast." },
+  { year: "May 2022", title: "Kolkata", country: "in", text: "Hello, India! The City of Joy opens a whole new chapter of our story." },
+  { year: "Jul 2022", title: "Banani", country: "bd", text: "Dhaka grows with us — a second home in the heart of the capital." },
+  { year: "May 2023", title: "Colombo", country: "lk", text: "Sri Lanka says yes, and our story crosses another ocean." },
+  { year: "Oct 2023", title: "Ahmedabad", country: "in", text: "Gujarat's most ambitious students get a partner right on their doorstep." },
+  { year: "Feb 2025", title: "Uttara", country: "bd", text: "Another door opens in Dhaka — because the dreams just keep coming." },
+  { year: "2025", title: "Brisbane", country: "au", text: "Sunshine State, here we come — every major Australian city now within reach." },
+  { year: "2026", title: "Sydney — Lakemba & Parramatta", country: "au", text: "Two new doors in Sydney, closer to the communities who believed in us first." },
+  { year: "Nov 2026", title: "Indonesia", country: "id", text: "Our newest flag, raised in our 20th year — and the road keeps going…" },
 ];
 
 // End of the road — the "TODAY" fold below the journey

@@ -6,9 +6,10 @@ import SparkleField from "./SparkleField";
 import CelebrateButton from "./CelebrateButton";
 import { TAGLINE } from "@/content";
 
-function SplitWord({ text, start }) {
+/** Gold word whose letters rise in one by one; `shine` = when its glossy sweep starts (same gloss as the 20). */
+function SplitWord({ text, start, shine }) {
   return (
-    <span className="split-word text-gold" style={{ "--start": `${start}s` }}>
+    <span className="split-word text-gold-shimmer" style={{ "--start": `${start}s`, "--shine-delay": `${shine}s` }}>
       {text.split("").map((ch, i) => (
         <span key={i} className="split-letter" style={{ "--i": i }}>
           {ch}
@@ -148,15 +149,15 @@ export default function Hero() {
           className="intro-logo h-auto w-[150px] sm:w-[200px]"
         />
 
-        <h1 className="sr-only">PFEC Global turns 20 years</h1>
+        <h1 className="sr-only">PFEC Global celebrating 20 years</h1>
         <div aria-hidden="true" className="mt-4 flex flex-col items-center sm:mt-6">
-          <SplitWord text="TURNS" start={0.45} />
+          <SplitWord text="CELEBRATING" start={0.45} shine={0.2} />
           <div className="twenty-wrap">
             <div className="twenty-rays" />
             <div className="twenty-halo" />
             <TwentyCounter />
           </div>
-          <SplitWord text="YEARS" start={1.65} />
+          <SplitWord text="YEARS" start={1.65} shine={1.4} />
         </div>
 
         <p className="intro-pill">

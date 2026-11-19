@@ -18,7 +18,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
-  title: "PFEC Global Turns 20 | Building Global Citizens",
+  title: "PFEC Global Celebrating 20 | Building Global Citizens",
   description:
     "Celebrating 20 years of PFEC Global — Study Abroad | Visa. Building Global Citizens, Powered by People.",
   icons: {
@@ -27,7 +27,7 @@ export const metadata = {
     apple: "/PFEC-Favicon.webp",
   },
   openGraph: {
-    title: "PFEC Global Turns 20",
+    title: "PFEC Global Celebrating 20",
     description: "Building Global Citizens | Powered by People",
   },
 };
