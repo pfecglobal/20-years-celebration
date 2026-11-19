@@ -30,11 +30,16 @@ export default function PageEffects() {
     };
 
     let raf = 0;
+    // page height cached (re-measured on resize) — reading scrollHeight every scroll frame forces layout
+    let max = 0;
+    const measure = () => (max = root.scrollHeight - window.innerHeight);
+    const ro = new ResizeObserver(measure);
+    ro.observe(document.body);
+    measure();
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        const max = root.scrollHeight - window.innerHeight;
         root.style.setProperty("--page-progress", max > 0 ? (window.scrollY / max).toFixed(4) : "0");
       });
     };
@@ -42,13 +47,18 @@ export default function PageEffects() {
     onScroll();
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    const onResize = () => {
+      measure();
+      onScroll();
+    };
+    window.addEventListener("resize", onResize);
     return () => {
       io.disconnect();
+      ro.disconnect();
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 

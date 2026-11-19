@@ -9,13 +9,15 @@ import CelebrateButton from "@/components/CelebrateButton";
 import SparkleField from "@/components/SparkleField";
 import ConfettiRain from "@/components/ConfettiRain";
 import VideoMessage from "@/components/VideoMessage";
-import OfficesMap from "@/components/OfficesMap";
+// import OfficesMap from "@/components/OfficesMap"; // previous offices fold (see the commented section below)
+import OfficesExpansion from "@/components/OfficesExpansion";
 import AwardsMarquee from "@/components/AwardsMarquee";
 import TeamVideoTabs from "@/components/TeamVideoTabs";
 import StudentCarousel from "@/components/StudentCarousel";
 import BackToTop from "@/components/BackToTop";
 import SmoothScroll from "@/components/SmoothScroll";
 import CoverReveal from "@/components/CoverReveal";
+import IntroInvite from "@/components/IntroInvite";
 import {
   ANNIVERSARY_YEAR,
   DAY_ONE,
@@ -113,6 +115,8 @@ function SectionHeading({ eyebrow, title, sub }) {
 export default function Home() {
   return (
     <>
+      {/* opening invitation (envelope) — plays on load, then the hero's own intro starts */}
+      <IntroInvite />
       <SmoothScroll />
       <PageEffects />
       <BackToTop />
@@ -127,7 +131,7 @@ export default function Home() {
           {/* Message from the people who were there on Day One */}
           <section
             id="message"
-            className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 py-20 sm:px-6 sm:py-28"
+            className="relative isolate flex flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-12 sm:min-h-svh sm:px-6 sm:py-28"
           >
             <div className="stars-carry stars-carry--full" aria-hidden="true">
               <SparkleField />
@@ -159,7 +163,7 @@ export default function Home() {
           </section>
 
           {/* Team videos, filterable by country */}
-          <section id="team" className="relative isolate overflow-hidden px-4 pt-16 pb-16 sm:px-6 sm:pt-24 sm:pb-20">
+          <section id="team" className="relative isolate overflow-hidden px-4 pt-6 pb-8 sm:px-6 sm:pt-24 sm:pb-20">
             <div className="stars-carry stars-carry--full" aria-hidden="true">
               <SparkleField />
             </div>
@@ -180,7 +184,7 @@ export default function Home() {
         {/* Journey road: #100694 → #F9F9F9 gradient, continuing from the team section above */}
         <div className="bg-flow-down">
           {/* Journey road — continues the light background from the video fold */}
-          <section id="journey" className="px-4 pt-20 pb-10 sm:px-6 sm:pt-28 sm:pb-14">
+          <section id="journey" className="px-4 pt-8 pb-10 sm:px-6 sm:pt-28 sm:pb-14">
             <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] lg:gap-10">
               <div className="journey-intro premium-card relative lg:sticky lg:top-28 lg:self-start">
                 <span className="today-spark today-spark--tl" aria-hidden="true">✦</span>
@@ -254,13 +258,17 @@ export default function Home() {
             </div>
           }
         >
-          {/* Offices: hero gradient (#121212 → #100796) with stars, flowing into the awards section */}
+          {/* Offices — NEW: pinned scroll scene; the world map assembles, then our countries light up one by one */}
+          <OfficesExpansion data={OFFICES} milestones={MILESTONES} />
+
+          {/* Offices — PREVIOUS fold (3D country maps), kept for now. To switch back, remove the line above and uncomment:
           <section id="offices" className="bg-offices relative isolate overflow-hidden px-4 pt-20 pb-8 sm:px-6 sm:pt-28 sm:pb-28">
             <div className="stars-carry stars-carry--in" aria-hidden="true">
               <SparkleField />
             </div>
             <OfficesMap data={OFFICES} />
           </section>
+          */}
         </CoverReveal>
 
         {/* 50+ Awards & Recognitions: solid #100796, two marquee rows in opposite directions */}

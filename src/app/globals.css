@@ -1446,6 +1446,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   margin-top: -1px;
   border-radius: 40px 40px 0 0;
   overflow: hidden;
+  overflow: clip; /* clips the rounded corners without breaking position: sticky inside (OfficesExpansion) */
   box-shadow: 0 -30px 60px -24px rgba(16, 7, 150, 0.45);
 }
 
@@ -1542,6 +1543,428 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 /* ---------- Offices map (hero gradient #121212 → #100694) ---------- */
 .bg-offices {
   background: linear-gradient(180deg, #121212 0%, #100796 100%);
+}
+
+/* ---------- Offices: scroll-driven "expansion" fold (OfficesExpansion) ---------- */
+.ox-track {
+  height: 420vh; /* the scroll distance the scene plays over */
+}
+
+.ox-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* faint outlined "PFEC GLOBAL" running continuously behind the map (marquee loop) */
+.ox-outline {
+  position: absolute;
+  top: 54%;
+  left: 0;
+  z-index: -1;
+  transform: translateY(-50%);
+  font-size: clamp(6rem, 19vw, 20rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  user-select: none;
+}
+
+.ox-outline-track {
+  display: flex;
+  width: max-content;
+  animation: ox-marquee 60s linear infinite;
+  will-change: transform;
+}
+
+.ox-outline-track > span {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.ox-outline-word {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 0.45em; /* gap between repeats */
+}
+
+@keyframes ox-marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ox-outline-track { animation: none; }
+}
+
+.ox-head {
+  position: relative;
+  z-index: 2;
+  padding: clamp(56px, 9vh, 96px) 16px 0;
+  text-align: center;
+}
+
+.ox-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 224, 138, 0.8);
+}
+
+.ox-title {
+  margin-top: 0.6rem;
+  font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.ox-count .text-gold {
+  display: inline-block;
+  min-width: 1ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.ox-stage {
+  position: absolute;
+  inset: 30% 4% 11%;
+  z-index: 1;
+}
+
+.ox-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* numbered country labels around the map (like an assembly legend) */
+.ox-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  list-style: none;
+  pointer-events: none;
+}
+
+.ox-label {
+  position: absolute;
+  top: calc(34% + var(--row) * 19%);
+  display: grid;
+  gap: 4px;
+  max-width: 250px;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ox-label--l {
+  left: clamp(20px, 4.5vw, 72px);
+  transform: translate3d(-24px, 0, 0);
+}
+
+.ox-label--r {
+  right: clamp(20px, 4.5vw, 72px);
+  top: calc(34% + var(--row) * 19%); /* same rows as the left column: 01 | 02, 03 | 04, then 05 */
+  justify-items: end;
+  text-align: right;
+  transform: translate3d(24px, 0, 0);
+}
+
+.ox-label.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.ox-num {
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(90deg, #ffe08a, #ffc53d 55%, #f5a524);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ox-rule {
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 210, 110, 0.9), rgba(255, 210, 110, 0));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+
+.ox-label--r .ox-rule {
+  background: linear-gradient(270deg, rgba(255, 210, 110, 0.9), rgba(255, 210, 110, 0));
+  transform-origin: right;
+}
+
+.ox-label.is-on .ox-rule {
+  transform: none;
+}
+
+.ox-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 700;
+  color: #fff;
+}
+
+.ox-name img {
+  width: 22px;
+  height: 15px;
+  border-radius: 3px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.ox-meta {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* the latest country glows */
+.ox-label.is-current .ox-name {
+  text-shadow: 0 0 18px rgba(255, 200, 80, 0.55);
+}
+
+/* hover: a label (or its country on the map) → the label lifts and glows, the country lights up on the map */
+.ox-label.is-on {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.ox-num {
+  transition: filter 0.35s ease, scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: left center;
+}
+
+.ox-label--r .ox-num {
+  transform-origin: right center;
+}
+
+.ox-label.is-hover .ox-num {
+  scale: 1.12;
+  filter: drop-shadow(0 0 10px rgba(255, 200, 80, 0.7));
+}
+
+.ox-label.is-hover .ox-name {
+  text-shadow: 0 0 18px rgba(255, 200, 80, 0.75);
+}
+
+.ox-label.is-hover .ox-rule {
+  background: linear-gradient(90deg, #ffe08a, rgba(255, 210, 110, 0));
+}
+
+.ox-label--r.is-hover .ox-rule {
+  background: linear-gradient(270deg, #ffe08a, rgba(255, 210, 110, 0));
+}
+
+/* bottom: EXPANSION ━━ 047% */
+.ox-progress {
+  position: absolute;
+  bottom: clamp(18px, 4vh, 40px);
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+.ox-bar {
+  position: relative;
+  width: clamp(120px, 14vw, 180px);
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.ox-bar i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #ffe08a, #ffc53d);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.ox-pct {
+  min-width: 4.5ch;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Phones: a stacked column — heading · map (takes the space that's left) · label area · progress —
+   so nothing can overlap, whatever the screen height */
+@media (max-width: 767px) {
+  .ox-track {
+    height: 380vh;
+  }
+
+  .ox-sticky {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ox-head {
+    flex: none;
+    padding: clamp(28px, 6svh, 56px) 18px 0;
+  }
+
+  .ox-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.26em;
+  }
+
+  .ox-title {
+    margin-top: 0.4rem;
+    font-size: clamp(1.15rem, 5.4vw, 1.5rem);
+  }
+
+  /* the map gets whatever height is left (the canvas re-fits itself to this box) */
+  .ox-stage {
+    position: relative;
+    inset: auto;
+    flex: 1 1 0; /* basis 0 → the leftover height, independent of the canvas's own pixel size */
+    min-height: 0;
+    margin: 8px 6px 0;
+  }
+
+  .ox-stage .ox-canvas {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* fixed-height label area: one country while it plays, the summary of all five at the end */
+  .ox-labels {
+    position: relative;
+    inset: auto;
+    flex: none;
+    height: 150px;
+    margin: 6px 12px 0;
+  }
+
+  .ox-label,
+  .ox-label--l,
+  .ox-label--r {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    max-width: 86vw;
+    justify-items: center;
+    text-align: center;
+    transform: translate3d(-50%, calc(-50% + 14px), 0);
+  }
+
+  .ox-label.is-on {
+    opacity: 0;
+  }
+
+  .ox-label.is-current {
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
+  .ox-rule {
+    display: none;
+  }
+
+  /* once every country is lit: a compact summary of ALL countries (flag, name, offices) */
+  .ox-labels.is-complete {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap: 12px 6px;
+  }
+
+  .ox-labels.is-complete .ox-label {
+    position: static;
+    flex: 0 0 31%;
+    max-width: none;
+    gap: 2px;
+    justify-items: center;
+    text-align: center;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: ox-summary-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--k) * 70ms);
+  }
+
+  .ox-labels.is-complete .ox-num {
+    font-size: 1rem;
+  }
+
+  .ox-labels.is-complete .ox-name {
+    gap: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .ox-labels.is-complete .ox-name img {
+    width: 18px;
+    height: 12px;
+  }
+
+  /* "7 offices" / "since 2006" on two tidy lines */
+  .ox-labels.is-complete .ox-meta {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.64rem;
+    line-height: 1.35;
+  }
+
+  .ox-labels.is-complete .ox-meta-sep {
+    display: none;
+  }
+
+  /* progress sits in the flow at the bottom: compact (bar + %), clear of the back-to-top button */
+  .ox-progress {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    flex: none;
+    align-self: center;
+    margin: 8px 0 clamp(16px, 3svh, 28px);
+    transform: none;
+  }
+
+  .ox-progress > span:first-child {
+    display: none;
+  }
+
+  .ox-bar {
+    width: 96px;
+  }
+}
+
+@keyframes ox-summary-in {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+}
+
+/* Reduced motion: no pinning — the finished map is simply shown */
+@media (prefers-reduced-motion: reduce) {
+  .ox-track { height: auto; }
+  .ox-sticky { position: relative; }
+  .ox-label { opacity: 1; transform: none; transition: none; }
 }
 
 .stars-carry--in {
@@ -2712,4 +3135,297 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 /* Lenis drives the smoothing itself — don't let the browser smooth on top of it */
 html.lenis {
   scroll-behavior: auto;
+}
+
+/* ---------- Opening invitation (IntroInvite) — 20th anniversary envelope ---------- */
+/* While it's on screen: the page can't scroll and the hero's own intro waits (resumes the moment it's gone) */
+html:has(.ix-intro) {
+  overflow: hidden;
+}
+
+body:has(.ix-intro) .hero,
+body:has(.ix-intro) .hero * {
+  animation-play-state: paused !important;
+}
+
+.ix-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 70% at 50% 42%, #2a1fb8 0%, #100694 38%, #0b0656 70%, #121212 100%);
+  animation: ix-overlay-out 0.75s cubic-bezier(0.6, 0, 0.2, 1) 3.15s both;
+  touch-action: none;
+}
+
+/* soft gold light rays slowly turning behind the envelope */
+.ix-rays {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 160vmax;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 205, 100, 0.07) 0deg 6deg, transparent 6deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 0%, rgba(0, 0, 0, 0.5) 22%, transparent 48%);
+  mask: radial-gradient(circle, #000 0%, rgba(0, 0, 0, 0.5) 22%, transparent 48%);
+  animation: spin 60s linear infinite, ix-fade-in 1.4s ease both;
+  pointer-events: none;
+}
+
+.ix-sparks span {
+  position: absolute;
+  font-size: 14px;
+  color: #ffd36b;
+  text-shadow: 0 0 10px rgba(255, 200, 80, 0.9);
+  opacity: 0;
+  animation: ix-twinkle 2.4s ease-in-out infinite;
+}
+
+.ix-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation:
+    ix-float-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both,
+    ix-stage-out 0.7s cubic-bezier(0.6, 0, 0.2, 1) 2.95s both;
+}
+
+.ix-env {
+  position: relative;
+  width: min(84vw, 420px);
+  aspect-ratio: 3 / 2;
+  perspective: 1200px;
+  filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.45));
+}
+
+.ix-env-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #efe4cc, #e2d3b2);
+}
+
+/* the invitation card */
+.ix-letter {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 5%;
+  height: 90%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #ffffff, #fdf9f0);
+  box-shadow: 0 12px 30px -10px rgba(140, 109, 53, 0.45);
+  text-align: center;
+  animation: ix-letter-up 0.95s cubic-bezier(0.22, 1, 0.36, 1) 1.7s both;
+}
+
+/* gold hairline frame */
+.ix-letter::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(200, 169, 106, 0.6);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+/* one gold shine sweeping across the card once it's out */
+.ix-letter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 226, 150, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: ix-shine 1s cubic-bezier(0.4, 0, 0.2, 1) 2.35s both;
+}
+
+.ix-invited {
+  font-size: clamp(8px, 2.2vw, 10px);
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #8c6d35;
+}
+
+.ix-title {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(22px, 6.4vw, 32px);
+  font-weight: 800;
+  line-height: 1.05;
+  color: #100694;
+}
+
+.ix-title em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.62em;
+  font-weight: 600;
+  font-style: italic;
+  color: #a8864a;
+}
+
+.ix-divider {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 90px;
+}
+
+.ix-divider::before,
+.ix-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(200, 169, 106, 0), #c8a96a);
+}
+
+.ix-divider::after {
+  background: linear-gradient(270deg, rgba(200, 169, 106, 0), #c8a96a);
+}
+
+.ix-divider i {
+  width: 5px;
+  height: 5px;
+  rotate: 45deg;
+  background: #c8a96a;
+}
+
+.ix-years {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(13px, 3.4vw, 16px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #a8864a;
+}
+
+/* envelope pocket (front) + flap */
+.ix-env-front {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 12px;
+  background: linear-gradient(170deg, #f8f2e6, #e9dcc1);
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+}
+
+.ix-env-flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 58%;
+  z-index: 3;
+  transform-origin: 50% 0;
+  animation: ix-flap 0.85s cubic-bezier(0.5, 0, 0.2, 1) 1.05s both;
+}
+
+.ix-env-flap div {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(180deg, #f3ead8, #e1d1b1);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* gold wax seal with "20" */
+.ix-seal {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: radial-gradient(circle at 35% 30%, #fff1c9, #e3b84f 45%, #b98a2c 80%, #8a6418);
+  box-shadow:
+    0 8px 18px rgba(90, 60, 10, 0.55),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.28),
+    inset 0 0 0 6px rgba(138, 100, 24, 0.35);
+  animation:
+    ix-seal-glow 0.6s ease 0.35s both,
+    ix-seal-crack 0.4s cubic-bezier(0.5, 0, 0.75, 0) 0.95s both;
+}
+
+.ix-seal span {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fffaf0;
+  text-shadow: 0 1px 0 rgba(120, 80, 10, 0.6), 0 0 8px rgba(255, 230, 160, 0.6);
+}
+
+.ix-for {
+  margin-top: 40px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 224, 138, 0.9);
+  animation: ix-fade-in 0.8s ease 0.35s both;
+}
+
+@keyframes ix-float-in {
+  from { opacity: 0; transform: translateY(30px) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes ix-seal-glow {
+  from { box-shadow: 0 8px 18px rgba(90, 60, 10, 0.55), 0 0 0 0 rgba(255, 210, 100, 0.7); }
+  to { box-shadow: 0 8px 18px rgba(90, 60, 10, 0.55), 0 0 0 18px rgba(255, 210, 100, 0); }
+}
+
+@keyframes ix-seal-crack {
+  0% { transform: scale(1); opacity: 1; filter: blur(0); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(0.4) rotate(-20deg); opacity: 0; filter: blur(3px); }
+}
+
+@keyframes ix-flap {
+  0% { transform: rotateX(0); z-index: 3; }
+  100% { transform: rotateX(180deg); z-index: 0; }
+}
+
+@keyframes ix-letter-up {
+  from { transform: translateY(0); }
+  to { transform: translateY(-56%); }
+}
+
+@keyframes ix-shine {
+  to { transform: translateX(120%); }
+}
+
+@keyframes ix-stage-out {
+  to { opacity: 0; transform: scale(1.14); filter: blur(6px); }
+}
+
+@keyframes ix-overlay-out {
+  0% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes ix-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes ix-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(45deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ix-intro { display: none; }
 }

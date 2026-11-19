@@ -13,9 +13,18 @@ export default function BackToTop() {
 
   useEffect(() => {
     let raf = 0;
+    // Page height is measured only when the page resizes — reading scrollHeight on every scroll frame
+    // forces a full layout (very costly while scroll-driven scenes update the page).
+    let max = 0;
+    const measure = () => (max = document.documentElement.scrollHeight - window.innerHeight);
+    const ro = new ResizeObserver(() => {
+      measure();
+      queue();
+    });
+    ro.observe(document.body);
+    measure();
     const update = () => {
       raf = 0;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
       const p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
       if (ringRef.current) ringRef.current.style.strokeDashoffset = `${C * (1 - p)}`;
       setVisible(window.scrollY > window.innerHeight * 0.7);
@@ -25,11 +34,16 @@ export default function BackToTop() {
     };
     update();
     window.addEventListener("scroll", queue, { passive: true });
-    window.addEventListener("resize", queue);
+    const onResize = () => {
+      measure();
+      queue();
+    };
+    window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
+      ro.disconnect();
       window.removeEventListener("scroll", queue);
-      window.removeEventListener("resize", queue);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 

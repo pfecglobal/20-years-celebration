@@ -58,9 +58,11 @@ function TwentyCounter({ start = 1, end = 20, duration = 2000 }) {
     wrap.classList.remove("is-done");
 
     let raf = 0;
-    // Start counting almost immediately — the number is never blank
+    let timer = 0;
+    // Start counting almost immediately — the number is never blank.
+    // If the opening invitation is on screen, wait until it has dissolved ("pfec:intro-done").
     const delay = 150;
-    const timer = setTimeout(() => {
+    const run = () => (timer = setTimeout(() => {
       const t0 = performance.now();
       const tick = (now) => {
         const p = Math.min((now - t0) / duration, 1);
@@ -77,9 +79,12 @@ function TwentyCounter({ start = 1, end = 20, duration = 2000 }) {
         }
       };
       raf = requestAnimationFrame(tick);
-    }, delay);
+    }, delay));
+    if (document.querySelector(".ix-intro")) window.addEventListener("pfec:intro-done", run, { once: true });
+    else run();
 
     return () => {
+      window.removeEventListener("pfec:intro-done", run);
       clearTimeout(timer);
       clearTimeout(popTimer);
       cancelAnimationFrame(raf);
