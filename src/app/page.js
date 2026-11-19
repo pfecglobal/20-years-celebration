@@ -131,7 +131,7 @@ export default function Home() {
           {/* Message from the people who were there on Day One */}
           <section
             id="message"
-            className="relative isolate flex flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-12 sm:min-h-svh sm:px-6 sm:py-28"
+            className="relative isolate flex flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-12 sm:px-6 sm:pt-20 sm:pb-14 lg:min-h-svh lg:py-28"
           >
             <div className="stars-carry stars-carry--full" aria-hidden="true">
               <SparkleField />
@@ -163,7 +163,7 @@ export default function Home() {
           </section>
 
           {/* Team videos, filterable by country */}
-          <section id="team" className="relative isolate overflow-hidden px-4 pt-6 pb-8 sm:px-6 sm:pt-24 sm:pb-20">
+          <section id="team" className="relative isolate overflow-hidden px-4 pt-6 pb-8 sm:px-6 sm:pt-10 sm:pb-10 lg:pt-24 lg:pb-20">
             <div className="stars-carry stars-carry--full" aria-hidden="true">
               <SparkleField />
             </div>
@@ -184,7 +184,7 @@ export default function Home() {
         {/* Journey road: #100694 → #F9F9F9 gradient, continuing from the team section above */}
         <div className="bg-flow-down">
           {/* Journey road — continues the light background from the video fold */}
-          <section id="journey" className="px-4 pt-8 pb-10 sm:px-6 sm:pt-28 sm:pb-14">
+          <section id="journey" className="px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:pt-28">
             <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] lg:gap-10">
               <div className="journey-intro premium-card relative lg:sticky lg:top-28 lg:self-start">
                 <span className="today-spark today-spark--tl" aria-hidden="true">✦</span>
@@ -334,9 +334,9 @@ export default function Home() {
             </section>
 
             {/* Marquee ribbons */}
-            <div className="relative overflow-x-clip pt-10 pb-8 sm:py-10">
+            <div className="marquee-pair relative overflow-x-clip pt-10 pb-8 sm:py-10">
               <Marquee back />
-              <div className="-mt-9 sm:-mt-14">
+              <div className="marquee-front -mt-9 sm:-mt-14">
                 <Marquee />
               </div>
           </div>

@@ -131,6 +131,51 @@ body {
   animation: fade-down 1s var(--ease-out) 0.15s both;
 }
 
+/* Logo gloss: once per load, right after the logo has faded in — a gold band sweeps across the letters
+   (masked to the logo's shape, like the shine on "CELEBRATING") while a soft gold glow rises and settles */
+.logo-shine {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  animation: logo-glow 1.9s ease-out 1.1s both;
+}
+
+.logo-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 197, 61, 0.95) 47%,
+    #fff3c4 50%,
+    rgba(255, 197, 61, 0.95) 53%,
+    transparent 60%
+  );
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask: url("/pfec-logo-white.png") center / 100% 100% no-repeat;
+  mask: url("/pfec-logo-white.png") center / 100% 100% no-repeat;
+  pointer-events: none;
+  animation: logo-gloss 1.4s cubic-bezier(0.45, 0, 0.25, 1) 1.15s both;
+}
+
+@keyframes logo-gloss {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+
+@keyframes logo-glow {
+  0% { filter: drop-shadow(0 0 0 rgba(255, 200, 80, 0)); }
+  45% { filter: drop-shadow(0 0 16px rgba(255, 200, 80, 0.75)); }
+  100% { filter: drop-shadow(0 0 6px rgba(255, 200, 80, 0.22)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-shine { animation: none; }
+  .logo-shine::after { display: none; }
+}
+
 .split-word {
   display: inline-flex;
   overflow: hidden;
@@ -2330,6 +2375,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   position: relative;
   display: flex;
   justify-content: center;
+  justify-content: safe center; /* if the row is ever wider than the screen, start at the left edge (no clipping) */
   gap: 10px;
   overflow-x: auto;
   padding: 4px 2px 6px;
@@ -2413,6 +2459,47 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 .country-tab-globe {
   width: 18px;
   height: 18px;
+}
+
+/* Tablets: slightly more compact pills so the whole row fits (All + 5 countries) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .country-tabs {
+    gap: 7px;
+  }
+
+  .country-tab {
+    gap: 7px;
+    padding: 7px 11px 7px 8px;
+    font-size: 0.82rem;
+  }
+
+  .country-tab-flag {
+    width: 22px;
+    height: 15px;
+  }
+
+  .country-tab-globe {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* small tablets (640–767px): a touch tighter still, so the full row fits */
+@media (min-width: 640px) and (max-width: 767px) {
+  .country-tabs {
+    gap: 5px;
+  }
+
+  .country-tab {
+    gap: 6px;
+    padding: 6px 9px 6px 7px;
+    font-size: 0.76rem;
+  }
+
+  .country-tab-flag {
+    width: 20px;
+    height: 14px;
+  }
 }
 
 /* Phones: one segmented bar — "All" + flags only, 6 equal slots that always fit the width
@@ -3144,7 +3231,9 @@ html:has(.ix-intro) {
 }
 
 body:has(.ix-intro) .hero,
-body:has(.ix-intro) .hero * {
+body:has(.ix-intro) .hero *,
+body:has(.ix-intro) .hero *::before,
+body:has(.ix-intro) .hero *::after {
   animation-play-state: paused !important;
 }
 
@@ -3428,4 +3517,58 @@ body:has(.ix-intro) .hero * {
 
 @media (prefers-reduced-motion: reduce) {
   .ix-intro { display: none; }
+}
+
+/* ---------- Tablets (640–1023px): calmer heading sizes (desktop sizes felt too big here) ---------- */
+@media (min-width: 640px) and (max-width: 1023px) {
+  #message h2,
+  #message h2 + p,
+  #team h2,
+  #students h2,
+  .journey-intro h2 {
+    font-size: 1.9rem;
+  }
+
+  #awards h2 {
+    font-size: 2.25rem;
+  }
+
+  .today-title {
+    font-size: 2.25rem;
+  }
+
+  #numbers p.text-gold {
+    font-size: 3rem;
+  }
+
+  #celebrate h2 {
+    font-size: 4.25rem;
+  }
+}
+
+/* Tablets (640–1023px): the ribbons cross in a clear X (like on phones) instead of lying on top of each other */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .marquee-pair {
+    padding-block: 56px;
+  }
+
+  .marquee {
+    transform: rotate(-4.5deg);
+    margin: 0 -3rem;
+    padding-block: 12px;
+  }
+
+  .marquee--back {
+    transform: rotate(4.5deg);
+  }
+
+  .marquee-track > div > span {
+    gap: 1.1rem;
+    padding-inline: 1.1rem;
+    font-size: 1.15rem;
+  }
+
+  .marquee-front {
+    margin-top: -52px;
+  }
 }

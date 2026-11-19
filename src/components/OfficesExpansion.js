@@ -107,6 +107,8 @@ export default function OfficesExpansion({ data, milestones }) {
     };
 
     let lastSlot = -2;
+    // fireworks when the expansion completes (100%) — once; re-armed after scrolling back below 90%
+    let celebrated = false;
 
     // The map (dots, outlines, arcs) only changes with the scroll position, so it's rendered into an
     // offscreen buffer when p changes; each frame just copies it and draws the pulsing pins on top.
@@ -245,6 +247,16 @@ export default function OfficesExpansion({ data, milestones }) {
       if (countriesWordRef.current) countriesWordRef.current.textContent = nCountries === 1 ? "Country" : "Countries";
       if (barRef.current) barRef.current.style.transform = `scaleX(${p})`;
       if (pctRef.current) pctRef.current.textContent = `${pad3(Math.round(p * 100))}%`;
+      if (!celebrated && p >= 0.995 && !reduced) {
+        celebrated = true;
+        // a burst right over the map + a show across the screen (CelebrationCanvas; fewer rockets on phones)
+        const r = canvas.getBoundingClientRect();
+        window.dispatchEvent(
+          new CustomEvent("pfec:celebrate", { detail: { count: 6, x: r.left + r.width / 2, y: r.top + r.height * 0.35 } })
+        );
+      } else if (celebrated && p < 0.9) {
+        celebrated = false;
+      }
       const current = litCount - 1;
       if (current !== lastSlot) {
         lastSlot = current;

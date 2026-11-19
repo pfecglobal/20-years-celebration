@@ -144,15 +144,18 @@ export default function Hero() {
       <div className="hero-vignette" />
 
       <div className="hero-content relative z-10 flex flex-col items-center px-4 pt-16 pb-24 text-center">
-        <Image
-          src="/pfec-logo-white.png"
-          alt="PFEC Global — Study Abroad | Visa"
-          width={635}
-          height={221}
-          loading="eager"
-          fetchPriority="high"
-          className="intro-logo h-auto w-[150px] sm:w-[200px]"
-        />
+        {/* logo: fades in, then one gold gloss sweeps across it with a soft glow (once per load) */}
+        <span className="logo-shine">
+          <Image
+            src="/pfec-logo-white.png"
+            alt="PFEC Global — Study Abroad | Visa"
+            width={635}
+            height={221}
+            loading="eager"
+            fetchPriority="high"
+            className="intro-logo h-auto w-[150px] sm:w-[200px]"
+          />
+        </span>
 
         <h1 className="sr-only">PFEC Global celebrating 20 years</h1>
         <div aria-hidden="true" className="mt-4 flex flex-col items-center sm:mt-6">
