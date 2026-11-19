@@ -41,7 +41,8 @@ export default function CelebrationCanvas() {
     const batches = new Map(); // "color|alpha|width" → flat [x1, y1, x2, y2, …]
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      // phones: 1.25× is plenty for soft sparks and ~30% fewer pixels to fill than 1.5×
+      const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.25 : MAX_DPR);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;

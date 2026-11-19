@@ -61,7 +61,8 @@ export default function ConfettiRain() {
     let dpr = 1;
 
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.5); // ≤1.5× density: plenty for confetti, far cheaper
+      // ≤1.5× density (1.25× on phones): plenty for confetti, far cheaper
+      dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.25 : 1.5);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;
@@ -69,7 +70,7 @@ export default function ConfettiRain() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    const density = () => Math.max(0.45, Math.min(w / 1440, 1));
+    const density = () => Math.max(window.innerWidth < 768 ? 0.36 : 0.45, Math.min(w / 1440, 1));
 
     const shower = (amount = 160) => {
       const n = Math.round(amount * density());

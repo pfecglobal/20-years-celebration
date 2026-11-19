@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 /** Scroll reveals, card spotlight glow and the top scroll-progress bar. */
 export default function PageEffects() {
+  const barRef = useRef(null);
+
   useEffect(() => {
     const root = document.documentElement;
     const els = document.querySelectorAll("[data-reveal]");
@@ -40,7 +42,9 @@ export default function PageEffects() {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        root.style.setProperty("--page-progress", max > 0 ? (window.scrollY / max).toFixed(4) : "0");
+        // set on the bar itself — a custom property on <html> would make the browser recalculate the style of
+        // the whole page on every scroll frame (the main cause of scroll jank on phones)
+        if (barRef.current) barRef.current.style.transform = `scaleX(${max > 0 ? (window.scrollY / max).toFixed(4) : 0})`;
       });
     };
 
@@ -62,5 +66,5 @@ export default function PageEffects() {
     };
   }, []);
 
-  return <div className="page-progress" aria-hidden="true" />;
+  return <div ref={barRef} className="page-progress" aria-hidden="true" />;
 }

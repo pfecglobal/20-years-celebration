@@ -7,9 +7,12 @@ import CelebrateButton from "./CelebrateButton";
 import { TAGLINE } from "@/content";
 
 /** Gold word whose letters rise in one by one; `shine` = when its glossy sweep starts (same gloss as the 20). */
-function SplitWord({ text, start, shine }) {
+function SplitWord({ text, start, shine, className = "" }) {
   return (
-    <span className="split-word text-gold-shimmer" style={{ "--start": `${start}s`, "--shine-delay": `${shine}s` }}>
+    <span
+      className={`split-word text-gold-shimmer ${className}`}
+      style={{ "--start": `${start}s`, "--shine-delay": `${shine}s` }}
+    >
       {text.split("").map((ch, i) => (
         <span key={i} className="split-letter" style={{ "--i": i }}>
           {ch}
@@ -108,12 +111,19 @@ export default function Hero() {
     let mx = 0;
     let my = 0;
 
+    // Parallax / scroll-out of the hero content, written straight onto that one element (custom properties on
+    // .hero would re-style the whole hero subtree every scroll frame) — and skipped once nothing changes,
+    // e.g. after the hero has scrolled out of view.
+    const content = el.querySelector(".hero-content");
+    let last = "";
     const apply = () => {
       raf = 0;
       const sp = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
-      el.style.setProperty("--mx", mx.toFixed(3));
-      el.style.setProperty("--my", my.toFixed(3));
-      el.style.setProperty("--sp", sp.toFixed(3));
+      const key = `${mx.toFixed(3)}|${my.toFixed(3)}|${sp.toFixed(3)}`;
+      if (key === last || !content) return;
+      last = key;
+      content.style.transform = `translate3d(${(mx * 10).toFixed(2)}px, ${(my * 8 + sp * 140).toFixed(2)}px, 0) scale(${(1 - sp * 0.12).toFixed(4)})`;
+      content.style.opacity = String(Math.max(0, 1 - sp * 1.3).toFixed(3));
     };
     const queue = () => {
       if (!raf) raf = requestAnimationFrame(apply);
@@ -159,7 +169,7 @@ export default function Hero() {
 
         <h1 className="sr-only">PFEC Global celebrating 20 years</h1>
         <div aria-hidden="true" className="mt-4 flex flex-col items-center sm:mt-6">
-          <SplitWord text="CELEBRATING" start={0.45} shine={0.2} />
+          <SplitWord text="CELEBRATING" start={0.45} shine={0.2} className="split-word--lead" />
           <div className="twenty-wrap">
             <div className="twenty-rays" />
             <div className="twenty-halo" />
