@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const TOTAL_MS = 3900; // whole opening sequence
+const REVEAL_MS = 3150; // earliest moment the overlay dissolves (the envelope sequence has played by then)
+const FADE_MS = 750; // the dissolve itself (ix-overlay-out)
 
 // fixed sparkle positions (percent of the screen), so server and client render the same
 const SPARKS = [
@@ -13,19 +14,30 @@ const SPARKS = [
 /**
  * Opening invitation for the 20th anniversary: an ivory envelope with a gold "20" wax seal floats in,
  * the seal cracks, the flap opens, and the invitation rises out — then the screen dissolves into the hero.
- * It always plays through (no skip). While it plays, the hero's own intro is held (see globals.css) and
- * starts the moment the overlay is gone ("pfec:intro-done").
+ * It always plays through (no skip). While it plays, the hero's own intro is held (see globals.css); it starts
+ * the moment the overlay *begins* to dissolve ("pfec:intro-done"), so the hero builds up underneath the fading
+ * envelope — a crossfade with no empty pause in between.
  */
 export default function IntroInvite() {
   const [done, setDone] = useState(false);
+  const [revealing, setRevealing] = useState(false);
   const timers = useRef([]);
   const rootRef = useRef(null);
+  const revealed = useRef(false);
+
+  // release the hero (its intro, the 1 → 20 count …) as the overlay starts to fade
+  const reveal = useCallback(() => {
+    if (revealed.current) return;
+    revealed.current = true;
+    setRevealing(true);
+    window.dispatchEvent(new Event("pfec:intro-done"));
+  }, []);
 
   const finish = useCallback(() => {
     timers.current.forEach(clearTimeout);
+    reveal();
     setDone(true);
-    window.dispatchEvent(new Event("pfec:intro-done"));
-  }, []);
+  }, [reveal]);
 
   // The sequence is pure CSS and starts at first paint, while this code only runs after hydration
   // (later on slow phones). So we finish exactly when the overlay's fade-out animation ends — or at once
@@ -36,26 +48,35 @@ export default function IntroInvite() {
       const t = setTimeout(finish, 0);
       return () => clearTimeout(t);
     }
-    const out = el.getAnimations?.().find((a) => a.animationName === "ix-overlay-out");
-    if (out?.playState === "finished") {
-      const t = setTimeout(finish, 0);
-      return () => clearTimeout(t);
-    }
+    // How far the CSS envelope sequence already is (it starts at first paint; this code runs after hydration).
+    // The dissolve is started from here — never earlier than REVEAL_MS — so the hero is always released at the
+    // same moment the overlay begins to fade: a clean crossfade, no matter how long the page took to load.
+    const intro = el.getAnimations?.({ subtree: true }).find((a) => a.animationName === "ix-float-in");
+    const elapsed = intro?.currentTime ?? 0;
     const onEnd = (e) => e.target === el && e.animationName === "ix-overlay-out" && finish();
     el.addEventListener("animationend", onEnd);
-    const remaining = out ? Math.max(0, TOTAL_MS - (out.currentTime ?? 0)) + 400 : TOTAL_MS;
-    timers.current = [setTimeout(finish, remaining)];
+    // no scrolling while the invitation is up (on the overlay itself — locking <html> re-laid out the page)
+    const block = (e) => !revealed.current && e.cancelable && e.preventDefault();
+    el.addEventListener("wheel", block, { passive: false });
+    el.addEventListener("touchmove", block, { passive: false });
+    const wait = Math.max(0, REVEAL_MS - elapsed);
+    timers.current = [
+      setTimeout(reveal, wait),
+      setTimeout(finish, wait + FADE_MS + 400), // safety net if animationend is missed
+    ];
     const t = timers.current;
     return () => {
+      el.removeEventListener("wheel", block);
+      el.removeEventListener("touchmove", block);
       el.removeEventListener("animationend", onEnd);
       t.forEach(clearTimeout);
     };
-  }, [finish]);
+  }, [finish, reveal]);
 
   if (done) return null;
 
   return (
-    <div ref={rootRef} className="ix-intro" aria-hidden="true" data-lenis-prevent>
+    <div ref={rootRef} className={`ix-intro ${revealing ? "is-revealing" : ""}`} aria-hidden="true" data-lenis-prevent>
       <div className="ix-rays" aria-hidden="true" />
       <div className="ix-sparks" aria-hidden="true">
         {SPARKS.map(([x, y, d], i) => (

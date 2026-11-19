@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import SparkleField from "./SparkleField";
 import CelebrateButton from "./CelebrateButton";
+// imported (not a "/public" path) → the URL carries a hash of the file, so a replaced logo is never served from cache
+import logo from "../../public/pfec-logo-white.png";
 import { TAGLINE } from "@/content";
 
 /** Gold word whose letters rise in one by one; `shine` = when its glossy sweep starts (same gloss as the 20). */
@@ -104,6 +106,20 @@ function TwentyCounter({ start = 1, end = 20, duration = 2000 }) {
 export default function Hero() {
   const ref = useRef(null);
 
+  // The hero renders "on hold" (.is-held: its intro animations paused) while the opening invitation plays,
+  // and is released when the invitation starts to dissolve. A class on the hero itself only re-styles the
+  // hero — a page-level :has() check re-styled the whole page at that moment (a visible hitch on phones).
+  useEffect(() => {
+    const el = ref.current;
+    const release = () => el.classList.remove("is-held");
+    if (!document.querySelector(".ix-intro")) {
+      release();
+      return;
+    }
+    window.addEventListener("pfec:intro-done", release, { once: true });
+    return () => window.removeEventListener("pfec:intro-done", release);
+  }, []);
+
   useEffect(() => {
     const el = ref.current;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -147,7 +163,7 @@ export default function Hero() {
   return (
     <section
       ref={ref}
-      className="hero relative flex min-h-svh items-center justify-center overflow-hidden"
+      className="hero is-held relative flex min-h-svh items-center justify-center overflow-hidden"
     >
       <div className="hero-bg" />
       <SparkleField />
@@ -155,12 +171,10 @@ export default function Hero() {
 
       <div className="hero-content relative z-10 flex flex-col items-center px-4 pt-16 pb-24 text-center">
         {/* logo: fades in, then one gold gloss sweeps across it with a soft glow (once per load) */}
-        <span className="logo-shine">
+        <span className="logo-shine" style={{ "--logo-url": `url(${logo.src})` }}>
           <Image
-            src="/pfec-logo-white.png"
-            alt="PFEC Global — Study Abroad | Visa"
-            width={635}
-            height={221}
+            src={logo}
+            alt="PFEC Global"
             loading="eager"
             fetchPriority="high"
             className="intro-logo h-auto w-[150px] sm:w-[200px]"

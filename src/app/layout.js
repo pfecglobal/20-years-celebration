@@ -18,17 +18,23 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
-  title: "PFEC Global Celebrating 20 | Building Global Citizens",
+  title: "PFEC Global — 20 Years of Building Global Citizens (2006–2026)",
   description:
-    "Celebrating 20 years of PFEC Global — Study Abroad | Visa. Building Global Citizens, Powered by People.",
+    "Since 2006, PFEC Global has guided students worldwide in study abroad and visa services. Celebrating two decades of building global citizens, powered by people.",
+  // not to be indexed by search engines (and their links not followed)
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: { index: false, follow: false },
+  },
   icons: {
     icon: [{ url: "/PFEC-Favicon.webp", type: "image/webp" }],
     shortcut: "/PFEC-Favicon.webp",
     apple: "/PFEC-Favicon.webp",
   },
   openGraph: {
-    title: "PFEC Global Celebrating 20",
-    description: "Building Global Citizens | Powered by People",
+    title: "PFEC Global — 20 Years of Building Global Citizens",
+    description: "Two decades of guiding students to study abroad, 2006–2026. Building Global Citizens, Powered by People.",
   },
 };
 

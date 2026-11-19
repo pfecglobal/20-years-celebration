@@ -1,4 +1,6 @@
 import Image from "next/image";
+// imported (not a "/public" path) → hashed URL, so a replaced logo is never served from cache
+import logo from "../../public/pfec-logo-white.png";
 import Hero from "@/components/Hero";
 import CelebrationCanvas from "@/components/CelebrationCanvas";
 import PageEffects from "@/components/PageEffects";
@@ -403,7 +405,7 @@ export default function Home() {
           <SparkleField />
         </div>
         <div className="relative mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-          <Image src="/pfec-logo-white.png" alt="PFEC Global" width={635} height={221} loading="eager" className="h-auto w-[110px]" />
+          <Image src={logo} alt="PFEC Global" loading="eager" className="h-auto w-[110px]" />
           <p className="text-sm text-ink-muted">
             © {ANNIVERSARY_YEAR} PFEC Global · Study Abroad | Visa · Celebrating {FOUNDED_YEAR} — {ANNIVERSARY_YEAR}
           </p>
