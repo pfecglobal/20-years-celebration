@@ -19,8 +19,11 @@ export const isLandscapeLink = (value) => /youtube\.com\/watch|youtu\.be\//.test
  * Thumbnail. For a Short, hq720 is 1280×720 with the vertical video exactly in the centre, so a 9:16 crop
  * (object-fit: cover) shows the Short's own frame — at ~100 KB instead of ~180 KB for the full portrait one.
  */
-export const ytThumb = (id) => `https://i.ytimg.com/vi/${id}/hq720.jpg`;
-export const ytThumbFallback = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+// Not every size exists for every video (YouTube drops some, e.g. after a custom thumbnail is set), so the
+// card tries them in this order: hq720 → maxresdefault (same 16:9 framing) → hqdefault (always there).
+const THUMBS = ["hq720", "maxresdefault", "hqdefault"];
+export const ytThumbCount = THUMBS.length;
+export const ytThumbAt = (id, i) => `https://i.ytimg.com/vi/${id}/${THUMBS[i]}.jpg`;
 
 /** Privacy-enhanced embed (no YouTube cookies until the visitor plays), autoplaying once opened. */
 export const ytEmbed = (id) =>

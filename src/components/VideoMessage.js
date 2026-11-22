@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { isLandscapeLink, ytEmbed, ytId, ytThumb, ytThumbFallback } from "@/lib/youtube";
+import { isLandscapeLink, ytEmbed, ytId, ytThumbAt, ytThumbCount } from "@/lib/youtube";
 
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 const DURATION = 650;
@@ -45,11 +45,11 @@ export default function VideoMessage({ youtube, label = "Watch the message", tit
   const busy = useRef(false);
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false); // iframe mounted
-  const [thumb, setThumb] = useState(0); // 0 = hq720, 1 = hqdefault fallback, 2 = none
+  const [thumb, setThumb] = useState(0); // index into the thumbnail sizes (falls back on load error)
 
   const id = ytId(youtube);
   const landscape = isLandscapeLink(youtube);
-  const thumbSrc = id && thumb < 2 ? (thumb === 0 ? ytThumb(id) : ytThumbFallback(id)) : "";
+  const thumbSrc = id && thumb < ytThumbCount ? ytThumbAt(id, thumb) : "";
 
   const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

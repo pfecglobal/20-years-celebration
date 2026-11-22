@@ -282,10 +282,10 @@ export default function Home() {
           <section id="students" className="px-4 pt-44 pb-6 sm:px-6 sm:pt-56 sm:pb-32">
             <div className="mx-auto max-w-7xl">
               <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
-                {VOICES.students.title}
+                {VOICES.partners.title}
               </h2>
               <div data-reveal="zoom" style={{ "--d": "120ms" }} className="mt-10">
-                <StudentCarousel videos={VOICES.students.videos} />
+                <StudentCarousel videos={VOICES.partners.videos} />
               </div>
             </div>
           </section>

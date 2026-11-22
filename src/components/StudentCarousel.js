@@ -21,7 +21,7 @@ const offsetOf = (i, active, n) => {
   return o;
 };
 
-/** Coverflow-style auto-playing carousel of student story videos. */
+/** Coverflow-style auto-playing carousel of videos (university partner messages). */
 export default function StudentCarousel({ videos }) {
   const n = videos.length;
   const [state, setState] = useState({ active: 0, prev: 0 }); // prev → detects cards wrapping round
@@ -91,7 +91,7 @@ export default function StudentCarousel({ videos }) {
       className="sc-stage"
       role="region"
       aria-roledescription="carousel"
-      aria-label="Student stories"
+      aria-label="Messages from our university partners"
       onKeyDown={onKeyDown}
       onMouseEnter={() => setHold(true)}
       onMouseLeave={() => setHold(false)}
@@ -109,7 +109,7 @@ export default function StudentCarousel({ videos }) {
           const isActive = o === 0;
           return (
             <div
-              key={v.name}
+              key={v.youtube}
               className={`sc-slide ${isActive ? "is-active" : ""} ${wrapped ? "is-wrapping" : ""}`}
               style={{
                 "--x": Math.sign(o) * l.x,
@@ -129,7 +129,19 @@ export default function StudentCarousel({ videos }) {
                   variant="tile"
                   caption={
                     <span className="sc-caption">
-                      <span className="sc-caption-tag">Student story</span>
+                      <span className="sc-caption-tag">
+                        {v.country && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={`/images/flags/${v.country}.svg`}
+                            alt=""
+                            width={16}
+                            height={12}
+                            onError={(e) => (e.currentTarget.style.display = "none")}
+                          />
+                        )}
+                        {v.university || "University partner"}
+                      </span>
                       <span className="sc-caption-name">{v.name}</span>
                     </span>
                   }

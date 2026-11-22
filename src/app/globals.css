@@ -2950,6 +2950,9 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 }
 
 .sc-caption-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   align-self: flex-start;
   padding: 3px 8px;
   border-radius: 999px;
@@ -2960,6 +2963,16 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #fff;
+}
+
+/* country flag beside the university name */
+.sc-caption-tag img {
+  width: 16px;
+  height: 12px;
+  flex: none;
+  border-radius: 2px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
 .sc-caption-name {

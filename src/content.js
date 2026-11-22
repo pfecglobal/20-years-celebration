@@ -105,13 +105,17 @@ export const AWARDS = {
   },
 };
 
-// Student stories (carousel) — one YouTube code per story (see the note at the top of this file)
-const STUDENT_VIDEOS = [
-  { name: "Student story 1", youtube: "" },
-  { name: "Student story 2", youtube: "" },
-  { name: "Student story 3", youtube: "" },
-  { name: "Student story 4", youtube: "" },
-  { name: "Student story 5", youtube: "" },
+// University partners (carousel) — messages from university representatives.
+// Add one line per video: the YouTube code (see the note at the top of this file), the university and its
+// country (flag + name = the small tag on the card) and the person / title (shown as the name).
+// country = 2-letter code of a flag in public/images/flags:
+//   au Australia · gb UK · us USA · ca Canada · nz New Zealand · ie Ireland · de Germany · fr France
+//   nl Netherlands · se Sweden · fi Finland · dk Denmark · ch Switzerland · it Italy · es Spain · mt Malta
+//   cy Cyprus · hu Hungary · my Malaysia · sg Singapore · ae UAE · jp Japan · kr South Korea · cn China · hk Hong Kong
+// Only filled-in videos appear; the carousel starts turning automatically once there are two or more.
+const UNIVERSITY_VIDEOS = [
+  { youtube: "qhfl1GIJfrk", university: "Monash University", country: "au", name: "Azra Karim, Country Manager – Bangladesh" },
+  // { youtube: "XXXXXXXXXXX", university: "University name", country: "gb", name: "Representative name, Title" },
 ];
 
 // Team messages per country — YouTube codes, in order. Add or remove "" slots freely (5 per row on desktop).
@@ -124,9 +128,9 @@ const TEAM_VIDEOS = {
 };
 
 export const VOICES = {
-  students: {
-    title: "We've Truly Made a Difference in So Many Students' Lives",
-    videos: STUDENT_VIDEOS,
+  partners: {
+    title: "Trusted by Universities Around the World",
+    videos: UNIVERSITY_VIDEOS.filter((v) => v.youtube),
   },
   team: {
     title: "None of this Would Have Been Possible Without Your Efforts!",
