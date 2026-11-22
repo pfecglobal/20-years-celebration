@@ -152,8 +152,7 @@ export default function Home() {
               </div>
               <div data-reveal="zoom" style={{ "--d": "180ms" }} className="col-start-2">
                 <VideoMessage
-                  src={DAY_ONE.video}
-                  poster={DAY_ONE.poster}
+                  youtube={DAY_ONE.youtube}
                   label={DAY_ONE.label}
                   title={`${DAY_ONE.title} ${DAY_ONE.lead} ${DAY_ONE.emphasis}`}
                 />

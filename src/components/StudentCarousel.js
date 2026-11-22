@@ -109,7 +109,7 @@ export default function StudentCarousel({ videos }) {
           const isActive = o === 0;
           return (
             <div
-              key={v.src}
+              key={v.name}
               className={`sc-slide ${isActive ? "is-active" : ""} ${wrapped ? "is-wrapping" : ""}`}
               style={{
                 "--x": Math.sign(o) * l.x,
@@ -123,8 +123,7 @@ export default function StudentCarousel({ videos }) {
             >
               <div className="sc-card" inert={!isActive}>
                 <VideoMessage
-                  src={v.src}
-                  poster={v.poster}
+                  youtube={v.youtube}
                   title={v.name}
                   label=""
                   variant="tile"

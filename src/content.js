@@ -3,14 +3,19 @@
 export const FOUNDED_YEAR = 2006;
 export const ANNIVERSARY_YEAR = 2026;
 
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// VIDEOS ARE YOUTUBE: paste the video code — the last part of the link.
+//   https://www.youtube.com/shorts/tVLcwsXQ5f8  →  "tVLcwsXQ5f8"
+// (Pasting the whole link works too. Shorts open in a portrait player; normal youtube.com/watch?v=…
+//  or youtu.be/… links open in a widescreen player.) Leave "" for a "Video coming soon" card.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+
 // "A Message from the People Who were there on Day One." video fold.
-// Drop the CEO's portrait video at public/videos/ceo-message.mp4 (and optionally a poster image).
 export const DAY_ONE = {
   title: "A Message from the People",
   lead: "Who were there on",
   emphasis: "Day One.",
-  video: "/videos/ceo-message.mp4",
-  poster: "", // e.g. "/videos/ceo-message-poster.jpg"
+  youtube: "tVLcwsXQ5f8", // ← example Short — replace with the Day One message's code
   label: "Watch the message",
 };
 
@@ -100,24 +105,37 @@ export const AWARDS = {
   },
 };
 
-// Video walls: students, then the team. Drop the files into public/videos/... (posters optional).
-const videoSet = (folder, names) =>
-  names.map((name, i) => ({ name, src: `/videos/${folder}/${i + 1}.mp4`, poster: "" }));
+// Student stories (carousel) — one YouTube code per story (see the note at the top of this file)
+const STUDENT_VIDEOS = [
+  { name: "Student story 1", youtube: "" },
+  { name: "Student story 2", youtube: "" },
+  { name: "Student story 3", youtube: "" },
+  { name: "Student story 4", youtube: "" },
+  { name: "Student story 5", youtube: "" },
+];
+
+// Team messages per country — YouTube codes, in order. Add or remove "" slots freely (5 per row on desktop).
+const TEAM_VIDEOS = {
+  bd: ["", "", "", "", "", "", "", "", "", ""], // Bangladesh
+  au: ["", "", "", "", "", "", "", "", "", ""], // Australia
+  in: ["", "", "", "", "", "", "", "", "", ""], // India
+  lk: ["", "", "", "", "", "", "", "", "", ""], // Sri Lanka
+  id: ["", "", "", "", "", "", "", "", "", ""], // Indonesia
+};
 
 export const VOICES = {
   students: {
     title: "We've Truly Made a Difference in So Many Students' Lives",
-    videos: videoSet("students", ["Student story 1", "Student story 2", "Student story 3", "Student story 4", "Student story 5"]),
+    videos: STUDENT_VIDEOS,
   },
   team: {
     title: "None of this Would Have Been Possible Without Your Efforts!",
     sub: "Hear it from our team!",
-    // Country tabs (flag from /images/flags/{code}.svg) + an "All" tab. Videos go in public/videos/team/{code}/1.mp4, 2.mp4 …
-    // Change `length` to match how many videos each country has (5 per row on desktop).
+    // Country tabs (flag from /images/flags/{code}.svg) + an "All" tab; the videos come from TEAM_VIDEOS above
     countries: OFFICES.countries.map(({ code, name }) => ({
       code,
       name,
-      videos: videoSet(`team/${code}`, Array.from({ length: 10 }, (_, i) => `${name} team message ${i + 1}`)),
+      videos: (TEAM_VIDEOS[code] || []).map((youtube, i) => ({ name: `${name} team message ${i + 1}`, youtube })),
     })),
   },
 };

@@ -280,7 +280,7 @@ export default function CelebrationCanvas() {
     };
 
     // Click anywhere → firework burst at that spot (interactive elements keep their normal behaviour)
-    const INTERACTIVE = "a, button, input, textarea, select, label, video, dialog, [role='button'], .video-card, .award-row";
+    const INTERACTIVE = "a, button, input, textarea, select, label, video, iframe, dialog, [role='button'], .video-card, .award-row";
     const onClick = (e) => {
       if (e.button !== 0 || e.target.closest?.(INTERACTIVE)) return;
       if (e.pointerType === "touch" || e.pointerType === "pen") return; // touch gets the soft glow instead

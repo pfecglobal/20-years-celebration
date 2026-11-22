@@ -1,14 +1,20 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { isLandscapeLink, ytEmbed, ytId, ytThumb, ytThumbFallback } from "@/lib/youtube";
 
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 const DURATION = 650;
 
-/** Final (centred) size of the portrait popup player, 9:16 */
-function targetRect() {
+/** Final (centred) size of the popup player: 9:16 for Shorts, 16:9 for normal (landscape) videos */
+function targetRect(landscape) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  if (landscape) {
+    const w = Math.min(vw * 0.92, ((vh * 0.82) * 16) / 9, 1280);
+    const h = (w * 9) / 16;
+    return { left: (vw - w) / 2, top: (vh - h) / 2, width: w, height: h };
+  }
   const h = Math.min(vh * 0.86, ((vw * 0.92) * 16) / 9, 900);
   const w = (h * 9) / 16;
   return { left: (vw - w) / 2, top: (vh - h) / 2, width: w, height: h };
@@ -24,20 +30,26 @@ function PlayIcon({ size = 28 }) {
   );
 }
 
-/** Portrait video card that expands into a popup player (and shrinks back on close). */
 /**
+ * Video card (YouTube thumbnail) that expands into a popup YouTube player (and shrinks back on close).
+ * youtube: the video code ("tVLcwsXQ5f8") or a full YouTube link — empty → "Video coming soon".
  * variant: "feature" (large card, e.g. the Day One message) | "tile" (portrait tile in a row of videos)
  * caption: optional overlay inside the card (e.g. a name + label in the student carousel)
+ * The YouTube player (iframe) only exists while the popup is open — dozens of cards don't load dozens of players.
  */
-export default function VideoMessage({ src, poster, label = "Watch the message", title, variant = "feature", caption = null }) {
+export default function VideoMessage({ youtube, label = "Watch the message", title, variant = "feature", caption = null }) {
   const cardRef = useRef(null);
   const dialogRef = useRef(null);
   const panelRef = useRef(null);
   const backdropRef = useRef(null);
-  const videoRef = useRef(null);
   const busy = useRef(false);
   const [open, setOpen] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [playing, setPlaying] = useState(false); // iframe mounted
+  const [thumb, setThumb] = useState(0); // 0 = hq720, 1 = hqdefault fallback, 2 = none
+
+  const id = ytId(youtube);
+  const landscape = isLandscapeLink(youtube);
+  const thumbSrc = id && thumb < 2 ? (thumb === 0 ? ytThumb(id) : ytThumbFallback(id)) : "";
 
   const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -47,13 +59,14 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
     const dialog = dialogRef.current;
     const panel = panelRef.current;
     const from = cardRef.current.getBoundingClientRect();
-    const to = targetRect();
+    const to = targetRect(landscape);
 
     Object.assign(panel.style, px(to));
     dialog.showModal();
     document.documentElement.style.overflow = "hidden";
     window.__pfecLenis?.stop(); // keep the page still behind the player
     setOpen(true);
+    if (id) setPlaying(true); // mount the YouTube player (autoplays — this click is the user gesture)
     cardRef.current.style.visibility = "hidden"; // the card "becomes" the popup
 
     const d = reduce() ? 0 : DURATION;
@@ -68,12 +81,6 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
     anim.finished.finally(() => {
       busy.current = false;
     });
-
-    const v = videoRef.current;
-    if (v && !failed) {
-      v.currentTime = 0;
-      v.play().catch(() => {});
-    }
   };
 
   const closeAnims = useRef([]);
@@ -82,7 +89,7 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
   const finishClose = useCallback(() => {
     closeAnims.current.forEach((a) => a.cancel());
     closeAnims.current = [];
-    videoRef.current?.pause();
+    setPlaying(false);
     if (dialogRef.current?.open) dialogRef.current.close();
     if (cardRef.current) cardRef.current.style.visibility = "";
     document.documentElement.style.overflow = "";
@@ -95,7 +102,7 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
     if (busy.current || !dialogRef.current?.open) return;
     busy.current = true;
     const panel = panelRef.current;
-    videoRef.current?.pause();
+    setPlaying(false); // stop the video at once; the thumbnail shows while the popup shrinks back
 
     const from = panel.getBoundingClientRect();
     const to = cardRef.current.getBoundingClientRect();
@@ -138,10 +145,10 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
   // Keep the popup centred if the window is resized while open
   useEffect(() => {
     if (!open) return;
-    const onResize = () => Object.assign(panelRef.current.style, px(targetRect()));
+    const onResize = () => Object.assign(panelRef.current.style, px(targetRect(landscape)));
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [open]);
+  }, [open, landscape]);
 
   useEffect(() => () => (document.documentElement.style.overflow = ""), []);
 
@@ -154,21 +161,16 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
         aria-label={`Play video: ${title}`}
         className={`video-card group ${variant === "tile" ? "video-card--tile" : ""}`}
       >
-        {src && !failed ? (
-          <video
-            className="video-card-media"
-            src={`${src}#t=0.1`}
-            poster={poster || undefined}
-            muted
-            playsInline
-            preload="metadata"
-            onError={() => setFailed(true)}
-            aria-hidden="true"
-            tabIndex={-1}
-          />
-        ) : poster ? (
+        {thumbSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img className="video-card-media" src={poster} alt="" />
+          <img
+            className={`video-card-media ${landscape ? "" : "video-card-media--short"}`}
+            src={thumbSrc}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            onError={() => setThumb((t) => t + 1)}
+          />
         ) : null}
 
         <span className="video-card-shade" aria-hidden="true" />
@@ -186,17 +188,23 @@ export default function VideoMessage({ src, poster, label = "Watch the message",
       <dialog ref={dialogRef} className="video-dialog" aria-label={title}>
         <div ref={backdropRef} className="video-backdrop" onClick={closePlayer} />
         <div ref={panelRef} className="video-panel">
-          {src && !failed ? (
-            <video
-              ref={videoRef}
-              className="h-full w-full bg-black object-contain"
-              src={src}
-              poster={poster || undefined}
-              controls
-              playsInline
-              preload="none"
-              onError={() => setFailed(true)}
-            />
+          {id ? (
+            <div className="relative h-full w-full bg-black">
+              {thumbSrc && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="absolute inset-0 h-full w-full object-cover" src={thumbSrc} alt="" />
+              )}
+              {playing && (
+                <iframe
+                  className="absolute inset-0 h-full w-full"
+                  src={ytEmbed(id)}
+                  title={title}
+                  allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              )}
+            </div>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-[#0b0b1e] p-8 text-center">
               <span className="video-play-btn">

@@ -50,8 +50,8 @@ export default function VideoWall({ videos, label = "Watch", reveal = true, grid
   return (
     <ul ref={listRef} className={`video-wall ${grid ? "video-wall--grid" : ""} ${rowReveal ? "video-wall--rows" : ""}`}>
       {videos.map((v, i) => (
-        <li key={v.src} data-reveal={reveal ? "zoom" : undefined} style={{ "--d": `${i * 110}ms`, "--i": i }}>
-          <VideoMessage src={v.src} poster={v.poster} title={v.name} label={label} variant="tile" />
+        <li key={v.name} data-reveal={reveal ? "zoom" : undefined} style={{ "--d": `${i * 110}ms`, "--i": i }}>
+          <VideoMessage youtube={v.youtube} title={v.name} label={label} variant="tile" />
         </li>
       ))}
     </ul>
