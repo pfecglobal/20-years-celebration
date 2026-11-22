@@ -81,15 +81,42 @@ export const OFFICES = {
   ],
 };
 
-// "50+ Awards & Recognitions" — award cards scroll in two marquee rows
+// "50+ Awards & Recognitions" — award cards scroll in two marquee rows (split between them, alternating).
+// Files live in public/images/awards. w / h = the image's pixel size (keeps the card's shape).
+// photo: true  → a photograph (rectangular) — shown with rounded corners.
+// (no photo)   → a designed award card with its own shape (transparent edges); its outline is used for the
+//                hover reflection, so keep these as PNGs with transparency.
 export const AWARDS = {
   count: 50,
   title: "Awards & Recognitions",
   items: [
-    { src: "/images/awards/1.png", w: 617, h: 372, alt: "Outstanding Partnership & Support for Sarawak Campus (2024), recognised by Swinburne University of Technology" },
-    { src: "/images/awards/2.png", w: 650, h: 372, alt: "Outstanding Achievement (2024) and Rising Star Agent Award (2022), recognised by Western Sydney University" },
-    { src: "/images/awards/3.png", w: 650, h: 372, alt: "Best Conversion and Best Emerging Partner Award (2025), recognised by UWE Bristol" },
-    { src: "/images/awards/4.png", w: 650, h: 372, alt: "Gold Agent of the Year and Top 3 Student Recruiter of the Year – Bangladesh (2024), recognised by Canterbury Christ Church University" },
+    // order matters: items alternate between the two rows (1st → top row, 2nd → bottom row, 3rd → top …)
+    // (a photo roughly every third card, so each row mixes photos and designed cards)
+    { src: "/images/awards/acu-silver-award.png", w: 1567, h: 914, alt: "2024 Silver Award, recognised by Australian Catholic University" },
+    { src: "/images/awards/awaed1.jpg", w: 1536, h: 2048, photo: true, alt: "Outstanding Achievement Partner award (2024) from Western Sydney University, presented to PFEC Global" },
+    { src: "/images/awards/adelaide-partner-of-the-year.png", w: 1664, h: 931, alt: "Outstanding Achievement (2024) and Partner of the Year Award – Diamond Category (2024 & 2023), recognised by Adelaide University" },
+    { src: "/images/awards/deakin-outstanding-partner.png", w: 1561, h: 898, alt: "Outstanding Partner Award (2020), recognised by Deakin University" },
+    { src: "/images/awards/awaed3.jpg", w: 3024, h: 4032, photo: true, alt: "Outstanding Agency Performance, South Asia — award from Kaplan Business School Australia to PFEC Global" },
+    { src: "/images/awards/federation-platinum-status.png", w: 1573, h: 919, alt: "Platinum Level Status in the Recruitment of International Students (2023 & 2021), recognised by Federation University" },
+    { src: "/images/awards/jcu-trusted-agent.png", w: 1568, h: 907, alt: "Trusted Agent (2025), recognised by James Cook University" },
+    { src: "/images/awards/awaed4.jpg", w: 1536, h: 2048, photo: true, alt: "Outstanding Service Award (2023) from CQUniversity Australia, presented to PFEC Global" },
+    { src: "/images/awards/la-trobe-double-platinum.png", w: 1560, h: 902, alt: "Double Platinum Eagle Award (2023) and Most Engaged Agency Award (2024), recognised by La Trobe University" },
+    { src: "/images/awards/rmit-gold-agent.png", w: 1560, h: 903, alt: "Gold Agent Status (2023), recognised by RMIT University" },
+    { src: "/images/awards/awaed2.png", w: 1654, h: 2339, photo: true, alt: "Partner of the Year Award, Diamond Category (2024), presented to PFEC Global Bangladesh by the University of Adelaide" },
+    { src: "/images/awards/up-education-platinum-partner.png", w: 1579, h: 924, alt: "Platinum Partner (2023), recognised by UP Education" },
+    { src: "/images/awards/cim-top-performing-partner.png", w: 1580, h: 921, alt: "Top Performing Partner 2023–24 (Melbourne Campus), recognised by Canterbury Institute of Management" },
+    { src: "/images/awards/awaed5.jpg", w: 1152, h: 2048, photo: true, alt: "Glass award from La Trobe University, presented to Pacific Foreign Education Consultants Limited (PFEC)" },
+    { src: "/images/awards/ecu-top-performing-agent.png", w: 1577, h: 919, alt: "Top Performing Agent Award (2023), Highest Achiever – Interstate Recruitment (2022) and Top Performing Agent Award – Eastern States (2021), recognised by Edith Cowan University" },
+    { src: "/images/awards/torrens-excellence-subcontinent.png", w: 1582, h: 923, alt: "Excellence Award Subcontinent (2021), recognised by Torrens University Australia" },
+    { src: "/images/awards/awaed6.png", w: 906, h: 1234, photo: true, alt: "Partner of the Decade and Emerging Excellence award from Swinburne University of Technology to PFEC Global" },
+    { src: "/images/awards/uts-outstanding-performance.png", w: 1579, h: 921, alt: "Outstanding Performance – South Asia (2023), recognised by University of Technology Sydney" },
+    { src: "/images/awards/wollongong-global-recruitment.png", w: 1564, h: 905, alt: "Certificate of Achievement for Global Recruitment Initiatives (2023), recognised by University of Wollongong" },
+    { src: "/images/awards/awaed7.jpg", w: 1200, h: 1600, photo: true, alt: "Bangladesh Expatriate Award 2024 from the Bangladesh High Commission, Canberra, presented to Md Shahidul Islam" },
+    { src: "/images/awards/tasmania-rising-star.png", w: 1575, h: 920, alt: "In Recognition of Excellent Cooperation & Unwavering Support (2023) and Rising Star Award (2024), recognised by University of Tasmania" },
+    { src: "/images/awards/uwa-best-newcomer.png", w: 1562, h: 898, alt: "Best Newcomer for 2024 – Gold, recognised by The University of Western Australia" },
+    { src: "/images/awards/awaed8.jpg", w: 1200, h: 1600, photo: true, alt: "Best Conversion and Best Emerging Partner Award, UWE Bristol Partners Conference 2025, presented to PFEC Global" },
+    { src: "/images/awards/victoria-agent-of-the-year.png", w: 1567, h: 913, alt: "Excellence Award for Conversion – AU (2022), Top Performing Agent (2024) and Agent of the Year (2021), recognised by Victoria University" },
+    { src: "/images/awards/western-sydney-rising-star.png", w: 1574, h: 907, alt: "Rising Star Agent Award (2022) and Outstanding Achievement Partner Award (2024), recognised by Western Sydney University" },
   ],
   affiliations: {
     title: "Our Affiliations",

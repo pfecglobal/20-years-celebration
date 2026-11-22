@@ -2323,9 +2323,65 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   object-fit: contain;
 }
 
+/* photographed awards: rounded like the designed cards, with a thin light frame (the reflection is clipped too) */
+.award-card--photo {
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.award-card--photo img {
+  object-fit: cover;
+}
+
 .award-card:hover {
   transform: translateY(-6px) scale(1.035);
   filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 18px rgba(255, 197, 61, 0.4));
+}
+
+/* hover reflection: a band of light sweeps across the award once, like light catching a glossy plaque —
+   masked to the award image itself, so it only ever lands on the award (never its soft edge / the background) */
+.award-card {
+  position: relative;
+}
+
+.award-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* warm gold edges around a bright core, so the band reads on light (white / grey) award cards too */
+  background: linear-gradient(
+    115deg,
+    transparent 33%,
+    rgba(255, 196, 70, 0.22) 40%,
+    rgba(255, 214, 120, 0.55) 45%,
+    rgba(255, 255, 255, 0.95) 49%,
+    rgba(255, 214, 120, 0.55) 53%,
+    rgba(255, 196, 70, 0.22) 58%,
+    transparent 65%
+  );
+  background-size: 240% 100%;
+  background-repeat: no-repeat;
+  background-position: 110% 0;
+  -webkit-mask: var(--award-img) center / 100% 100% no-repeat;
+  mask: var(--award-img) center / 100% 100% no-repeat;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.award-card:hover::after {
+  opacity: 1;
+  animation: award-reflect 1.2s cubic-bezier(0.45, 0, 0.35, 1) both;
+}
+
+@keyframes award-reflect {
+  from { background-position: 110% 0; }
+  to { background-position: -12% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .award-card::after { display: none; }
 }
 
 .affil-card {
