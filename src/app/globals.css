@@ -1027,7 +1027,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 .leader {
   position: relative;
-  flex: 0 0 70vw;
+  flex: 0 0 62vw;
   scroll-snap-align: center;
   text-align: center;
   opacity: 0;
@@ -1049,6 +1049,25 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 .leader .video-card {
   width: 100%;
+  border-radius: 18px; /* 9:16 Shorts-size tiles */
+}
+
+/* the spotlight keeps the full-size play button and label */
+.leader--spotlight .video-play-btn,
+.leader--spotlight .video-play-ring {
+  width: 72px;
+  height: 72px;
+}
+
+.leader--spotlight .video-play-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
+.leader--spotlight .video-card-label {
+  bottom: 18px;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
 }
 
 .leader-card {
@@ -1142,13 +1161,13 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   }
 
   .leader {
-    flex: 0 0 clamp(150px, 25vw, 330px);
+    flex: 0 0 clamp(140px, 21vw, 260px);
     margin-top: clamp(28px, 5vw, 80px); /* side cards sit lower, so the middle one leads */
   }
 
   .leader--spotlight {
     order: 0;
-    flex-basis: clamp(185px, 31vw, 420px);
+    flex-basis: clamp(170px, 26vw, 320px);
     margin-top: 0;
   }
 }

@@ -1,7 +1,7 @@
 import VideoMessage from "./VideoMessage";
 
 /**
- * Top management messages: three video cards side by side — the middle one is the spotlight (larger, gold
+ * Top management messages: three Shorts-size (9:16) video cards side by side — the middle one is the spotlight (larger, gold
  * rim, sides sit lower). Name, role and a short quote are always visible under each card, so who is
  * speaking reads at a glance. Phones: a swipeable row that opens on the spotlight card.
  * Each card opens the same popup player as the rest of the page; it plays on through the three messages
@@ -28,6 +28,7 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
                 youtube={p.youtube}
                 label={isSpot ? label : "Watch"}
                 title={`${p.name}, ${p.role}`}
+                variant="tile"
                 playlist={playlist}
                 index={order.indexOf(i)}
                 group="leaders"
