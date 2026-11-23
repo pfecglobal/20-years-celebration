@@ -24,6 +24,7 @@ const offsetOf = (i, active, n) => {
 /** Coverflow-style auto-playing carousel of videos (university partner messages). */
 export default function StudentCarousel({ videos }) {
   const n = videos.length;
+  const playlist = videos.map((v) => ({ youtube: v.youtube, title: v.name })); // popup plays on like reels
   const [state, setState] = useState({ active: 0, prev: 0 }); // prev → detects cards wrapping round
   const [hold, setHold] = useState(false); // hover / focus pause
   const [visible, setVisible] = useState(false); // on screen
@@ -127,6 +128,9 @@ export default function StudentCarousel({ videos }) {
                   title={v.name}
                   label=""
                   variant="tile"
+                  playlist={playlist}
+                  index={i}
+                  group="partners"
                   caption={
                     <span className="sc-caption">
                       <span className="sc-caption-tag">

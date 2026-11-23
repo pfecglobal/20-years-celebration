@@ -7,8 +7,11 @@ import VideoMessage from "./VideoMessage";
  * A row of portrait video tiles; each one opens the popup player (same as the Day One message).
  * rowReveal: as you scroll, the grid appears row by row — each row rises in, its tiles staggered left → right.
  */
-export default function VideoWall({ videos, label = "Watch", reveal = true, grid = false, rowReveal = false }) {
+export default function VideoWall({ videos, label = "Watch", reveal = true, grid = false, rowReveal = false, group = "wall" }) {
   const listRef = useRef(null);
+  // popup playlist (reels): only the tiles that have a video
+  const playable = videos.filter((v) => v.youtube);
+  const playlist = playable.map((v) => ({ youtube: v.youtube, title: v.name }));
 
   useEffect(() => {
     const list = listRef.current;
@@ -51,7 +54,15 @@ export default function VideoWall({ videos, label = "Watch", reveal = true, grid
     <ul ref={listRef} className={`video-wall ${grid ? "video-wall--grid" : ""} ${rowReveal ? "video-wall--rows" : ""}`}>
       {videos.map((v, i) => (
         <li key={v.name} data-reveal={reveal ? "zoom" : undefined} style={{ "--d": `${i * 110}ms`, "--i": i }}>
-          <VideoMessage youtube={v.youtube} title={v.name} label={label} variant="tile" />
+          <VideoMessage
+            youtube={v.youtube}
+            title={v.name}
+            label={label}
+            variant="tile"
+            playlist={playlist}
+            index={playable.indexOf(v)}
+            group={group}
+          />
         </li>
       ))}
     </ul>

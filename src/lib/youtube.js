@@ -28,3 +28,33 @@ export const ytThumbAt = (id, i) => `https://i.ytimg.com/vi/${id}/${THUMBS[i]}.j
 /** Privacy-enhanced embed (no YouTube cookies until the visitor plays), autoplaying once opened. */
 export const ytEmbed = (id) =>
   `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1`;
+
+/**
+ * Loads YouTube's IFrame Player API once (only when someone first plays a video) and resolves with window.YT.
+ * The player API is what tells us when a video has ended, so the popup can move on to the next one.
+ */
+let apiPromise = null;
+export function loadYouTubeApi() {
+  if (typeof window === "undefined") return Promise.reject(new Error("no window"));
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  if (!apiPromise) {
+    apiPromise = new Promise((resolve, reject) => {
+      const fail = (err) => {
+        apiPromise = null;
+        reject(err);
+      };
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        prev?.();
+        resolve(window.YT);
+      };
+      const s = document.createElement("script");
+      s.src = "https://www.youtube.com/iframe_api";
+      s.async = true;
+      s.onerror = () => fail(new Error("YouTube player API failed to load"));
+      document.head.append(s);
+      setTimeout(() => !window.YT?.Player && fail(new Error("YouTube player API timed out")), 8000);
+    });
+  }
+  return apiPromise;
+}

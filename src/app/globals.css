@@ -1008,6 +1008,159 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   color: #fff;
 }
 
+/* ---------- Day One: top management messages (3 cards, middle = spotlight) ---------- */
+/* phones: swipeable row that opens on the spotlight card; ≥640px: three across, the sides set lower */
+.leaders {
+  display: flex;
+  gap: 16px;
+  margin-inline: -16px;
+  padding: 10px 15vw 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.leaders::-webkit-scrollbar {
+  display: none;
+}
+
+.leader {
+  position: relative;
+  flex: 0 0 70vw;
+  scroll-snap-align: center;
+  text-align: center;
+  opacity: 0;
+  transform: translate3d(0, 48px, 0) scale(0.94);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 1.1s var(--ease-out);
+  transition-delay: calc(var(--k, 0) * 180ms + 150ms);
+}
+
+.leaders.is-in .leader {
+  opacity: 1;
+  transform: none;
+}
+
+.leader--spotlight {
+  order: -1;
+}
+
+.leader .video-card {
+  width: 100%;
+}
+
+.leader-card {
+  position: relative;
+  isolation: isolate;
+}
+
+/* the spotlight: a soft gold halo behind the card and a gold rim on it */
+.leader--spotlight .leader-card::before {
+  content: "";
+  position: absolute;
+  inset: -14% -18%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(255, 197, 61, 0.28), rgba(16, 6, 148, 0.25) 60%, transparent);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.leader--spotlight .video-card {
+  box-shadow:
+    0 30px 70px -25px rgba(16, 6, 148, 0.8),
+    0 0 0 2px rgba(255, 197, 61, 0.6);
+}
+
+.leader:not(.leader--spotlight) .video-play-btn,
+.leader:not(.leader--spotlight) .video-play-ring {
+  width: 60px;
+  height: 60px;
+}
+
+.leader:not(.leader--spotlight) .video-play-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.leader-meta {
+  margin-top: 18px;
+}
+
+.leader-name {
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.leader--spotlight .leader-name {
+  font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+}
+
+.leader-role {
+  margin-top: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-200);
+}
+
+.leader--spotlight .leader-role {
+  color: var(--gold-400);
+}
+
+.leader-quote {
+  max-width: 30ch;
+  margin: 10px auto 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.leader-quote::before,
+.leader-quote::after {
+  color: var(--gold-400);
+  font-style: normal;
+}
+
+.leader-quote::before { content: "“"; margin-right: 0.1em; }
+.leader-quote::after { content: "”"; margin-left: 0.1em; }
+
+@media (min-width: 640px) {
+  .leaders {
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(18px, 3vw, 56px);
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .leader {
+    flex: 0 0 clamp(150px, 25vw, 330px);
+    margin-top: clamp(28px, 5vw, 80px); /* side cards sit lower, so the middle one leads */
+  }
+
+  .leader--spotlight {
+    order: 0;
+    flex-basis: clamp(185px, 31vw, 420px);
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leader {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Popup player */
 .video-dialog {
   position: fixed;
@@ -1066,6 +1219,78 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
 
 .video-dialog[open] .video-close {
   animation: fade-in 0.4s ease 0.5s both;
+}
+
+/* the YouTube player API puts its own iframe in here */
+.video-yt iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Reels controls: previous / count / next — beside the player, or under it on phones (.is-below) */
+.video-reel-nav {
+  position: fixed;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.video-reel-nav[hidden] {
+  display: none;
+}
+
+.video-reel-nav.is-below {
+  flex-direction: row;
+  gap: 14px;
+}
+
+.video-dialog[open] .video-reel-nav {
+  animation: fade-in 0.4s ease 0.45s both;
+}
+
+.video-reel-btn {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: #100694;
+  background: var(--gold-gradient);
+  box-shadow: 0 12px 30px -8px rgba(255, 180, 50, 0.6);
+  transition: transform 0.35s var(--ease-back), opacity 0.3s;
+}
+
+.video-reel-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.video-reel-btn:focus-visible {
+  outline: 3px solid var(--gold-50);
+  outline-offset: 3px;
+}
+
+.video-reel-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  box-shadow: none;
+}
+
+.video-reel-nav.is-below .video-reel-btn svg {
+  rotate: -90deg; /* ‹  › when the controls sit in a row */
+}
+
+.video-reel-count {
+  min-width: 3.5em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-align: center;
+  color: var(--gold-200);
 }
 
 /* ---------- Journey road ---------- */

@@ -10,13 +10,21 @@ export const ANNIVERSARY_YEAR = 2026;
 //  or youtu.be/… links open in a widescreen player.) Leave "" for a "Video coming soon" card.
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
-// "A Message from the People Who were there on Day One." video fold.
+// "A Message from the People Who were there on Day One." video fold — the top management messages.
+// Three cards, listed left → right as they appear on a computer. The MIDDLE one is the spotlight
+// (bigger card, gold rim) — put the most senior person there; on phones it is shown first.
+//   youtube: video code or link ("" → "Video coming soon")   name / role: shown under the card
+//   quote: optional one-liner from their message, shown in italics under the name ("" to hide)
 export const DAY_ONE = {
   title: "A Message from the People",
   lead: "Who were there on",
   emphasis: "Day One.",
-  youtube: "tVLcwsXQ5f8", // ← example Short — replace with the Day One message's code
   label: "Watch the message",
+  leaders: [
+    { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", name: "Fareha Begum", role: "Sr. Country Director, Bangladesh", quote: "" },
+    { youtube: "tVLcwsXQ5f8", name: "Leader Name", role: "Founder & CEO", quote: "" }, // ← spotlight — replace
+    { youtube: "tVLcwsXQ5f8", name: "Leader Name", role: "Director", quote: "" }, // ← example — replace
+  ],
 };
 
 export const TAGLINE = ["Building Global Citizens", "Powered by People"];
@@ -96,27 +104,36 @@ export const AWARDS = {
     { src: "/images/awards/awaed1.jpg", w: 1536, h: 2048, photo: true, alt: "Outstanding Achievement Partner award (2024) from Western Sydney University, presented to PFEC Global" },
     { src: "/images/awards/adelaide-partner-of-the-year.png", w: 1664, h: 931, alt: "Outstanding Achievement (2024) and Partner of the Year Award – Diamond Category (2024 & 2023), recognised by Adelaide University" },
     { src: "/images/awards/deakin-outstanding-partner.png", w: 1561, h: 898, alt: "Outstanding Partner Award (2020), recognised by Deakin University" },
+    { src: "/images/awards/cqu-collaborative-excellence.png", w: 1651, h: 953, alt: "Collaborative Excellence Award (2024), Outstanding Service Award (2023), Top Performing Agent (2021) and Top Quality Agent (2018), recognised by CQUniversity Australia" },
     { src: "/images/awards/awaed3.jpg", w: 3024, h: 4032, photo: true, alt: "Outstanding Agency Performance, South Asia — award from Kaplan Business School Australia to PFEC Global" },
     { src: "/images/awards/federation-platinum-status.png", w: 1573, h: 919, alt: "Platinum Level Status in the Recruitment of International Students (2023 & 2021), recognised by Federation University" },
     { src: "/images/awards/jcu-trusted-agent.png", w: 1568, h: 907, alt: "Trusted Agent (2025), recognised by James Cook University" },
+    { src: "/images/awards/kaplan-legacy-partner.png", w: 1651, h: 953, alt: "Legacy Partner Agency (South Asia), Champion Performer – Kaplink Agent Portal, Outstanding Agency Performance (South Asia), Above & Beyond Award (2023) and Outstanding Performance in 2020 (Year on Year growth), recognised by Kaplan Business School Australia" },
     { src: "/images/awards/awaed4.jpg", w: 1536, h: 2048, photo: true, alt: "Outstanding Service Award (2023) from CQUniversity Australia, presented to PFEC Global" },
     { src: "/images/awards/la-trobe-double-platinum.png", w: 1560, h: 902, alt: "Double Platinum Eagle Award (2023) and Most Engaged Agency Award (2024), recognised by La Trobe University" },
     { src: "/images/awards/rmit-gold-agent.png", w: 1560, h: 903, alt: "Gold Agent Status (2023), recognised by RMIT University" },
+    { src: "/images/awards/navitas-outstanding-partner.png", w: 1652, h: 952, alt: "Outstanding Partner Award (2025) and Diamond Agent (2022), recognised by Navitas" },
     { src: "/images/awards/awaed2.png", w: 1654, h: 2339, photo: true, alt: "Partner of the Year Award, Diamond Category (2024), presented to PFEC Global Bangladesh by the University of Adelaide" },
     { src: "/images/awards/up-education-platinum-partner.png", w: 1579, h: 924, alt: "Platinum Partner (2023), recognised by UP Education" },
     { src: "/images/awards/cim-top-performing-partner.png", w: 1580, h: 921, alt: "Top Performing Partner 2023–24 (Melbourne Campus), recognised by Canterbury Institute of Management" },
+    { src: "/images/awards/scu-agent-of-the-year.png", w: 1651, h: 953, alt: "Agent of the Year Award (2022) and VIP Agent Status (FY2024), recognised by Southern Cross University" },
     { src: "/images/awards/awaed5.jpg", w: 1152, h: 2048, photo: true, alt: "Glass award from La Trobe University, presented to Pacific Foreign Education Consultants Limited (PFEC)" },
     { src: "/images/awards/ecu-top-performing-agent.png", w: 1577, h: 919, alt: "Top Performing Agent Award (2023), Highest Achiever – Interstate Recruitment (2022) and Top Performing Agent Award – Eastern States (2021), recognised by Edith Cowan University" },
     { src: "/images/awards/torrens-excellence-subcontinent.png", w: 1582, h: 923, alt: "Excellence Award Subcontinent (2021), recognised by Torrens University Australia" },
+    { src: "/images/awards/holmes-outstanding-performance-gold.png", w: 1654, h: 951, alt: "Outstanding Performance – Gold (2023/24), recognised by Holmes Institute" },
     { src: "/images/awards/awaed6.png", w: 906, h: 1234, photo: true, alt: "Partner of the Decade and Emerging Excellence award from Swinburne University of Technology to PFEC Global" },
     { src: "/images/awards/uts-outstanding-performance.png", w: 1579, h: 921, alt: "Outstanding Performance – South Asia (2023), recognised by University of Technology Sydney" },
     { src: "/images/awards/wollongong-global-recruitment.png", w: 1564, h: 905, alt: "Certificate of Achievement for Global Recruitment Initiatives (2023), recognised by University of Wollongong" },
+    { src: "/images/awards/vit-platinum-agency.png", w: 1671, h: 941, alt: "Platinum Agency Award (2020) and Top Performing Business Partner (2023), recognised by Victorian Institute of Technology" },
     { src: "/images/awards/awaed7.jpg", w: 1200, h: 1600, photo: true, alt: "Bangladesh Expatriate Award 2024 from the Bangladesh High Commission, Canberra, presented to Md Shahidul Islam" },
     { src: "/images/awards/tasmania-rising-star.png", w: 1575, h: 920, alt: "In Recognition of Excellent Cooperation & Unwavering Support (2023) and Rising Star Award (2024), recognised by University of Tasmania" },
     { src: "/images/awards/uwa-best-newcomer.png", w: 1562, h: 898, alt: "Best Newcomer for 2024 – Gold, recognised by The University of Western Australia" },
+    { src: "/images/awards/cdu-top-performing-agent.png", w: 1651, h: 953, alt: "Top Performing Agent – Bangladesh (2020), recognised by Charles Darwin University" },
     { src: "/images/awards/awaed8.jpg", w: 1200, h: 1600, photo: true, alt: "Best Conversion and Best Emerging Partner Award, UWE Bristol Partners Conference 2025, presented to PFEC Global" },
     { src: "/images/awards/victoria-agent-of-the-year.png", w: 1567, h: 913, alt: "Excellence Award for Conversion – AU (2022), Top Performing Agent (2024) and Agent of the Year (2021), recognised by Victoria University" },
     { src: "/images/awards/western-sydney-rising-star.png", w: 1574, h: 907, alt: "Rising Star Agent Award (2022) and Outstanding Achievement Partner Award (2024), recognised by Western Sydney University" },
+    { src: "/images/awards/melbourne-polytechnic-most-consistent.png", w: 1651, h: 953, alt: "Most Consistent Agency (2020), recognised by Melbourne Polytechnic" },
+    { src: "/images/awards/performance-education-agent-excellence.png", w: 1566, h: 891, alt: "Agent Excellence Award (2023), recognised by Performance Education" },
   ],
   affiliations: {
     title: "Our Affiliations",

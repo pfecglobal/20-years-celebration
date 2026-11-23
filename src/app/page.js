@@ -10,7 +10,7 @@ import JourneyRoad from "@/components/JourneyRoad";
 import CelebrateButton from "@/components/CelebrateButton";
 import SparkleField from "@/components/SparkleField";
 import ConfettiRain from "@/components/ConfettiRain";
-import VideoMessage from "@/components/VideoMessage";
+import LeadershipVideos from "@/components/LeadershipVideos";
 // import OfficesMap from "@/components/OfficesMap"; // previous offices fold (see the commented section below)
 import OfficesExpansion from "@/components/OfficesExpansion";
 import AwardsMarquee from "@/components/AwardsMarquee";
@@ -130,7 +130,7 @@ export default function Home() {
 
         {/* Day One message + team videos: one starry #100694 → soft purple gradient (continues the hero) */}
         <div className="bg-message-team">
-          {/* Message from the people who were there on Day One */}
+          {/* Message from the people who were there on Day One — the top management videos */}
           <section
             id="message"
             className="relative isolate flex flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-12 sm:px-6 sm:pt-20 sm:pb-14 lg:min-h-svh lg:py-28"
@@ -138,28 +138,25 @@ export default function Home() {
             <div className="stars-carry stars-carry--full" aria-hidden="true">
               <SparkleField />
             </div>
-            <div className="relative text-center">
-              <h2 data-reveal className="text-2xl font-bold text-white sm:text-4xl">
-                {DAY_ONE.title}
-              </h2>
-              <p data-reveal style={{ "--d": "120ms" }} className="mt-1 text-2xl font-light text-white/90 sm:text-4xl">
-                {DAY_ONE.lead} <strong className="font-bold text-white">{DAY_ONE.emphasis}</strong>
-              </p>
+            {/* heading with the PFEC bar mark on either side (≥640px) */}
+            <div className="relative grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-6 lg:gap-14">
+              <div data-reveal="left" style={{ "--d": "250ms" }} className="hidden justify-self-end sm:block">
+                <PfecMark />
+              </div>
+              <div className="col-start-2 text-center">
+                <h2 data-reveal className="text-2xl font-bold text-white sm:text-4xl">
+                  {DAY_ONE.title}
+                </h2>
+                <p data-reveal style={{ "--d": "120ms" }} className="mt-1 text-2xl font-light text-white/90 sm:text-4xl">
+                  {DAY_ONE.lead} <strong className="font-bold text-white">{DAY_ONE.emphasis}</strong>
+                </p>
+              </div>
+              <div data-reveal="right" style={{ "--d": "250ms" }} className="hidden justify-self-start sm:block">
+                <PfecMark />
+              </div>
             </div>
-            <div className="relative mt-10 grid w-full grid-cols-[1fr_auto_1fr] items-center sm:mt-14">
-              <div data-reveal="left" style={{ "--d": "250ms" }} className="hidden justify-self-center sm:block">
-                <PfecMark />
-              </div>
-              <div data-reveal="zoom" style={{ "--d": "180ms" }} className="col-start-2">
-                <VideoMessage
-                  youtube={DAY_ONE.youtube}
-                  label={DAY_ONE.label}
-                  title={`${DAY_ONE.title} ${DAY_ONE.lead} ${DAY_ONE.emphasis}`}
-                />
-              </div>
-              <div data-reveal="right" style={{ "--d": "250ms" }} className="hidden justify-self-center sm:block">
-                <PfecMark />
-              </div>
+            <div className="relative mt-10 w-full sm:mt-14">
+              <LeadershipVideos leaders={DAY_ONE.leaders} label={DAY_ONE.label} />
             </div>
           </section>
 
