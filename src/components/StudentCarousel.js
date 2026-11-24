@@ -125,6 +125,7 @@ export default function StudentCarousel({ videos }) {
               <div className="sc-card" inert={!isActive}>
                 <VideoMessage
                   youtube={v.youtube}
+                  poster={v.poster}
                   title={v.name}
                   label=""
                   variant="tile"

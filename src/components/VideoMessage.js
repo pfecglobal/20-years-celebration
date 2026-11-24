@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { isLandscapeLink, loadYouTubeApi, ytEmbed, ytId, ytThumbAt, ytThumbCount } from "@/lib/youtube";
+import { isLandscapeLink, isPortraitThumb, loadYouTubeApi, ytEmbed, ytId, ytThumbs } from "@/lib/youtube";
 
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 const DURATION = 650;
@@ -65,6 +65,8 @@ function Chevron({ up = false }) {
 /**
  * Video card (YouTube thumbnail) that expands into a popup YouTube player (and shrinks back on close).
  * youtube: the video code ("tVLcwsXQ5f8") or a full YouTube link — empty → "Video coming soon".
+ * poster: optional own cover image (e.g. "/images/videos/name.jpg") used instead of YouTube's thumbnail —
+ *   for videos whose YouTube thumbnail is low-res (it then looks blurry on the card).
  * variant: "feature" (large card, e.g. the Day One message) | "tile" (portrait tile in a row of videos)
  * caption: optional overlay inside the card (e.g. a name + label in the student carousel)
  * playlist / index / group: the videos this card belongs to ([{ youtube, title }], this card's place in it, and a
@@ -77,6 +79,7 @@ export default function VideoMessage({
   label = "Watch the message",
   title,
   variant = "feature",
+  poster = "",
   caption = null,
   playlist = null,
   index = -1,
@@ -102,7 +105,11 @@ export default function VideoMessage({
   const [cur, setCur] = useState(index); // the video showing in the popup (its place in the playlist)
 
   const cardVideoId = ytId(youtube);
-  const thumbSrc = cardVideoId && thumb < ytThumbCount ? ytThumbAt(cardVideoId, thumb) : "";
+  const thumbList = [poster, ...(cardVideoId ? ytThumbs(cardVideoId, isLandscapeLink(youtube)) : [])].filter(Boolean);
+  const thumbSrc = thumb < thumbList.length ? thumbList[thumb] : "";
+  // a Short in a 16:9 thumbnail is zoomed to fill the card; a poster or the portrait (oar2) size needs no zoom
+  const mediaClass =
+    (poster && thumbSrc === poster) || isPortraitThumb(thumbSrc) || isLandscapeLink(youtube) ? "" : "video-card-media--short";
 
   const item = list ? list[cur] || list[index] : { youtube, title };
   const id = ytId(item.youtube);
@@ -411,7 +418,7 @@ export default function VideoMessage({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             ref={imgRef}
-            className={`video-card-media ${isLandscapeLink(youtube) ? "" : "video-card-media--short"}`}
+            className={`video-card-media ${mediaClass}`}
             src={thumbSrc}
             alt=""
             loading="lazy"

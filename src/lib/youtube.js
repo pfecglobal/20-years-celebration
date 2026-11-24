@@ -16,14 +16,20 @@ export function ytId(value) {
 export const isLandscapeLink = (value) => /youtube\.com\/watch|youtu\.be\//.test(String(value || ""));
 
 /**
- * Thumbnail. For a Short, hq720 is 1280×720 with the vertical video exactly in the centre, so a 9:16 crop
- * (object-fit: cover) shows the Short's own frame — at ~100 KB instead of ~180 KB for the full portrait one.
+ * Thumbnail sizes, best first. Not every size exists for every video (YouTube skips some, e.g. hq720 /
+ * maxresdefault for many Shorts), and a missing one comes back as a 120×90 placeholder, so the card tries
+ * them in order and moves on.
+ *  - oar2: a Short's own portrait thumbnail, 1080×1920 — sharp on a 9:16 card (Shorts only).
+ *  - hq720 / maxresdefault: 1280×720 (a Short sits in the middle, ~405 px wide).
+ *  - sddefault 640×480, hqdefault 480×360: always there, but a Short in them is only ~200–270 px wide,
+ *    so a 9:16 card shows it stretched and blurry — set a `poster` image for those videos instead.
  */
-// Not every size exists for every video (YouTube drops some, e.g. after a custom thumbnail is set), so the
-// card tries them in this order: hq720 → maxresdefault (same 16:9 framing) → hqdefault (always there).
-const THUMBS = ["hq720", "maxresdefault", "hqdefault"];
-export const ytThumbCount = THUMBS.length;
-export const ytThumbAt = (id, i) => `https://i.ytimg.com/vi/${id}/${THUMBS[i]}.jpg`;
+const THUMBS_SHORT = ["oar2", "hq720", "maxresdefault", "sddefault", "hqdefault"];
+const THUMBS_WIDE = ["hq720", "maxresdefault", "sddefault", "hqdefault"];
+export const ytThumbs = (id, landscape) =>
+  (landscape ? THUMBS_WIDE : THUMBS_SHORT).map((size) => `https://i.ytimg.com/vi/${id}/${size}.jpg`);
+/** The portrait (9:16) size — the image is already the Short's frame, so it needs no zoom. */
+export const isPortraitThumb = (src) => /\/oar\d\.jpg$/.test(src || "");
 
 /** Privacy-enhanced embed (no YouTube cookies until the visitor plays), autoplaying once opened. */
 export const ytEmbed = (id) =>

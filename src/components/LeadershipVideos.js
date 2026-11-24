@@ -26,6 +26,7 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
             <div className="leader-card">
               <VideoMessage
                 youtube={p.youtube}
+                poster={p.poster}
                 label={isSpot ? label : "Watch"}
                 title={`${p.name}, ${p.role}`}
                 variant="tile"

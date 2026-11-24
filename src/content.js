@@ -15,15 +15,17 @@ export const ANNIVERSARY_YEAR = 2026;
 // (bigger card, gold rim) — put the most senior person there; on phones it is shown first.
 //   youtube: video code or link ("" → "Video coming soon")   name / role: shown under the card
 //   quote: optional one-liner from their message, shown in italics under the name ("" to hide)
+//   poster: optional cover image for the card, e.g. "/images/leaders/fareha.jpg" (put it in public/images/leaders/,
+//     portrait 9:16, ~720×1280). Use it when the card looks blurry: some videos have only a small YouTube thumbnail.
 export const DAY_ONE = {
   title: "A Message from the People",
   lead: "Who were there on",
   emphasis: "Day One.",
   label: "Watch the message",
   leaders: [
-    { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", name: "Fareha Begum", role: "Sr. Country Director, Bangladesh", quote: "" },
+    { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
     { youtube: "tVLcwsXQ5f8", name: "Leader Name", role: "Founder & CEO", quote: "" }, // ← spotlight — replace
-    { youtube: "tVLcwsXQ5f8", name: "Leader Name", role: "Director", quote: "" }, // ← example — replace
+    { youtube: "https://www.youtube.com/shorts/cwiRwa8pIi0", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
   ],
 };
 
@@ -157,8 +159,10 @@ export const AWARDS = {
 //   nl Netherlands · se Sweden · fi Finland · dk Denmark · ch Switzerland · it Italy · es Spain · mt Malta
 //   cy Cyprus · hu Hungary · my Malaysia · sg Singapore · ae UAE · jp Japan · kr South Korea · cn China · hk Hong Kong
 // Only filled-in videos appear; the carousel starts turning automatically once there are two or more.
+// poster: optional cover image for the card, e.g. "/images/universities/monash.jpg" (public/images/universities/,
+//   portrait 9:16, ~720×1280) — use it when a card looks blurry (the video has only a small YouTube thumbnail).
 const UNIVERSITY_VIDEOS = [
-  { youtube: "qhfl1GIJfrk", university: "Monash University", country: "au", name: "Azra Karim, Country Manager – Bangladesh" },
+  // { youtube: "qhfl1GIJfrk", university: "Monash University", country: "au", name: "Azra Karim, Country Manager – Bangladesh" },
   { youtube: "C-H_3ribKkI", university: "Asia Pacific University", country: "my", name: "Afsan, Representative - Bangladesh" },
 ];
 
