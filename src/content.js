@@ -159,7 +159,7 @@ export const AWARDS = {
 // Only filled-in videos appear; the carousel starts turning automatically once there are two or more.
 const UNIVERSITY_VIDEOS = [
   { youtube: "qhfl1GIJfrk", university: "Monash University", country: "au", name: "Azra Karim, Country Manager – Bangladesh" },
-  // { youtube: "XXXXXXXXXXX", university: "University name", country: "gb", name: "Representative name, Title" },
+  { youtube: "C-H_3ribKkI", university: "Asia Pacific University", country: "my", name: "Afsan, Representative - Bangladesh" },
 ];
 
 // Team messages per country — YouTube codes, in order. Add or remove "" slots freely (5 per row on desktop).
