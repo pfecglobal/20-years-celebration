@@ -25,7 +25,7 @@ export const DAY_ONE = {
   leaders: [
     { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
     { youtube: "tVLcwsXQ5f8", name: "Leader Name", role: "Founder & CEO", quote: "" }, // ← spotlight — replace
-    { youtube: "https://www.youtube.com/shorts/cwiRwa8pIi0", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
+    { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
   ],
 };
 
