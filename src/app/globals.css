@@ -3286,6 +3286,21 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     overflow: visible;
   }
+
+  .video-wall--grid > li {
+    width: 100%;
+  }
+
+  .video-wall--grid.video-wall--count-1 {
+    grid-template-columns: minmax(0, 62%);
+    justify-content: center;
+  }
+
+  .video-wall--grid > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: 62%;
+    justify-self: center;
+  }
 }
 
 .video-wall--grid {
@@ -3370,6 +3385,28 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
     gap: clamp(12px, 1.6vw, 22px);
     overflow: visible;
   }
+
+  /* Team grid: centred flex-wrap so every row — including a partial last row — sits in the middle */
+  .video-wall.video-wall--grid {
+    --cols: 5;
+    --tile-max: 100%;
+    --gap: clamp(12px, 1.6vw, 22px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--gap);
+  }
+
+  .video-wall--grid > li {
+    flex: 0 0 min(var(--tile-max), calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)));
+    min-width: 0;
+  }
+
+  /* 1–4 videos: larger tiles (max 260px), still centred */
+  .video-wall--grid.video-wall--count-1 { --cols: 1; --tile-max: 260px; }
+  .video-wall--grid.video-wall--count-2 { --cols: 2; --tile-max: 260px; }
+  .video-wall--grid.video-wall--count-3 { --cols: 3; --tile-max: 260px; }
+  .video-wall--grid.video-wall--count-4 { --cols: 4; --tile-max: 250px; }
 }
 
 .video-card--tile {

@@ -152,7 +152,11 @@ export default function TeamVideoTabs({ countries }) {
       >
         <div ref={innerRef} key={current.code} className={`country-panel-inner is-${phase}`}>
           {/* first view: rows reveal one by one on scroll; after a country switch the cascade animation takes over */}
-          <VideoWall videos={current.videos} label="Watch message" reveal={false} grid rowReveal={phase === "idle"} group={`team-${current.code}`} />
+          {current.videos.length ? (
+            <VideoWall videos={current.videos} label="Watch message" reveal={false} grid rowReveal={phase === "idle"} group={`team-${current.code}`} />
+          ) : (
+            <p className="py-10 text-center text-sm text-white/70">Team message coming soon.</p>
+          )}
         </div>
       </div>
     </div>

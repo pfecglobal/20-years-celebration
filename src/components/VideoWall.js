@@ -12,6 +12,7 @@ export default function VideoWall({ videos, label = "Watch", reveal = true, grid
   // popup playlist (reels): only the tiles that have a video
   const playable = videos.filter((v) => v.youtube);
   const playlist = playable.map((v) => ({ youtube: v.youtube, title: v.name }));
+  const count = videos.length;
 
   useEffect(() => {
     const list = listRef.current;
@@ -51,7 +52,10 @@ export default function VideoWall({ videos, label = "Watch", reveal = true, grid
   }, [rowReveal, videos]);
 
   return (
-    <ul ref={listRef} className={`video-wall ${grid ? "video-wall--grid" : ""} ${rowReveal ? "video-wall--rows" : ""}`}>
+    <ul
+      ref={listRef}
+      className={`video-wall ${grid ? "video-wall--grid" : ""} ${rowReveal ? "video-wall--rows" : ""} ${grid ? `video-wall--count-${count}` : ""}`}
+    >
       {videos.map((v, i) => (
         <li key={v.name} data-reveal={reveal ? "zoom" : undefined} style={{ "--d": `${i * 110}ms`, "--i": i }}>
           <VideoMessage

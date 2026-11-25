@@ -179,13 +179,13 @@ const UNIVERSITY_VIDEOS = [
 
 ];
 
-// Team messages per country — YouTube codes, in order. Add or remove "" slots freely (5 per row on desktop).
+// One team video slot per country. Replace "" with a YouTube code; empty slots never show a card.
 const TEAM_VIDEOS = {
-  bd: ["", "", "", "", "", "", "", "", "", ""], // Bangladesh
-  au: ["", "", "", "", "", "", "", "", "", ""], // Australia
-  in: ["", "", "", "", "", "", "", "", "", ""], // India
-  lk: ["", "", "", "", "", "", "", "", "", ""], // Sri Lanka
-  id: ["", "", "", "", "", "", "", "", "", ""], // Indonesia
+  bd: [""], // Bangladesh
+  au: ["2gR9MLMCA08"], // Australia
+  in: [""], // India
+  lk: [""], // Sri Lanka
+  id: [""], // Indonesia
 };
 
 export const VOICES = {
@@ -200,7 +200,7 @@ export const VOICES = {
     countries: OFFICES.countries.map(({ code, name }) => ({
       code,
       name,
-      videos: (TEAM_VIDEOS[code] || []).map((youtube, i) => ({ name: `${name} team message ${i + 1}`, youtube })),
+      videos: (TEAM_VIDEOS[code] || []).filter((youtube) => youtube.trim()).map((youtube, i) => ({ name: `${name} team message ${i + 1}`, youtube })),
     })),
   },
 };
