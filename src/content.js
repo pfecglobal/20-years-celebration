@@ -184,8 +184,8 @@ const UNIVERSITY_VIDEOS = [
 const TEAM_VIDEOS = {
   bd: ["PFU-VxtqmFM"], // Bangladesh
   au: ["2gR9MLMCA08","0S6W0A7SzuA","D5b2JjJciYY","wXt-9EhVFtQ","L-HNkjYATKk", "94IV0LsdlaI"], // Australia
-  in: [""], // India
-  lk: [""], // Sri Lanka
+  in: ["IJmcbZ7W9SU", "qZrStOPHolA", "JzmVqS-wpnI"], // India
+  lk: ["tuEmbguWxZc","zMKvjbXtcAo"], // Sri Lanka
   id: ["bvQsSkj3g5Y","rya2QrAnhCU"], // Indonesia
 };
 
