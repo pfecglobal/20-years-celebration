@@ -153,7 +153,8 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
                 "--k": Math.abs(i - spotlight),
                 "--slide-order": k,
                 "--desktop-sequence": k,
-                "--featured-column": featured.indexOf(i) === 0 ? 2 : 4,
+                // desktop 12-column grid: Founder in columns 3–6, CEO in 7–10 (centred above the rows of 4)
+                "--featured-column": featured.indexOf(i) === 0 ? 3 : 7,
               }}
               // phones: a tap on a side card brings it to the centre first (the centre card plays)
               onClickCapture={(e) => {

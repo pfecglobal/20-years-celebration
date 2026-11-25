@@ -47,6 +47,14 @@ export const DAY_ONE = {
       role: "Chief Growth Officer,PFEC GLOBAL",
       quote: "",
     }, // ← spotlight — replace
+
+    {
+      youtube: "https://www.youtube.com/shorts/PBdlz01IruI",
+      poster: "/images/thumbnail/gazi.png",
+      name: "Gazi Hossain",
+      role: "General Manager,PFEC GLOBAL,Australia",
+      quote: "",
+    }, // ← spotlight — replace
     {
       youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y",
       poster: "/images/thumbnail/fareha.png",
@@ -213,7 +221,6 @@ const UNIVERSITY_VIDEOS = [
 // One team video slot per country. Replace "" with a YouTube code; empty slots never show a card.
 const TEAM_VIDEOS = {
   au: [
-    "PBdlz01IruI",
     "ULcuZF54ZDI",
     "0S6W0A7SzuA",
     "D5b2JjJciYY",
