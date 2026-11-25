@@ -4,11 +4,22 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import VideoWall from "./VideoWall";
 
 const ALL = "all";
-const MAX_VIDEOS = 15; // 3 rows of 5 on desktop
 
 // "All" takes videos in turn from each country, so every country shows up in the 3 rows
 const interleave = (lists) =>
   Array.from({ length: Math.max(0, ...lists.map((l) => l.length)) }, (_, i) => lists.map((l) => l[i])).flat().filter(Boolean);
+
+// Fisher–Yates shuffle (returns a new array)
+const shuffle = (list) => {
+  const a = [...list];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+// Random country order + random order within each country, still interleaved so every country appears
+const shuffledAll = (countries) => interleave(shuffle(countries.map((c) => shuffle(c.videos))));
 const EXIT_MS = 320; // old tiles leave, then the new country's tiles cascade in
 
 function GlobeIcon() {
@@ -26,13 +37,17 @@ const prefersReducedMotion = () =>
 
 /** "All" + one tab per country (flag + name). Picking a tab filters the team video wall with an animated swap. */
 export default function TeamVideoTabs({ countries }) {
-  const tabs = useMemo(
-    () => [{ code: ALL, name: "All", videos: interleave(countries.map((c) => c.videos)) }, ...countries].map((t) => ({
-      ...t,
-      videos: t.videos.slice(0, MAX_VIDEOS),
-    })),
-    [countries]
-  );
+  // Fixed order for the server render (avoids a hydration mismatch); shuffled on the client after mount
+  // and again every time "All" is picked, so it doesn't always open with the same video
+  const [allVideos, setAllVideos] = useState(() => interleave(countries.map((c) => c.videos)));
+  const reshuffleAll = useCallback(() => setAllVideos(shuffledAll(countries)), [countries]);
+  useEffect(() => {
+    const id = requestAnimationFrame(reshuffleAll);
+    return () => cancelAnimationFrame(id);
+  }, [reshuffleAll]);
+
+  // every video in TEAM_VIDEOS is shown — no cap
+  const tabs = useMemo(() => [{ code: ALL, name: "All", videos: allVideos }, ...countries], [countries, allVideos]);
 
   const [active, setActive] = useState(ALL); // highlighted tab (moves instantly)
   const [shown, setShown] = useState(ALL); // country whose videos are on screen (swaps after the exit)
@@ -82,12 +97,14 @@ export default function TeamVideoTabs({ countries }) {
     clearTimeout(timer.current);
 
     if (prefersReducedMotion()) {
+      if (code === ALL) reshuffleAll();
       setShown(code);
       setPhase("idle");
       return;
     }
     setPhase("out");
     timer.current = setTimeout(() => {
+      if (code === ALL) reshuffleAll(); // after the exit, so the old tiles don't reorder mid-animation
       setShown(code);
       setPhase("in");
     }, EXIT_MS);

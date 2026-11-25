@@ -20,17 +20,47 @@ export const ANNIVERSARY_HASHTAG = "#PFECGLOBALTURNS20";
 //   poster: custom thumbnail, e.g. "/images/thumbnail/fareha.png" (put it in public/images/thumbnail/,
 //     portrait 9:16, ideally ~720×1280). This replaces the default YouTube thumbnail.
 export const DAY_ONE = {
-  title: "A Message from the People",
-  lead: "Who were there from",
-  emphasis: "Day One.",
+  title: "Message from Leadership",
+  lead: "Who Take Pride in What",
+  emphasis: "We Do Together.",
   hashtag: ANNIVERSARY_HASHTAG,
   label: "Watch the message",
   leaders: [
-    { youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY", poster: "/images/thumbnail/shaiful.png", featured: "Founder & Director", role: "Founder & Director,PFEC GLOBAL", quote: "" },
-    { youtube: "https://www.youtube.com/shorts/xGoUDXwTJKo", poster: "/images/thumbnail/shahidul.png" ,featured: "Chief Executive Officer", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
-    { youtube: "https://www.youtube.com/shorts/B4LijjDENZo", poster: "/images/thumbnail/yaafi.png", name: "Mosharraf Khan Yaafi", role: "Chief Growth Officer,PFEC GLOBAL", quote: "" }, // ← spotlight — replace
-    { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", poster: "/images/thumbnail/fareha.png", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
-    { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", poster: "/images/thumbnail/mahmuda.png", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
+    {
+      youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY",
+      poster: "/images/thumbnail/shaiful.png",
+      featured: "Founder & Director",
+      role: "Founder & Director,PFEC GLOBAL",
+      quote: "",
+    },
+    {
+      youtube: "https://www.youtube.com/shorts/xGoUDXwTJKo",
+      poster: "/images/thumbnail/shahidul.png",
+      featured: "Chief Executive Officer",
+      role: "Chief Executive Officer,PFEC GLOBAL",
+      quote: "",
+    }, // ← add the CEO's thumbnail when available
+    {
+      youtube: "https://www.youtube.com/shorts/B4LijjDENZo",
+      poster: "/images/thumbnail/yaafi.png",
+      name: "Mosharraf Khan Yaafi",
+      role: "Chief Growth Officer,PFEC GLOBAL",
+      quote: "",
+    }, // ← spotlight — replace
+    {
+      youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y",
+      poster: "/images/thumbnail/fareha.png",
+      name: "Fareha Begum",
+      role: "Sr. Country Director,PFEC Global,Bangladesh",
+      quote: "",
+    },
+    {
+      youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI",
+      poster: "/images/thumbnail/mahmuda.png",
+      name: "Mahmuda Akther",
+      role: "General Manager,PFEC Global,Bangladesh",
+      quote: "",
+    }, // ← example — replace
   ],
 };
 
@@ -182,11 +212,33 @@ const UNIVERSITY_VIDEOS = [
 
 // One team video slot per country. Replace "" with a YouTube code; empty slots never show a card.
 const TEAM_VIDEOS = {
-  bd: ["PFU-VxtqmFM"], // Bangladesh
-  au: ["2gR9MLMCA08","0S6W0A7SzuA","D5b2JjJciYY","wXt-9EhVFtQ","L-HNkjYATKk", "94IV0LsdlaI"], // Australia
-  in: ["IJmcbZ7W9SU", "qZrStOPHolA", "JzmVqS-wpnI"], // India
-  lk: ["tuEmbguWxZc","zMKvjbXtcAo"], // Sri Lanka
-  id: ["bvQsSkj3g5Y","rya2QrAnhCU"], // Indonesia
+  au: [
+    "PBdlz01IruI",
+    "ULcuZF54ZDI",
+    "0S6W0A7SzuA",
+    "D5b2JjJciYY",
+    "wXt-9EhVFtQ",
+    "L-HNkjYATKk",
+    "94IV0LsdlaI",
+    "_rLLxnTT6_w",
+  ], // Australia
+  bd: [
+    "PFU-VxtqmFM",
+    "Nz27_An54_c",
+    "k3AFUtSU_GM",
+    "2MrPZgDD3Mw",
+    "1FD21kpogtk",
+  ], // Bangladesh
+  in: [
+    "IJmcbZ7W9SU",
+    "qZrStOPHolA",
+    "JzmVqS-wpnI",
+    "6UVbQqNFCYo",
+    "EqauA9gsqCE",
+    "J8uixbu7uv4",
+  ], // India
+  lk: ["tuEmbguWxZc", "zMKvjbXtcAo", "r8ZYdYb49LQ"], // Sri Lanka
+  id: ["bvQsSkj3g5Y", "rya2QrAnhCU"], // Indonesia
 };
 
 export const VOICES = {
@@ -196,7 +248,7 @@ export const VOICES = {
   },
   team: {
     title: "None of this Would Have Been Possible Without Your Efforts!",
-    sub: "Hear it from our team!",
+    sub: "Hear it from the team!",
     // Country tabs (flag from /images/flags/{code}.svg) + an "All" tab; the videos come from TEAM_VIDEOS above
     countries: OFFICES.countries.map(({ code, name }) => ({
       code,
