@@ -148,7 +148,7 @@ export default function Home() {
                   {DAY_ONE.title}
                 </h2>
                 <p data-reveal style={{ "--d": "120ms" }} className="mt-1 text-2xl font-light text-white/90 sm:text-4xl">
-                  {DAY_ONE.lead} <strong className="font-bold text-white">{DAY_ONE.emphasis}</strong>
+                  {DAY_ONE.lead} <strong className="text-gold font-bold">{DAY_ONE.emphasis}</strong>
                 </p>
               </div>
               <div data-reveal="right" style={{ "--d": "250ms" }} className="hidden justify-self-start sm:block">
@@ -195,8 +195,8 @@ export default function Home() {
 
         {/* Journey road: on #F9F9F9, continuing from the universities section above */}
         <div className="bg-flow-down">
-          {/* Journey road — continues the light background from the video fold */}
-          <section id="journey" className="px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:pt-28">
+          {/* Journey road — overflow-x-clip: cards wait off to the side before swinging in; that must not widen the page on phones */}
+          <section id="journey" className="overflow-x-clip px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:pt-28">
             <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] lg:gap-10">
               {/* container-type: the heading below sizes itself to this card's width */}
               <div
