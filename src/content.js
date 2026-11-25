@@ -19,12 +19,12 @@ export const ANNIVERSARY_YEAR = 2026;
 //     portrait 9:16, ~720×1280). Use it when the card looks blurry: some videos have only a small YouTube thumbnail.
 export const DAY_ONE = {
   title: "A Message from the People",
-  lead: "Who were there on",
+  lead: "Who were there from",
   emphasis: "Day One.",
   label: "Watch the message",
   leaders: [
     { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
-    { youtube: "tVLcwsXQ5f8", name: "Leader Name", role: "Founder & CEO", quote: "" }, // ← spotlight — replace
+    { youtube: "tVLcwsXQ5f8", name: "Md. Shahidul Islam", role: "Chief Executive Officer (CEO),PFEC GLOBAL", quote: "" }, // ← spotlight — replace
     { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
   ],
 };
@@ -32,8 +32,11 @@ export const DAY_ONE = {
 export const TAGLINE = ["Building Global Citizens", "Powered by People"];
 
 // Words wrapped in *asterisks* are highlighted in gold.
-export const STORY =
-  "Twenty years ago, we set out to be every student's *honest guide* to the world. Today, we're still *building global citizens*, and we're just getting started.";
+// export const STORY =
+//   "Twenty years ago, we set out to be every student's *honest guide* to the world. Today, we're still *building global citizens*, and we're just getting started.";
+
+  export const STORY =
+  "Twenty years ago, we set out to *empower students* with *trusted guidance and global opportunities*. Today, we're shaping the next generation of global citizens — and we're just *getting started.*";
 
 // TODO: replace these placeholder figures with PFEC's real numbers before going live.
 export const STATS = [
@@ -45,8 +48,8 @@ export const STATS = [
 
 // "Every Remarkable Journey" road — milestones from awards.pfecglobal.com
 export const JOURNEY = {
-  title: "Every Remarkable Journey Begins as a Simple Idea.",
-  sub: "Here's a look at how our story unfolded, one milestone at a time.",
+  title: "Every Remarkable Journey Begins from a Simple Idea.",
+  sub: "Here's a look at how our story unfolded.",
 };
 
 // Office openings along the road. `country` = flag code (bd / au / in / lk / id → /images/flags/{code}.svg),
@@ -79,7 +82,7 @@ export const TODAY = {
 
 // "We've grown from 1 car in Melbourne" — offices per country (the headline total is computed from these)
 export const OFFICES = {
-  intro: "We've Grown from 1 Car in Melbourne",
+  intro: "From *Melbourne* to the World.",
   note: "But, that's not all! We are going to expand even more across many other countries. Stay tuned to know more!",
   // lx / ly = where the flag label sits on the map (percent of the map image)
   countries: [
@@ -162,8 +165,10 @@ export const AWARDS = {
 // poster: optional cover image for the card, e.g. "/images/universities/monash.jpg" (public/images/universities/,
 //   portrait 9:16, ~720×1280) — use it when a card looks blurry (the video has only a small YouTube thumbnail).
 const UNIVERSITY_VIDEOS = [
-  // { youtube: "qhfl1GIJfrk", university: "Monash University", country: "au", name: "Azra Karim, Country Manager – Bangladesh" },
-  { youtube: "C-H_3ribKkI", university: "Asia Pacific University", country: "my", name: "Afsan, Representative - Bangladesh" },
+  { youtube: "WUd9usOdxC8", university: "Curtin University", country: "au", name: "Rhys Lodwick, Regional Recruitment Manager – Australia" },
+  { youtube: "AbJuRXipbjE", university: "Federation University", country: "au", name: "Adeyemi Ekunola, International Student Recruitment Officer – Australia" },
+  { youtube: "TQesEopYv6U", university: "Murdoch University", country: "au", name: "Arjun Singh, Regional Manager South Asia – Australia" },
+
 ];
 
 // Team messages per country — YouTube codes, in order. Add or remove "" slots freely (5 per row on desktop).

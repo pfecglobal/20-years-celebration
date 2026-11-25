@@ -179,12 +179,30 @@ export default function Home() {
           </section>
         </div>
 
-        {/* Journey road: #100694 → #F9F9F9 gradient, continuing from the team section above */}
+        {/* Trusted by universities: the team section's purple fades quickly to #F9F9F9 above the heading */}
+        <div className="bg-voices">
+          <section id="students" className="px-4 pt-44 pb-6 sm:px-6 sm:pt-56 sm:pb-16">
+            <div className="mx-auto max-w-7xl">
+              <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
+                {VOICES.partners.title}
+              </h2>
+              <div data-reveal="zoom" style={{ "--d": "120ms" }} className="mt-10">
+                <StudentCarousel videos={VOICES.partners.videos} />
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Journey road: on #F9F9F9, continuing from the universities section above */}
         <div className="bg-flow-down">
           {/* Journey road — continues the light background from the video fold */}
           <section id="journey" className="px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:pt-28">
             <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] lg:gap-10">
-              <div className="journey-intro premium-card relative lg:sticky lg:top-28 lg:self-start">
+              {/* container-type: the heading below sizes itself to this card's width */}
+              <div
+                className="journey-intro premium-card relative lg:sticky lg:top-28 lg:self-start"
+                style={{ containerType: "inline-size" }}
+              >
                 <span className="today-spark today-spark--tl" aria-hidden="true">✦</span>
                 <span className="today-spark today-spark--br" aria-hidden="true">✦</span>
                 <p data-reveal className="today-eyebrow relative">
@@ -199,8 +217,14 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <h2 data-reveal style={{ "--d": "80ms" }} className="relative mt-3 text-3xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
-                  {JOURNEY.title}
+                {/* "Every Remarkable" always stays on one line; the font scales with the card (max 2.25rem) so it fits */}
+                <h2
+                  data-reveal
+                  style={{ "--d": "80ms", fontSize: "clamp(1.5rem, 9.5cqi, 2.25rem)" }}
+                  className="relative mt-3 leading-tight font-bold text-[#0b0b2b]"
+                >
+                  <span style={{ whiteSpace: "nowrap" }}>{JOURNEY.title.split(" ").slice(0, 2).join(" ")}</span>{" "}
+                  {JOURNEY.title.split(" ").slice(2).join(" ")}
                 </h2>
                 <span className="intro-divider" aria-hidden="true">
                   <i />
@@ -270,26 +294,12 @@ export default function Home() {
         </CoverReveal>
 
         {/* 50+ Awards & Recognitions: solid #100796, two marquee rows in opposite directions */}
-        <section id="awards" className="bg-awards relative overflow-hidden pt-8 pb-20 sm:py-28">
+        <section id="awards" className="bg-awards relative overflow-hidden pt-8 pb-12 sm:pt-28 sm:pb-12">
           <AwardsMarquee data={AWARDS} />
         </section>
 
-        {/* Student stories: the awards' #100796 fades quickly to #F9F9F9 above the heading */}
-        <div className="bg-voices">
-          <section id="students" className="px-4 pt-44 pb-6 sm:px-6 sm:pt-56 sm:pb-32">
-            <div className="mx-auto max-w-7xl">
-              <h2 data-reveal className="max-w-xl text-2xl leading-tight font-bold text-[#0b0b2b] sm:text-4xl">
-                {VOICES.partners.title}
-              </h2>
-              <div data-reveal="zoom" style={{ "--d": "120ms" }} className="mt-10">
-                <StudentCarousel videos={VOICES.partners.videos} />
-              </div>
-            </div>
-          </section>
-        </div>
-
-        {/* Story: hero-style background (#121212 → #100694) with stars, blended in/out of the light sections */}
-        <section id="story" className="bg-story relative isolate overflow-hidden px-4 pt-28 pb-6 sm:px-6 sm:pt-56 sm:pb-52">
+        {/* Story: hero-style background (#121212 → #100694) with stars, continuing from the awards' blue */}
+        <section id="story" className="bg-story relative isolate overflow-hidden px-4 pt-10 pb-6 sm:px-6 sm:pt-16 sm:pb-16">
           <div className="stars-carry stars-carry--story" aria-hidden="true">
             <SparkleField />
           </div>
@@ -309,7 +319,7 @@ export default function Home() {
           <div className="on-light">
 
             {/* Stats */}
-            <section id="numbers" className="px-4 pt-2 pb-8 sm:px-6 sm:pt-20 sm:pb-36">
+            <section id="numbers" className="px-4 pt-2 pb-8 sm:px-6 sm:pt-12 sm:pb-36">
               <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
                 {STATS.map((s, i) => (
                   <div key={s.label} data-reveal="zoom" style={{ "--d": `${i * 120}ms` }}>

@@ -47,6 +47,7 @@ export default function OfficesExpansion({ data, milestones }) {
   const countriesRef = useRef(null);
   const officesWordRef = useRef(null);
   const countriesWordRef = useRef(null);
+  const countRef = useRef(null);
   const barRef = useRef(null);
   const pctRef = useRef(null);
   const labelsRef = useRef(null);
@@ -245,6 +246,14 @@ export default function OfficesExpansion({ data, milestones }) {
       if (countriesRef.current) countriesRef.current.textContent = nCountries;
       if (officesWordRef.current) officesWordRef.current.textContent = offices === 1 ? "Office" : "Offices";
       if (countriesWordRef.current) countriesWordRef.current.textContent = nCountries === 1 ? "Country" : "Countries";
+      // the "N Offices Across the N Countries" line appears once the countries start coming in
+      // (scroll-linked: fades / rises in with the first country, and back out when scrolling up)
+      if (countRef.current) {
+        const c = lit[0];
+        countRef.current.style.opacity = c.toFixed(3);
+        countRef.current.style.transform = `translateY(${(0.6 * (1 - c)).toFixed(3)}em) scale(${(0.96 + 0.04 * c).toFixed(4)})`;
+        countRef.current.style.filter = c >= 1 ? "none" : `blur(${(6 * (1 - c)).toFixed(2)}px)`;
+      }
       if (barRef.current) barRef.current.style.transform = `scaleX(${p})`;
       if (pctRef.current) pctRef.current.textContent = `${pad3(Math.round(p * 100))}%`;
       if (!celebrated && p >= 0.995 && !reduced) {
@@ -455,9 +464,19 @@ export default function OfficesExpansion({ data, milestones }) {
         <header className="ox-head">
           <p className="ox-eyebrow">Our footprint · 2006 — 2026</p>
           <h2 className="ox-title">
-            {data.intro}
+            {/* "*word*" → gold */}
+            {data.intro.split(/(\*[^*]+\*)/).map((part, i) =>
+              part.startsWith("*") && part.endsWith("*") ? (
+                <span key={i} className="text-gold">
+                  {part.slice(1, -1)}
+                </span>
+              ) : (
+                part
+              )
+            )}
             <br />
-            <span className="ox-count">
+            {/* hidden until the first country lights up, then it rises in and counts along */}
+            <span ref={countRef} className="ox-count" style={{ display: "inline-block", opacity: 0 }}>
               <span ref={officesRef} className="text-gold">
                 1
               </span>{" "}
