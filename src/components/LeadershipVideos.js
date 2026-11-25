@@ -170,7 +170,7 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
                 <VideoMessage
                   youtube={p.youtube}
                   poster={p.poster}
-                  label={isSpot ? label : "Watch"}
+                  label={isSpot || p.featured ? label : "Watch"}
                   title={`${p.name}, ${p.role}`}
                   variant="tile"
                   playlist={playlist}

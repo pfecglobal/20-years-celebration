@@ -26,8 +26,8 @@ export const DAY_ONE = {
   hashtag: ANNIVERSARY_HASHTAG,
   label: "Watch the message",
   leaders: [
-    { youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY", poster: "/images/thumbnail/shaiful.png", featured: "Founder & Director", name: "Mohammad Shaiful Islam", role: "Founder & Director,PFEC GLOBAL", quote: "" },
-    { youtube: "tVLcwsXQ5f8", featured: "Chief Executive Officer", name: "Md. Shahidul Islam", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
+    { youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY", poster: "/images/thumbnail/shaiful.png", featured: "Founder & Director", role: "Founder & Director,PFEC GLOBAL", quote: "" },
+    { youtube: "https://www.youtube.com/shorts/N4oubAkOjxk", poster: "/images/thumbnail/shahidul.png" ,featured: "Chief Executive Officer", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
     { youtube: "https://www.youtube.com/shorts/B4LijjDENZo", poster: "/images/thumbnail/yaafi.png", name: "Mosharraf Khan Yaafi", role: "Chief Growth Officer,PFEC GLOBAL", quote: "" }, // ← spotlight — replace
     { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", poster: "/images/thumbnail/fareha.png", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
     { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", poster: "/images/thumbnail/mahmuda.png", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
