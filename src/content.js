@@ -69,6 +69,14 @@ export const DAY_ONE = {
       role: "General Manager,PFEC Global,Bangladesh",
       quote: "",
     }, // ← example — replace
+
+    {
+      youtube: "https://www.youtube.com/shorts/J8uixbu7uv4",
+      poster: "/images/thumbnail/rohit.png",
+      name: "Rohit Mehra",
+      role: "Business Development & Strategy,PFEC Global,India",
+      quote: "",
+    },
   ],
 };
 
@@ -211,7 +219,7 @@ const UNIVERSITY_VIDEOS = [
   { youtube: "WUd9usOdxC8", university: "Curtin University", country: "au", name: "Rhys Lodwick, Regional Recruitment Manager – Australia" },
   { youtube: "AbJuRXipbjE", university: "Federation University", country: "au", name: "Adeyemi Ekunola, International Student Recruitment Officer – Australia" },
   { youtube: "TQesEopYv6U", university: "Murdoch University", country: "au", name: "Arjun Singh, Regional Manager South Asia – Australia" },
-  { youtube: "grdo7BEZ8Xc", university: "Asia Pacific University", country: "my", name: "Ahmed Afshan Hanif, Manager,International Business Development – Malaysia" },
+  // { youtube: "grdo7BEZ8Xc", university: "Asia Pacific University", country: "my", name: "Ahmed Afshan Hanif, Manager,International Business Development – Malaysia" },
   { youtube: "D6akQih8ixQ", university: "La Trobe University", country: "au", name: "Chang Liu, Regional Manager – Australia" },
   { youtube: "2vRw4RrSJMs", university: "University of Wollongong", country: "au", name: "Gerald Joshua, Regional Associate Director South Asia – Australia" },
   { youtube: "Xj9iOJCTDcc", university: "South East Technological University", country: "ie", name: "Hannah Murphy, International Officer – Ireland" },
@@ -233,7 +241,6 @@ const TEAM_VIDEOS = {
     "PFU-VxtqmFM",
     "Nz27_An54_c",
     "k3AFUtSU_GM",
-    "2MrPZgDD3Mw",
     "1FD21kpogtk",
   ], // Bangladesh
   in: [
@@ -242,7 +249,6 @@ const TEAM_VIDEOS = {
     "JzmVqS-wpnI",
     "6UVbQqNFCYo",
     "EqauA9gsqCE",
-    "J8uixbu7uv4",
   ], // India
   lk: ["tuEmbguWxZc", "zMKvjbXtcAo", "r8ZYdYb49LQ"], // Sri Lanka
   id: ["bvQsSkj3g5Y", "rya2QrAnhCU"], // Indonesia

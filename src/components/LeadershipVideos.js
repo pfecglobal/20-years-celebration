@@ -5,6 +5,15 @@ import VideoMessage from "./VideoMessage";
   
 const PHONE = "(max-width: 639px)";
 const AUTOPLAY_MS = 5000; // phones: next message every 7s
+const PER_ROW = 4; // desktop: leaders per row below Founder / CEO
+
+/** Desktop grid start column (24 columns, 6 per card) for the j-th of n non-featured leaders.
+ *  Full rows fill left → right; a last row with fewer than 4 cards is shifted so it sits in the middle. */
+const desktopColumn = (j, n) => {
+  const rowStart = j - (j % PER_ROW);
+  const inRow = Math.min(PER_ROW, n - rowStart);
+  return (PER_ROW - inRow) * 3 + (j - rowStart) * 6 + 1;
+};
 
 /**
  * Desktop: Founder and CEO share the larger featured row, with the other leaders below.
@@ -21,6 +30,7 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
   // Featured entries are listed Founder then CEO in content.js; keep the remaining leaders in content order.
   const slides = [...featured, ...leaders.map((_, i) => i).filter((i) => !featured.includes(i))];
   const spotlight = slides[0];
+  const others = leaders.map((_, i) => i).filter((i) => !featured.includes(i)); // desktop rows below Founder / CEO
   // Cards, navigation dots, autoplay and the popup playlist all follow the same sequence.
   const order = slides.filter((i) => leaders[i].youtube);
   const playlist = order.map((i) => ({ youtube: leaders[i].youtube, title: `${leaders[i].name}, ${leaders[i].role}` }));
@@ -153,8 +163,10 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
                 "--k": Math.abs(i - spotlight),
                 "--slide-order": k,
                 "--desktop-sequence": k,
-                // desktop 12-column grid: Founder in columns 3–6, CEO in 7–10 (centred above the rows of 4)
-                "--featured-column": featured.indexOf(i) === 0 ? 3 : 7,
+                // desktop 24-column grid: Founder in columns 5–12, CEO in 13–20 (centred above the rows of 4)
+                "--featured-column": featured.indexOf(i) === 0 ? 5 : 13,
+                // other leaders: rows of 4 (6 columns each); a part-filled last row is centred
+                ...(!p.featured && { "--desktop-column": desktopColumn(others.indexOf(i), others.length) }),
               }}
               // phones: a tap on a side card brings it to the centre first (the centre card plays)
               onClickCapture={(e) => {

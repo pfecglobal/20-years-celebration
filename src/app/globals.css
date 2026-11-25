@@ -1328,20 +1328,21 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   }
 }
 
-/* Desktop hierarchy: two larger portraits centered above rows of four supporting portraits (12-column grid). */
+/* Desktop hierarchy: two larger portraits centered above rows of four supporting portraits (24-column grid). */
 @media (min-width: 1024px) {
   .leaders--hierarchy {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-columns: repeat(24, minmax(0, 1fr)); /* no column gap: the cards' max-width leaves the space between them */
     align-items: start;
-    gap: 64px 24px;
+    gap: 64px 0;
     max-width: 1040px;
     margin-inline: auto;
     padding: 4px 20px 24px;
   }
 
   .leaders--hierarchy .leader {
-    grid-column: span 3;
+    grid-column: var(--desktop-column, auto) / span 6; /* --desktop-column: LeadershipVideos.js (centres a part-filled last row) */
+    grid-row: auto;
     order: 0;
     width: 100%;
     max-width: 220px;
@@ -1353,9 +1354,9 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
     transition-delay: calc(var(--desktop-sequence) * 100ms);
   }
 
-  /* Founder / CEO: 4 columns each, centred (columns 3–6 and 7–10; --featured-column set in LeadershipVideos.js) */
+  /* Founder / CEO: 8 columns each, centred (columns 5–12 and 13–20 of 24; --featured-column set in LeadershipVideos.js) */
   .leaders--hierarchy .leader--featured {
-    grid-column: var(--featured-column) / span 4;
+    grid-column: var(--featured-column) / span 8;
     grid-row: 1;
     order: -1;
     max-width: 320px;
