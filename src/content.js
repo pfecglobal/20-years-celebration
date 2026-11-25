@@ -168,6 +168,9 @@ const UNIVERSITY_VIDEOS = [
   { youtube: "WUd9usOdxC8", university: "Curtin University", country: "au", name: "Rhys Lodwick, Regional Recruitment Manager – Australia" },
   { youtube: "AbJuRXipbjE", university: "Federation University", country: "au", name: "Adeyemi Ekunola, International Student Recruitment Officer – Australia" },
   { youtube: "TQesEopYv6U", university: "Murdoch University", country: "au", name: "Arjun Singh, Regional Manager South Asia – Australia" },
+  { youtube: "grdo7BEZ8Xc", university: "Asia Pacific University", country: "my", name: "Ahmed Afshan Hanif, Manager,International Business Development – Malaysia" },
+  { youtube: "D6akQih8ixQ", university: "La Trobe University", country: "au", name: "Chang Liu, Regional Manager – Australia" },
+  { youtube: "2vRw4RrSJMs", university: "University of Wollongong", country: "au", name: "Gerald Joshua, Regional Associate Director South Asia – Australia" },
 
 ];
 
