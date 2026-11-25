@@ -150,6 +150,9 @@ export default function Home() {
                 <p data-reveal style={{ "--d": "120ms" }} className="mt-1 text-2xl font-light text-white/90 sm:text-4xl">
                   {DAY_ONE.lead} <strong className="text-gold font-bold">{DAY_ONE.emphasis}</strong>
                 </p>
+                <p data-reveal style={{ "--d": "240ms" }} className="mt-5 text-sm font-semibold tracking-widest text-gold sm:text-base">
+                  {DAY_ONE.hashtag}
+                </p>
               </div>
               <div data-reveal="right" style={{ "--d": "250ms" }} className="hidden justify-self-start sm:block">
                 <PfecMark />
@@ -381,7 +384,7 @@ export default function Home() {
         </div>
 
           {/* Celebrate */}
-          <section id="celebrate" className="relative isolate overflow-hidden px-4 pt-8 pb-28 text-center sm:px-6 sm:py-40">
+          <section id="celebrate" className="relative isolate overflow-hidden px-4 pt-8 pb-6 text-center sm:px-6 sm:pt-40 sm:pb-8">
             <div className="stars-carry stars-carry--up" aria-hidden="true">
               <SparkleField />
             </div>
@@ -410,6 +413,9 @@ export default function Home() {
         <div className="stars-carry stars-carry--footer" aria-hidden="true">
           <SparkleField />
         </div>
+        <p className="relative mb-6 text-center text-sm font-semibold tracking-widest text-gold sm:text-base">
+          {DAY_ONE.hashtag}
+        </p>
         <div className="relative mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
           <Image src={logo} alt="PFEC Global" loading="eager" className="h-auto w-[110px]" />
           <p className="text-sm text-ink-muted">

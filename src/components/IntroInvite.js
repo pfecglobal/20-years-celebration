@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ANNIVERSARY_HASHTAG } from "@/content";
 
 const REVEAL_MS = 3150; // earliest moment the overlay dissolves (the envelope sequence has played by then)
 const FADE_MS = 750; // the dissolve itself (ix-overlay-out)
@@ -99,6 +100,7 @@ export default function IntroInvite() {
               <i />
             </span>
             <span className="ix-years">2006 — 2026</span>
+            <span className="ix-letter-hashtag">{ANNIVERSARY_HASHTAG}</span>
           </div>
           <div className="ix-env-front" />
           <div className="ix-env-flap">
@@ -109,6 +111,7 @@ export default function IntroInvite() {
           </div>
         </div>
         <p className="ix-for">To celebrate with every PFECian</p>
+        <p className="ix-hashtag">{ANNIVERSARY_HASHTAG}</p>
       </div>
     </div>
   );

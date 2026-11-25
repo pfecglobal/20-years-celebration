@@ -2,6 +2,7 @@
 
 export const FOUNDED_YEAR = 2006;
 export const ANNIVERSARY_YEAR = 2026;
+export const ANNIVERSARY_HASHTAG = "#PFECGLOBALTURNS20";
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // VIDEOS ARE YOUTUBE: paste the video code — the last part of the link.
@@ -11,21 +12,25 @@ export const ANNIVERSARY_YEAR = 2026;
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
 // "A Message from the People Who were there on Day One." video fold — the top management messages.
-// Three cards, listed left → right as they appear on a computer. The MIDDLE one is the spotlight
-// (bigger card, gold rim) — put the most senior person there; on phones it is shown first.
+// Desktop: leaders with a featured label share the larger top row; the others sit below.
+// Small screens: featured entries first (Founder, then CEO), followed by the remaining leaders.
+//   featured: optional short role label for the desktop top row (Founder and CEO)
 //   youtube: video code or link ("" → "Video coming soon")   name / role: shown under the card
 //   quote: optional one-liner from their message, shown in italics under the name ("" to hide)
-//   poster: optional cover image for the card, e.g. "/images/leaders/fareha.jpg" (put it in public/images/leaders/,
-//     portrait 9:16, ~720×1280). Use it when the card looks blurry: some videos have only a small YouTube thumbnail.
+//   poster: custom thumbnail, e.g. "/images/thumbnail/fareha.png" (put it in public/images/thumbnail/,
+//     portrait 9:16, ideally ~720×1280). This replaces the default YouTube thumbnail.
 export const DAY_ONE = {
   title: "A Message from the People",
   lead: "Who were there from",
   emphasis: "Day One.",
+  hashtag: ANNIVERSARY_HASHTAG,
   label: "Watch the message",
   leaders: [
-    { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
-    { youtube: "tVLcwsXQ5f8", name: "Md. Shahidul Islam", role: "Chief Executive Officer (CEO),PFEC GLOBAL", quote: "" }, // ← spotlight — replace
-    { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
+    { youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY", poster: "/images/thumbnail/shaiful.png", featured: "Founder & Director", name: "Mohammad Shaiful Islam", role: "Founder & Director,PFEC GLOBAL", quote: "" },
+    { youtube: "tVLcwsXQ5f8", featured: "Chief Executive Officer", name: "Md. Shahidul Islam", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
+    { youtube: "tVLcwsXQ5f8", name: "Mosharraf Khan Yaafi", role: "Chief Growth Officer,PFEC GLOBAL", quote: "" }, // ← spotlight — replace
+    { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", poster: "/images/thumbnail/fareha.png", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
+    { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", poster: "/images/thumbnail/mahmuda.png", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
   ],
 };
 

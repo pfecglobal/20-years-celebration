@@ -1019,8 +1019,38 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   color: #fff;
 }
 
-/* ---------- Day One: top management messages (3 cards, middle = spotlight) ---------- */
-/* phones: swipeable row that opens on the spotlight card; ≥640px: three across, the sides set lower */
+/* ---------- Day One: top management messages ---------- */
+/* Keep the phone slider; desktop uses two featured leaders above the remaining three. */
+.leader-feature-label {
+  display: none;
+}
+
+/* Gold ripples and a breathing yellow glow on the leadership play buttons. */
+.leaders .video-play-ring {
+  border-color: rgba(255, 224, 138, 0.95);
+  box-shadow: 0 0 10px rgba(255, 197, 61, 0.3), inset 0 0 6px rgba(255, 197, 61, 0.15);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .leaders .video-play-btn {
+    animation: leadership-play-glow 2.4s ease-in-out infinite;
+  }
+
+  .leaders .video-play-ring--2 {
+    animation-delay: -1.2s; /* show the second ripple immediately, halfway through its cycle */
+  }
+}
+
+@keyframes leadership-play-glow {
+  0%, 100% {
+    box-shadow: 0 0 16px 2px rgba(255, 197, 61, 0.35), 0 10px 24px -6px rgba(255, 180, 50, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 32px 8px rgba(255, 197, 61, 0.6), 0 10px 30px -4px rgba(255, 180, 50, 0.8);
+  }
+}
+
 .leaders {
   position: relative; /* offsetParent for the slider's scroll maths (LeadershipVideos.js) */
   display: flex;
@@ -1186,11 +1216,19 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
     transform: translate3d(0, calc(var(--a, 0) * 10px), 0);
   }
 
-  /* centre card: name + role in full colour, a soft lift */
-  .leader.is-current .video-card {
+  /* Reserve the border space so selecting a card never changes its size. */
+  .leaders .leader .video-card {
+    border: 2px solid transparent;
+    box-shadow: 0 20px 45px -25px rgba(0, 0, 0, 0.55);
+    transition: border-color 350ms ease, box-shadow 350ms ease, transform 0.6s var(--ease-out);
+  }
+
+  /* The gold frame follows whichever card is currently centered. */
+  .leaders .leader.is-current .video-card {
+    border-color: var(--gold-400);
     box-shadow:
       0 30px 60px -25px rgba(0, 0, 0, 0.65),
-      0 0 0 2px rgba(255, 197, 61, 0.55);
+      0 0 22px rgba(255, 197, 61, 0.3);
   }
 
   .leaders-dots {
@@ -1240,7 +1278,7 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   }
 
   .leaders-wrap.is-auto .leaders-dots button.is-active::before {
-    animation: leaders-countdown var(--autoplay, 4500ms) linear both;
+    animation: leaders-countdown var(--autoplay, 7000ms) linear both;
   }
 }
 
@@ -1284,8 +1322,144 @@ html.is-celebrating .twenty-wrap.is-done .twenty {
   }
 }
 
+@media (max-width: 1023px) {
+  .leaders .leader {
+    order: var(--slide-order, 0);
+  }
+}
+
+/* Desktop hierarchy: two larger portraits centered above three supporting portraits. */
+@media (min-width: 1024px) {
+  .leaders--hierarchy {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+    gap: 64px 28px;
+    max-width: 1040px;
+    margin-inline: auto;
+    padding: 4px 20px 24px;
+  }
+
+  .leaders--hierarchy .leader {
+    grid-column: span 2;
+    order: 0;
+    width: 100%;
+    max-width: 250px;
+    min-width: 0;
+    margin-top: 0;
+    justify-self: center;
+    transform: translate3d(0, 20px, 0);
+    transition: opacity 700ms var(--ease-out), transform 800ms var(--ease-out);
+    transition-delay: calc(var(--desktop-sequence) * 100ms);
+  }
+
+  .leaders--hierarchy .leader--featured {
+    grid-column: var(--featured-column) / span 2;
+    grid-row: 1;
+    order: -1;
+    max-width: 320px;
+  }
+
+  .leaders--hierarchy.is-in .leader {
+    transform: none;
+  }
+
+  .leaders--hierarchy .leader-feature-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-200);
+  }
+
+  .leader-feature-label::before,
+  .leader-feature-label::after {
+    content: "";
+    flex: 1;
+    max-width: 28px;
+    height: 1px;
+    background: rgba(255, 197, 61, 0.5);
+  }
+
+  .leaders--hierarchy .video-card {
+    border-radius: 20px;
+    box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.18);
+    transition: transform 450ms var(--ease-out), box-shadow 450ms ease;
+  }
+
+  .leaders--hierarchy .video-card:hover {
+    transform: none;
+  }
+
+  .leaders--hierarchy .leader--featured .video-card {
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(255, 197, 61, 0.65);
+  }
+
+  .leaders--hierarchy .leader--featured .leader-card::before {
+    content: "";
+    position: absolute;
+    inset: -30px;
+    z-index: -1;
+    background: radial-gradient(ellipse, rgba(255, 197, 61, 0.16), transparent 70%);
+    pointer-events: none;
+  }
+
+  .leaders--hierarchy .leader:not(.leader--featured) .leader-card::before {
+    display: none;
+  }
+
+  .leaders--hierarchy .video-play-btn,
+  .leaders--hierarchy .video-play-ring {
+    width: 56px;
+    height: 56px;
+  }
+
+  .leaders--hierarchy .leader--featured .video-play-btn,
+  .leaders--hierarchy .leader--featured .video-play-ring {
+    width: 66px;
+    height: 66px;
+  }
+
+  .leaders--hierarchy .video-play-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .leaders--hierarchy .leader-name {
+    font-size: 1.2rem;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .leaders--hierarchy .leader--featured .leader-name {
+    font-size: 1.45rem;
+  }
+
+  .leaders--hierarchy .leader-role {
+    margin-top: 8px;
+    font-size: 0.65rem;
+    line-height: 1.8;
+    letter-spacing: 0.12em;
+    text-wrap: balance;
+  }
+}
+
+@media (min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .leaders--hierarchy .video-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 56px -20px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--gold-400), 0 0 28px rgba(255, 197, 61, 0.16);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .leader {
+  .leader,
+  .leaders--hierarchy .leader {
     opacity: 1;
     transform: none;
     transition: none;
@@ -3932,6 +4106,15 @@ html.lenis {
   color: #a8864a;
 }
 
+.ix-letter-hashtag {
+  position: relative;
+  z-index: 1; /* keep the card's shine from washing out the gold text */
+  font-size: clamp(9px, 2vw, 11px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #9a650f;
+}
+
 /* envelope pocket (front) + flap */
 .ix-env-front {
   position: absolute;
@@ -4008,6 +4191,16 @@ html.lenis {
   text-transform: uppercase;
   color: rgba(255, 224, 138, 0.9);
   animation: ix-fade-in 0.8s ease 0.35s both;
+}
+
+.ix-hashtag {
+  margin-top: 12px;
+  font-size: clamp(11px, 2.8vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffe08a;
+  text-align: center;
+  animation: ix-fade-in 0.8s ease 0.5s both;
 }
 
 @keyframes ix-float-in {

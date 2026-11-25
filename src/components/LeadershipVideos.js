@@ -2,28 +2,28 @@
 
 import { useEffect, useRef, useState } from "react";
 import VideoMessage from "./VideoMessage";
-
+  
 const PHONE = "(max-width: 639px)";
-const AUTOPLAY_MS = 4500; // phones: next message every 4.5s
+const AUTOPLAY_MS = 5000; // phones: next message every 7s
 
 /**
- * Top management messages: three Shorts-size (9:16) video cards side by side — the middle one is the spotlight (larger, gold
- * rim, sides sit lower). Name, role and a short quote are always visible under each card, so who is
- * speaking reads at a glance.
- * Phones: a swipe slider that opens on the spotlight card — cards scale / tilt / fade with the swipe (scroll-linked),
+ * Desktop: Founder and CEO share the larger featured row, with the other leaders below.
+ * Name, role and an optional quote remain visible beneath each portrait.
+ * Phones: a swipe slider ordered Founder, CEO, then the remaining leaders — cards scale / tilt / fade with the swipe (scroll-linked),
  * dots below; tapping a side card glides it to the centre, tapping the centre card plays it.
  * Autoplay (phones): glides to the next message every AUTOPLAY_MS (loops), the active dot fills up as a countdown.
  * Pauses while the finger is on the slider, while it's off screen, while a video popup is open, and with reduced motion.
- * Each card opens the same popup player as the rest of the page; it plays on through the three messages
- * (spotlight first) and can be switched like reels.
+ * Each card opens the same popup player as the rest of the page; it plays on through the messages
+ * in the same order and can be switched like reels.
  */
 export default function LeadershipVideos({ leaders, label = "Watch the message" }) {
-  const spotlight = Math.floor((leaders.length - 1) / 2);
-  // popup playlist (reels): the spotlight first, then the others left → right; empty video codes are skipped
-  const order = [spotlight, ...leaders.map((_, i) => i).filter((i) => i !== spotlight)].filter((i) => leaders[i].youtube);
+  const featured = leaders.map((p, i) => p.featured ? i : -1).filter((i) => i !== -1);
+  // Featured entries are listed Founder then CEO in content.js; keep the remaining leaders in content order.
+  const slides = [...featured, ...leaders.map((_, i) => i).filter((i) => !featured.includes(i))];
+  const spotlight = slides[0];
+  // Cards, navigation dots, autoplay and the popup playlist all follow the same sequence.
+  const order = slides.filter((i) => leaders[i].youtube);
   const playlist = order.map((i) => ({ youtube: leaders[i].youtube, title: `${leaders[i].name}, ${leaders[i].role}` }));
-  // on phones the spotlight comes first (CSS order), so the slides read: spotlight, then the others
-  const slides = [spotlight, ...leaders.map((_, i) => i).filter((i) => i !== spotlight)];
 
   const wrapRef = useRef(null);
   const listRef = useRef(null);
@@ -135,7 +135,7 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
       <ul
         ref={listRef}
         data-reveal="fade"
-        className="leaders"
+        className={`leaders ${featured.length === 2 ? "leaders--hierarchy" : ""}`}
         aria-label="Messages from our leadership"
         // finger on the slider → pause autoplay; released → the timer starts again from the current slide
         onTouchStart={() => setHold(true)}
@@ -148,8 +148,13 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
           return (
             <li
               key={i}
-              className={`leader ${isSpot ? "leader--spotlight" : ""} ${k === active ? "is-current" : ""}`}
-              style={{ "--k": Math.abs(i - spotlight) }}
+              className={`leader ${isSpot ? "leader--spotlight" : ""} ${p.featured ? "leader--featured" : ""} ${k === active ? "is-current" : ""}`}
+              style={{
+                "--k": Math.abs(i - spotlight),
+                "--slide-order": k,
+                "--desktop-sequence": k,
+                "--featured-column": featured.indexOf(i) === 0 ? 2 : 4,
+              }}
               // phones: a tap on a side card brings it to the centre first (the centre card plays)
               onClickCapture={(e) => {
                 if (e.target.closest("dialog")) return; // clicks inside the open popup player
@@ -160,6 +165,7 @@ export default function LeadershipVideos({ leaders, label = "Watch the message" 
                 }
               }}
             >
+              {p.featured && <p className="leader-feature-label">{p.featured}</p>}
               <div className="leader-card">
                 <VideoMessage
                   youtube={p.youtube}
