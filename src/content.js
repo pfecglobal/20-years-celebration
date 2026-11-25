@@ -28,7 +28,7 @@ export const DAY_ONE = {
   leaders: [
     { youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY", poster: "/images/thumbnail/shaiful.png", featured: "Founder & Director", name: "Mohammad Shaiful Islam", role: "Founder & Director,PFEC GLOBAL", quote: "" },
     { youtube: "tVLcwsXQ5f8", featured: "Chief Executive Officer", name: "Md. Shahidul Islam", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
-    { youtube: "tVLcwsXQ5f8", name: "Mosharraf Khan Yaafi", role: "Chief Growth Officer,PFEC GLOBAL", quote: "" }, // ← spotlight — replace
+    { youtube: "https://www.youtube.com/shorts/B4LijjDENZo", poster: "/images/thumbnail/yaafi.png", name: "Mosharraf Khan Yaafi", role: "Chief Growth Officer,PFEC GLOBAL", quote: "" }, // ← spotlight — replace
     { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", poster: "/images/thumbnail/fareha.png", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
     { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", poster: "/images/thumbnail/mahmuda.png", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
   ],
@@ -176,6 +176,7 @@ const UNIVERSITY_VIDEOS = [
   { youtube: "grdo7BEZ8Xc", university: "Asia Pacific University", country: "my", name: "Ahmed Afshan Hanif, Manager,International Business Development – Malaysia" },
   { youtube: "D6akQih8ixQ", university: "La Trobe University", country: "au", name: "Chang Liu, Regional Manager – Australia" },
   { youtube: "2vRw4RrSJMs", university: "University of Wollongong", country: "au", name: "Gerald Joshua, Regional Associate Director South Asia – Australia" },
+  { youtube: "Xj9iOJCTDcc", university: "South East Technological University", country: "ie", name: "Hannah Murphy, International Officer – Ireland" },
 
 ];
 
@@ -185,7 +186,7 @@ const TEAM_VIDEOS = {
   au: ["2gR9MLMCA08"], // Australia
   in: [""], // India
   lk: [""], // Sri Lanka
-  id: [""], // Indonesia
+  id: ["bvQsSkj3g5Y","rya2QrAnhCU"], // Indonesia
 };
 
 export const VOICES = {
