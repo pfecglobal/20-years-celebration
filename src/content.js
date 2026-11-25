@@ -182,7 +182,7 @@ const UNIVERSITY_VIDEOS = [
 
 // One team video slot per country. Replace "" with a YouTube code; empty slots never show a card.
 const TEAM_VIDEOS = {
-  bd: [""], // Bangladesh
+  bd: ["PFU-VxtqmFM"], // Bangladesh
   au: ["2gR9MLMCA08"], // Australia
   in: [""], // India
   lk: [""], // Sri Lanka
