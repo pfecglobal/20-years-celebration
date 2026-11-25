@@ -27,7 +27,7 @@ export const DAY_ONE = {
   label: "Watch the message",
   leaders: [
     { youtube: "https://www.youtube.com/shorts/-KHZeQpIMAY", poster: "/images/thumbnail/shaiful.png", featured: "Founder & Director", role: "Founder & Director,PFEC GLOBAL", quote: "" },
-    { youtube: "https://www.youtube.com/shorts/N4oubAkOjxk", poster: "/images/thumbnail/shahidul.png" ,featured: "Chief Executive Officer", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
+    { youtube: "https://www.youtube.com/shorts/xGoUDXwTJKo", poster: "/images/thumbnail/shahidul.png" ,featured: "Chief Executive Officer", role: "Chief Executive Officer,PFEC GLOBAL", quote: "" }, // ← add the CEO's thumbnail when available
     { youtube: "https://www.youtube.com/shorts/B4LijjDENZo", poster: "/images/thumbnail/yaafi.png", name: "Mosharraf Khan Yaafi", role: "Chief Growth Officer,PFEC GLOBAL", quote: "" }, // ← spotlight — replace
     { youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y", poster: "/images/thumbnail/fareha.png", name: "Fareha Begum", role: "Sr. Country Director,PFEC Global,Bangladesh", quote: "" },
     { youtube: "https://www.youtube.com/shorts/0zvsD-j_8VI", poster: "/images/thumbnail/mahmuda.png", name: "Mahmuda Akther", role: "General Manager,PFEC Global,Bangladesh", quote: "" }, // ← example — replace
@@ -183,7 +183,7 @@ const UNIVERSITY_VIDEOS = [
 // One team video slot per country. Replace "" with a YouTube code; empty slots never show a card.
 const TEAM_VIDEOS = {
   bd: ["PFU-VxtqmFM"], // Bangladesh
-  au: ["2gR9MLMCA08","D5b2JjJciYY","wXt-9EhVFtQ"], // Australia
+  au: ["2gR9MLMCA08","0S6W0A7SzuA","D5b2JjJciYY","wXt-9EhVFtQ","L-HNkjYATKk", "94IV0LsdlaI"], // Australia
   in: [""], // India
   lk: [""], // Sri Lanka
   id: ["bvQsSkj3g5Y","rya2QrAnhCU"], // Indonesia
