@@ -56,13 +56,13 @@ export const DAY_ONE = {
       quote: "",
     }, // ← spotlight — replace
 
-    {
-      youtube: "https://www.youtube.com/shorts/ULcuZF54ZDI",
-      poster: "/images/thumbnail/ali.png",
-      name: "Ali Ehsan",
-      role: "Director, NSW Registered Migration Agent,PFEC GLOBAL,Sydney,Australia",
-      quote: "",
-    }, // ← spotlight — replace
+    // {
+    //   youtube: "https://www.youtube.com/shorts/ULcuZF54ZDI",
+    //   poster: "/images/thumbnail/ali.png",
+    //   name: "Ali Ehsan",
+    //   role: "Director, NSW Registered Migration Agent,PFEC GLOBAL,Sydney,Australia",
+    //   quote: "",
+    // }, // ← spotlight — replace
     {
       youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y",
       poster: "/images/thumbnail/fareha.png",
