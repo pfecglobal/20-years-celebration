@@ -85,6 +85,14 @@ export const DAY_ONE = {
       role: "Business Development & Strategy,PFEC Global,India",
       quote: "",
     },
+
+    {
+      youtube: "https://www.youtube.com/shorts/EqauA9gsqCE",
+      poster: "/images/thumbnail/balodi.png",
+      name: "Ila Balodi",
+      role: "Head of Client Relations,PFEC Global,India",
+      quote: "",
+    },
   ],
 };
 
@@ -243,6 +251,7 @@ const TEAM_VIDEOS = {
     "L-HNkjYATKk",
     "94IV0LsdlaI",
     "_rLLxnTT6_w",
+    "F5ZS-D19Ax8"
   ], // Australia
   bd: [
     "PFU-VxtqmFM",
@@ -258,7 +267,6 @@ const TEAM_VIDEOS = {
     "qZrStOPHolA",
     "JzmVqS-wpnI",
     "6UVbQqNFCYo",
-    "EqauA9gsqCE",
   ], // India
   lk: ["tuEmbguWxZc", "zMKvjbXtcAo", "r8ZYdYb49LQ"], // Sri Lanka
   id: ["bvQsSkj3g5Y", "rya2QrAnhCU"], // Indonesia
