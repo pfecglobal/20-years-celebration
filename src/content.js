@@ -255,7 +255,7 @@ const TEAM_VIDEOS = {
     "KL_bVelo6r8",
     "RDvEpktR2Xw",
     "EE0U12BPJDw",
-    "xW5QxfhW0C0"
+    "xW5QxfhW0C0",
   ], // Australia
   bd: [
     "PFU-VxtqmFM",
@@ -265,14 +265,11 @@ const TEAM_VIDEOS = {
     "QhjZQtMZc9M",
     "G0YTdgOD5Bc",
     "6a8AAIEvJIs",
-    "cVyYYEUE3Kg"
+    "cVyYYEUE3Kg",
+    "hoL5Sk9OC3Q",
+    "BY88f928qoo",
   ], // Bangladesh
-  in: [
-    "IJmcbZ7W9SU",
-    "qZrStOPHolA",
-    "JzmVqS-wpnI",
-    "6UVbQqNFCYo",
-  ], // India
+  in: ["IJmcbZ7W9SU", "qZrStOPHolA", "JzmVqS-wpnI", "6UVbQqNFCYo"], // India
   lk: ["tuEmbguWxZc", "zMKvjbXtcAo", "r8ZYdYb49LQ"], // Sri Lanka
   id: ["bvQsSkj3g5Y", "rya2QrAnhCU"], // Indonesia
 };
