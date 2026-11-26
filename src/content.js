@@ -55,6 +55,14 @@ export const DAY_ONE = {
       role: "General Manager,PFEC GLOBAL,Australia",
       quote: "",
     }, // ← spotlight — replace
+
+    {
+      youtube: "https://www.youtube.com/shorts/ULcuZF54ZDI",
+      poster: "/images/thumbnail/ali.png",
+      name: "Ali Ehsan",
+      role: "Director, NSW Registered Migration Agent,PFEC GLOBAL,Sydney,Australia",
+      quote: "",
+    }, // ← spotlight — replace
     {
       youtube: "https://www.youtube.com/watch?v=gDwUuLUUU4Y",
       poster: "/images/thumbnail/fareha.png",
@@ -229,7 +237,6 @@ const UNIVERSITY_VIDEOS = [
 // One team video slot per country. Replace "" with a YouTube code; empty slots never show a card.
 const TEAM_VIDEOS = {
   au: [
-    "ULcuZF54ZDI",
     "0S6W0A7SzuA",
     "D5b2JjJciYY",
     "wXt-9EhVFtQ",
