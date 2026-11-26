@@ -79,7 +79,7 @@ export const DAY_ONE = {
     }, // ← example — replace
 
     {
-      youtube: "https://www.youtube.com/shorts/J8uixbu7uv4",
+      youtube: "https://www.youtube.com/shorts/h-tbJtW4evA",
       poster: "/images/thumbnail/rohit.png",
       name: "Rohit Mehra",
       role: "Business Development & Strategy,PFEC Global,India",
@@ -250,7 +250,8 @@ const TEAM_VIDEOS = {
     "k3AFUtSU_GM",
     "1FD21kpogtk",
     "QhjZQtMZc9M",
-    "G0YTdgOD5Bc"
+    "G0YTdgOD5Bc",
+    "6a8AAIEvJIs"
   ], // Bangladesh
   in: [
     "IJmcbZ7W9SU",
