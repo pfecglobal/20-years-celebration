@@ -100,9 +100,9 @@ export const TAGLINE = ["Building Global Citizens", "Powered by People"];
 // TODO: replace these placeholder figures with PFEC's real numbers before going live.
 export const STATS = [
   { value: 20, suffix: "", label: "Years of trust" },
-  { value: 50000, suffix: "+", label: "Students guided" },
-  { value: 500, suffix: "+", label: "Partner institutions" },
-  { value: 15, suffix: "+", label: "Study destinations" },
+  { value: 25000, suffix: "+", label: "Students guided" },
+  { value: 550, suffix: "+", label: "Partner institutions" },
+  { value: 11, suffix: "+", label: "Study destinations" },
 ];
 
 // "Every Remarkable Journey" road — milestones from awards.pfecglobal.com
@@ -227,7 +227,7 @@ const UNIVERSITY_VIDEOS = [
   { youtube: "WUd9usOdxC8", university: "Curtin University", country: "au", name: "Rhys Lodwick, Regional Recruitment Manager – Australia" },
   { youtube: "AbJuRXipbjE", university: "Federation University", country: "au", name: "Adeyemi Ekunola, International Student Recruitment Officer – Australia" },
   { youtube: "TQesEopYv6U", university: "Murdoch University", country: "au", name: "Arjun Singh, Regional Manager South Asia – Australia" },
-  // { youtube: "grdo7BEZ8Xc", university: "Asia Pacific University", country: "my", name: "Ahmed Afshan Hanif, Manager,International Business Development – Malaysia" },
+  { youtube: "AOi6teIJBis", university: "Asia Pacific University", country: "my", name: "Ahmed Afshan Hanif, Manager,International Business Development – Malaysia" },
   { youtube: "D6akQih8ixQ", university: "La Trobe University", country: "au", name: "Chang Liu, Regional Manager – Australia" },
   { youtube: "2vRw4RrSJMs", university: "University of Wollongong", country: "au", name: "Gerald Joshua, Regional Associate Director South Asia – Australia" },
   { youtube: "Xj9iOJCTDcc", university: "South East Technological University", country: "ie", name: "Hannah Murphy, International Officer – Ireland" },
@@ -249,6 +249,7 @@ const TEAM_VIDEOS = {
     "Nz27_An54_c",
     "k3AFUtSU_GM",
     "1FD21kpogtk",
+    "QhjZQtMZc9M"
   ], // Bangladesh
   in: [
     "IJmcbZ7W9SU",
