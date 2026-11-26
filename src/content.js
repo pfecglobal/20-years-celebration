@@ -251,7 +251,11 @@ const TEAM_VIDEOS = {
     "L-HNkjYATKk",
     "94IV0LsdlaI",
     "_rLLxnTT6_w",
-    "F5ZS-D19Ax8"
+    "F5ZS-D19Ax8",
+    "KL_bVelo6r8",
+    "RDvEpktR2Xw",
+    "EE0U12BPJDw",
+    "xW5QxfhW0C0"
   ], // Australia
   bd: [
     "PFU-VxtqmFM",
